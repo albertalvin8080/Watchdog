@@ -1,8 +1,8 @@
-package org.featherlessbipeds.visiwatch.controller;
+package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.visiwatch.entity.Alert;
-import org.featherlessbipeds.visiwatch.service.AlertService;
+import org.featherlessbipeds.watchdog.entity.Alert;
+import org.featherlessbipeds.watchdog.service.AlertService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

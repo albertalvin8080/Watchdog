@@ -1,4 +1,4 @@
-package org.featherlessbipeds.visiwatch.entity;
+package org.featherlessbipeds.watchdog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

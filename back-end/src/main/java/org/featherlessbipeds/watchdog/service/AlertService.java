@@ -1,8 +1,8 @@
-package org.featherlessbipeds.visiwatch.service;
+package org.featherlessbipeds.watchdog.service;
 
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.visiwatch.entity.Alert;
-import org.featherlessbipeds.visiwatch.repository.AlertRepository;
+import org.featherlessbipeds.watchdog.entity.Alert;
+import org.featherlessbipeds.watchdog.repository.AlertRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

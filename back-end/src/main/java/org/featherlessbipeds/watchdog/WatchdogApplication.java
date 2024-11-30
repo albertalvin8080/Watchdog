@@ -1,15 +1,15 @@
-package org.featherlessbipeds.visiwatch;
+package org.featherlessbipeds.watchdog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VisiWatchApplication
+public class WatchdogApplication
 {
 
     public static void main(String[] args)
     {
-        SpringApplication.run(VisiWatchApplication.class, args);
+        SpringApplication.run(WatchdogApplication.class, args);
     }
 
 }

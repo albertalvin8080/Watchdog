@@ -7,10 +7,10 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: visiwatch
+      POSTGRES_DB: watchdog
 
 # docker-compose up -d --build
 # docker exec -it postgresql bash
-# psql -U root -d visiwatch
-# pg_dump -U root -d visiwatch --schema-only > visiwatch.sql
-# docker cp postgresql:/visiwatch.sql .
+# psql -U root -d watchdog
+# pg_dump -U root -d watchdog --schema-only > watchdog.sql
+# docker cp postgresql:/watchdog.sql .
