@@ -19,8 +19,8 @@ public class Alert
     @Column(name = "alert_id")
     private Integer id;
     @Enumerated(EnumType.STRING)
-    @Column(name = "alert_type", columnDefinition = "VARCHAR(20)", nullable = false)
-    private AlertType alertType;
+    @Column(name = "alert_danger_level", columnDefinition = "VARCHAR(20)", nullable = false)
+    private DangerLevel dangerLevel;
     @Column(name = "alert_description", columnDefinition = "VARCHAR(255)", nullable = false)
     private String description;
     @Temporal(TemporalType.TIMESTAMP)

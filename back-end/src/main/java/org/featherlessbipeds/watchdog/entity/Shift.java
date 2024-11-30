@@ -1,6 +1,6 @@
 package org.featherlessbipeds.watchdog.entity;
 
-public enum AlertType
+public enum Shift
 {
-    GREEN, YELLOW, RED;
+    DAY, NIGHT;
 }
