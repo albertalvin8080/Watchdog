@@ -1,0 +1,16 @@
+services:
+  postgresql:
+    image: postgres:15.10
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: visiwatch
+
+# docker-compose up -d --build
+# docker exec -it postgresql bash
+# psql -U root -d visiwatch
+# pg_dump -U root -d visiwatch --schema-only > visiwatch.sql
+# docker cp postgresql:/visiwatch.sql .
