@@ -1,9 +1,15 @@
 "use strict";
 
+const SpeechRecognitionObject = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+if (!SpeechRecognitionObject) {
+    alert('Speech recognition is not supported in this browser.');
+    throw new Error('Speech recognition not supported');
+}
+
 const startButton = document.getElementById('startButton');
 const outputDiv = document.getElementById('output');
 
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+const recognition = new SpeechRecognitionObject();
 recognition.lang = 'pt-BR';
 
 recognition.onstart = () => {

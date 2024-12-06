@@ -121,3 +121,9 @@ tensorflow/*/datasets/
 tensorflow/*/tfrecords
 
 **/.ipynb_checkpoints
+**/evaluation*/
+*/*/train/
+*/*/val/
+*/*/bundle/
+YOLOv10-structure.zip
+Ground-Truth-Evaluation/yolov10/
