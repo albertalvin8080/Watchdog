@@ -66,4 +66,7 @@ map.on('click', function (e) {
     const clickedMarker = L.marker(latlng).addTo(map);
 
     clickedMarker.bindPopup("You clicked here!").openPopup();
+    clickedMarker.on("click", (e) => {
+        map.removeLayer(clickedMarker);
+    });
 });
