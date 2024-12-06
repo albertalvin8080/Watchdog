@@ -23,8 +23,15 @@ function onSuccess(pos) {
         map.removeLayer(circle);
     }
 
-    marker = L.marker([lat, lng]).addTo(map);
-    circle = L.circle([lat, lng], { radius: acc }).addTo(map);
+    const myIcon = L.icon({
+        iconUrl: "../assets/location-blue.png",
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+    });
+
+    marker = L.marker([lat, lng], { icon: myIcon }).addTo(map);
+    circle = L.circle([lat, lng], { radius: acc, zIndexOffset: -1 }).addTo(map);
 
     // maintain the zoom
     if (!zoomed)
@@ -35,11 +42,28 @@ function onSuccess(pos) {
 }
 
 function onError(err) {
+    // console.log(err.code);
+    /*
+    Code 1: PERMISSION_DENIED — The user has denied permission for the geolocation request.
+    Code 2: POSITION_UNAVAILABLE — The position of the device could not be determined.
+    Code 3: TIMEOUT — The geolocation request timed out before a position could be determined.
+    */
     if (err.code === 1) {
         alert("Please allow geolocation access.");
-    } else {
+    } else if (err.code === 2) {
+        console.log("err.code==2 -> POSITION_UNAVAILABLE");
+    }
+    else {
         alert("Cannot get geolocation access.");
     }
 }
 
 navigator.geolocation.watchPosition(onSuccess, onError);
+
+map.on('click', function (e) {
+    const latlng = e.latlng;  
+
+    const clickedMarker = L.marker(latlng).addTo(map);
+
+    clickedMarker.bindPopup("You clicked here!").openPopup();
+});

@@ -2,7 +2,7 @@
 
 const SpeechRecognitionObject = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
 if (!SpeechRecognitionObject) {
-    alert('Speech recognition is not supported in this browser.');
+    // alert('Speech recognition is not supported in this browser.');
     throw new Error('Speech recognition not supported');
 }
 
