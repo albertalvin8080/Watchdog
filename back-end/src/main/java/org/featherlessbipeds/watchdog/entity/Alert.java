@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,9 +22,9 @@ public class Alert
     @Enumerated(EnumType.STRING)
     @Column(name = "alert_danger_level", columnDefinition = "VARCHAR(20)", nullable = false)
     private DangerLevel dangerLevel;
-    @OneToMany(mappedBy = "")
-    @JoinColumn(name = "entrance_id")
-    private List<ItemAlerta> itemAlerta;
+//    @OneToMany(mappedBy = "")
+//    @JoinColumn(name = "entrance_id")
+//    private List<ItemAlerta> itemAlerta;
 }
 
 class ItemAlerta {

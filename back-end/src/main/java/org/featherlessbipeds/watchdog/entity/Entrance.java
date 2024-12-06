@@ -23,8 +23,8 @@ public class Entrance
     @ManyToOne
     @JoinColumn(name = "condominium_id")
     private Condominium condominium;
-    @OneToMany(mappedBy = "entrance", fetch = FetchType.LAZY, cascade = {})
-    private Set<Alert> alertSet;
+//    @OneToMany(mappedBy = "entrance", fetch = FetchType.LAZY, cascade = {})
+//    private Set<Alert> alertSet;
     @OneToMany(mappedBy = "entrance", fetch = FetchType.EAGER, cascade = {})
     private Set<Doorman> doormanSet;
 }
