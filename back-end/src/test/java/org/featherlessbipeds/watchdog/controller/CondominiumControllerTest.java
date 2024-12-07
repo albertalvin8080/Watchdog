@@ -44,7 +44,7 @@ class CondominiumControllerTest {
 
     @Test
     @DisplayName("Pra ver se vai retornar 201 CREATED")
-    void onCreate_condominium_success() throws Exception {
+    void onRegister_condominium_success() throws Exception {
 
         when(service.registerCondominium(any())).thenReturn(null);
 
@@ -56,7 +56,7 @@ class CondominiumControllerTest {
 
     @Test
     @DisplayName("Pra ver se vai retornar 409 CONFLICT")
-    void onCreate_condominium_conflict() throws Exception {
+    void onRegister_condominium_conflict() throws Exception {
 
         when(service.registerCondominium(any())).thenThrow( new DataIntegrityViolationException(""));
 
