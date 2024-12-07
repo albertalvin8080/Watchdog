@@ -37,3 +37,48 @@ body {
     width: calc(var(--width) * 0.212);
     height: calc(var(--height) * 0.665);
 }
+
+#form-container {
+    position: absolute;
+    width: 50%;
+    max-width: 350px;
+    height: 550px;
+    padding: 20px;
+}
+
+#form-container h1 {
+    margin-bottom: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+#form-container .form-group {
+    margin-bottom: 15px;
+}
+
+#form-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#form-container input, 
+#form-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#form-container button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#form-container button:hover {
+    background-color: #0056b3;
+}
+
