@@ -9,6 +9,7 @@
 
 body {
     height: 100vh;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
@@ -16,7 +17,7 @@ body {
     align-items: center; 
 }
 
-#map-container {
+#outer-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,21 +30,24 @@ body {
         url('../assets/2113313.png') no-repeat center center;
 
     --width: 1540px;
-    --height: 850px;
+    --height: 840px;
+    --width-factor: 0.212;
+    --height-factor: 0.667;
     background-size: var(--width) var(--height);
 }
 
 #map {
-    width: calc(var(--width) * 0.212);
-    height: calc(var(--height) * 0.665);
+    width: calc(var(--width) * var(--width-factor));
+    height: calc(var(--height) * var(--height-factor));
 }
 
 #form-container {
-    position: absolute;
-    width: 50%;
-    max-width: 350px;
-    height: 550px;
+    width: calc(var(--width) * var(--width-factor));
+    height: calc(var(--height) * var(--height-factor));
+
     padding: 20px;
+    position: absolute;
+    background-color: red;
 }
 
 #form-container h1 {
