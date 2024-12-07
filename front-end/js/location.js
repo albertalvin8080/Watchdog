@@ -20,11 +20,23 @@ class MapApp {
         this.map.on("click", this.onMapClick.bind(this));
     }
 
-    openLocationSelector()
+    openLocationSelector(locationBar)
     {
-        this.mapElement.appendChild();
+        locationBar.style.display = "flex";
+        this.showMap();
     }
 
+    
+    hideMap()
+    {
+        this.mapElement.style.display = "none";
+    }
+    
+    showMap()
+    {
+        this.mapElement.style.display = "flex";
+    }
+    
     watchGeolocation()
     {
         // Enable geolocation watch
@@ -33,17 +45,6 @@ class MapApp {
             this.onError.bind(this)
         );
     }
-
-    hideMap()
-    {
-        this.mapElement.style.display = "none";
-    }
-
-    showMap()
-    {
-        this.mapElement.style.display = "flex";
-    }
-
     onSuccess(pos) {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
