@@ -18,6 +18,7 @@ function showForm(formId) {
 }
 
 /* MAP REGISTER LOCATION */
+const registerCondominiumForm = document.querySelectorAll("#registerCondominiumForm");
 const locationBar = document.querySelector("#locationBar");
 const btnCancel = locationBar.querySelector("#btnCancel");
 btnCancel.addEventListener("click", (evt) => {
