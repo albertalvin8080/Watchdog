@@ -8,22 +8,30 @@ class MapApp {
         this.circle = null;
         this.zoomed = false;
 
-        // Initialize the map
-        this.map.setView([51.505, -0.09], 13);
+        // [lat, lng], zoom 
+        this.map.setView([51.5074, -0.1278], 2);
 
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 19,
+            maxZoom: 20,
             attribution: "© OpenStreetMap"
         }).addTo(this.map);
 
+        // Handle map clicks
+        this.map.on("click", this.onMapClick.bind(this));
+    }
+
+    openLocationSelector()
+    {
+        this.mapElement.appendChild();
+    }
+
+    watchGeolocation()
+    {
         // Enable geolocation watch
         navigator.geolocation.watchPosition(
             this.onSuccess.bind(this),
             this.onError.bind(this)
         );
-
-        // Handle map clicks
-        this.map.on("click", this.onMapClick.bind(this));
     }
 
     hideMap()
