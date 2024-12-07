@@ -20,13 +20,10 @@ function showForm(formId) {
 /* MAP REGISTER LOCATION */
 const registerCondominiumForm = document.querySelectorAll("#registerCondominiumForm");
 const locationBar = document.querySelector("#locationBar");
-const btnCancel = locationBar.querySelector("#btnCancel");
-btnCancel.addEventListener("click", (evt) => {
-    locationBar.style.display = "none";
-    mapApp.hideMap();
-});
 
-function openLocationSelector()
-{
-    mapApp.openLocationSelector(locationBar);
+async function openLocationSelector() {
+    const ret = await new Promise((resolve, reject) => {
+        mapApp.openLocationSelector(locationBar, resolve);
+    });
+    console.log(ret);
 }
