@@ -11,8 +11,8 @@ public class CondominiumService {
 
     private final CondominiumRepository repository;
 
-    public void registerCondominium(Condominium condominium){
-        repository.save(condominium);
+    public Condominium registerCondominium(Condominium condominium){
+        return repository.save(condominium);
 
     }
 
