@@ -2,6 +2,7 @@ package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.DTO.CondominiumRegisterDTO;
+import org.featherlessbipeds.watchdog.DTO.LoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -41,6 +42,19 @@ public class CondominiumController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("BOoooM a bomba explodiu: "+e.getMessage());
         }
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<String> login(@RequestBody LoginDTO condom){
+
+        boolean found = service.loginCondominium(condom.email(),condom.password());
+
+        if(found){
+            return ResponseEntity.status(HttpStatus.OK).body("Logado com sucesso");
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nao possui autorizacao para acessar");
+
     }
 
 
