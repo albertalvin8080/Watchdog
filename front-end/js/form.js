@@ -1,3 +1,5 @@
+"use strict";
+
 function hideAllForms() {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
