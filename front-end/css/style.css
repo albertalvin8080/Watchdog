@@ -13,6 +13,7 @@
 }
 
 body {
+    font-family: Arial, Helvetica, sans-serif;
     height: 100vh;
     width: 100%;
 
@@ -48,15 +49,16 @@ body {
 }
 
 #locationBar {
-    display: flex;
-    width: 90%;
+    /* display: flex; */
+    display: none;
+    width: 80%;
     z-index: 100;
-    position: relative;
-    top: -1.9%;
-    left: 12.5%;
+    position: absolute;
+    top: 1.85%;
+    left: 16.5%;
 }
 
-#locationBar > input {
+#locationBar #inputLocationBar {
     flex-grow: 1;
     padding: 8px;
     font-size: 16px;
@@ -65,7 +67,7 @@ body {
     border-radius: 4px 0 0 4px;
 }
 
-#locationBar > button {
+#locationBar #btnLocationBar {
     padding: 8px;
     font-size: 16px;
     background: var(--color1);
@@ -75,8 +77,24 @@ body {
     cursor: pointer;
 }
 
-#locationBar > button:hover {
+#locationBar #btnLocationBar:hover {
     background: var(--color2);
+}
+
+#btnCancel {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    top: 1303%;
+    left: -20%;
+    position: absolute;
+    background: #f44336;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#btnCancel:hover {
+    background: #d32f2f;  /* Darker red on hover */
 }
 
 /* FORMS */

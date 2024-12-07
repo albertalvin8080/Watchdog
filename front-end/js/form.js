@@ -1,6 +1,6 @@
 "use strict";
 
-// mapApp.hideMap();
+mapApp.hideMap();
 
 // function hideAllForms() {
 //     const forms = document.querySelectorAll("form");
@@ -17,7 +17,15 @@ function showForm(formId) {
     formToShow.style.display = "block";
 }
 
+/* MAP REGISTER LOCATION */
+const locationBar = document.querySelector("#locationBar");
+const btnCancel = locationBar.querySelector("#btnCancel");
+btnCancel.addEventListener("click", (evt) => {
+    locationBar.style.display = "none";
+    mapApp.hideMap();
+});
+
 function openLocationSelector()
 {
-    mapApp.openLocationSelector();
+    mapApp.openLocationSelector(locationBar);
 }
