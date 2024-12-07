@@ -16,4 +16,10 @@ public class CondominiumService {
 
     }
 
+    public boolean loginCondominium(String email, String password){
+
+        return repository.existsByEmailAndPasswordHash(email,password);
+
+    }
+
 }
