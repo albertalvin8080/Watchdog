@@ -17,7 +17,7 @@ class MapApp {
         }).addTo(this.map);
 
         // Handle map clicks
-        this.map.on("click", this.onMapClick.bind(this));
+        // this.map.on("click", this.onMapClick.bind(this));
     }
 
     openLocationSelector(locationBar, resolve) {
@@ -30,6 +30,7 @@ class MapApp {
             this.hideMap();
             resolve(false);
         });
+
         const btnConfirm = locationBar.querySelector("#btnConfirm");
         btnConfirm.addEventListener("click", (evt) => {
             locationBar.style.display = "none";
@@ -39,11 +40,8 @@ class MapApp {
 
         const inputSearch = locationBar.querySelector("#inputSearch");
         const btnSearch = locationBar.querySelector("#btnSearch");
-        btnSearch.addEventListener("click", async (evt) => {
-            const strAddress = inputSearch.value.replace(/^\s+|\s+$/g, "");
-            // console.log(strAddress);
-            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
 
+        const fetchNominatim = async (url) => {
             try {
                 const response = await fetch(url);
                 const data = await response.json();
@@ -58,9 +56,8 @@ class MapApp {
                     this.map.removeLayer(this.coords.marker);
                 }
 
-                // Get the first result
                 // WARNING: Do NOT change these names;
-                let { lat, lon, display_name } = data[0];
+                let { lat, lon, display_name } = data[0]; // Get the first result
                 lat = parseFloat(lat);
                 lon = parseFloat(lon);
                 // Update the map
@@ -70,12 +67,25 @@ class MapApp {
                 const marker = L.marker([lat, lon]).addTo(mapApp.map);
                 marker.bindPopup(`📍 ${display_name}`).openPopup();
 
-                this.coords = { lat, lng: lon, display_name, marker };
+                this.coords = { lat, lon, display_name, marker };
 
             } catch (error) {
                 console.error("Error fetching geocoding data:", error);
                 alert("Failed to fetch location data.");
             }
+        };
+
+        btnSearch.addEventListener("click", (evt) => {
+            const strAddress = inputSearch.value.replace(/^\s+|\s+$/g, "");
+            // console.log(strAddress);
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
+            fetchNominatim(url);
+        });
+
+        this.map.on("click", (evt) => {
+            const latlng = evt.latlng;
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`;
+            fetchNominatim(url);
         });
     }
 
