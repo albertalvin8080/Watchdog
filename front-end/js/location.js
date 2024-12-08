@@ -20,25 +20,74 @@ class MapApp {
         this.map.on("click", this.onMapClick.bind(this));
     }
 
-    openLocationSelector(locationBar)
-    {
+    openLocationSelector(locationBar, resolve) {
         locationBar.style.display = "flex";
         this.showMap();
+
+        const btnCancel = locationBar.querySelector("#btnCancel");
+        btnCancel.addEventListener("click", (evt) => {
+            locationBar.style.display = "none";
+            this.hideMap();
+            resolve(false);
+        });
+        const btnConfirm = locationBar.querySelector("#btnConfirm");
+        btnConfirm.addEventListener("click", (evt) => {
+            locationBar.style.display = "none";
+            this.hideMap();
+            resolve(this.coords);
+        });
+
+        const inputSearch = locationBar.querySelector("#inputSearch");
+        const btnSearch = locationBar.querySelector("#btnSearch");
+        btnSearch.addEventListener("click", async (evt) => {
+            const strAddress = inputSearch.value.replace(/^\s+|\s+$/g, "");
+            // console.log(strAddress);
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    alert("Address not found.");
+                    return;
+                }
+
+                if (this.coords) {
+                    // Remove previously marked point.
+                    this.map.removeLayer(this.coords.marker);
+                }
+
+                // Get the first result
+                // WARNING: Do NOT change these names;
+                let { lat, lon, display_name } = data[0];
+                lat = parseFloat(lat);
+                lon = parseFloat(lon);
+                // Update the map
+                mapApp.map.setView([lat, lon], 15);
+
+                // Add a marker with a popup
+                const marker = L.marker([lat, lon]).addTo(mapApp.map);
+                marker.bindPopup(`📍 ${display_name}`).openPopup();
+
+                this.coords = { lat, lng: lon, display_name, marker };
+
+            } catch (error) {
+                console.error("Error fetching geocoding data:", error);
+                alert("Failed to fetch location data.");
+            }
+        });
     }
 
-    
-    hideMap()
-    {
+    hideMap() {
         this.mapElement.style.display = "none";
     }
-    
-    showMap()
-    {
+
+    showMap() {
         this.mapElement.style.display = "flex";
     }
-    
-    watchGeolocation()
-    {
+
+    watchGeolocation() {
         // Enable geolocation watch
         navigator.geolocation.watchPosition(
             this.onSuccess.bind(this),
@@ -47,7 +96,7 @@ class MapApp {
     }
     onSuccess(pos) {
         const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+        const lng = pos.coords.lnggitude;
         const acc = pos.coords.accuracy;
 
         // Remove existing marker and circle if they exist
@@ -97,7 +146,7 @@ class MapApp {
         clickedMarker.bindPopup("You clicked here!").openPopup();
 
         // Remove the marker on click
-        clickedMarker.on("click", () => {
+        clickedMarker.on("click", (e) => {
             this.map.removeLayer(clickedMarker);
         });
     }

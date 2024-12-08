@@ -20,14 +20,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
 
 #outer-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 
     width: 100%;
     height: 100vh;
@@ -58,7 +58,7 @@ body {
     left: 16.5%;
 }
 
-#locationBar #inputLocationBar {
+#locationBar #inputSearch {
     flex-grow: 1;
     padding: 8px;
     font-size: 16px;
@@ -67,7 +67,7 @@ body {
     border-radius: 4px 0 0 4px;
 }
 
-#locationBar #btnLocationBar {
+#locationBar #btnSearch {
     padding: 8px;
     font-size: 16px;
     background: var(--color1);
@@ -77,24 +77,43 @@ body {
     cursor: pointer;
 }
 
-#locationBar #btnLocationBar:hover {
+#locationBar #btnSearch:hover {
     background: var(--color2);
+}
+
+#btnWrapper {
+    top: 1299%;
+    left: -20%;
+    position: absolute;
+}
+
+#btnCancel, #btnConfirm
+{
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
 }
 
 #btnCancel {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-    top: 1303%;
-    left: -20%;
-    position: absolute;
     background: #f44336;
     border: 1px solid #f44336;
-    border-radius: 4px;
-    padding: 10px;
 }
 
 #btnCancel:hover {
-    background: #d32f2f;  /* Darker red on hover */
+    background: #d32f2f;
+}
+
+#btnConfirm {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    background: #2fd379;
+}
+
+#btnConfirm:hover {
+    background: #13aa57;
 }
 
 /* FORMS */
@@ -128,8 +147,8 @@ body {
     font-weight: bold;
 }
 
-#form-container > form input, 
-#form-container > form button {
+#form-container>form input,
+#form-container>form button {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
@@ -137,14 +156,13 @@ body {
     border-radius: 4px;
 }
 
-#form-container > form button {
+#form-container>form button {
     background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
 }
 
-#form-container > form button:hover {
+#form-container>form button:hover {
     background-color: #0056b3;
 }
-
