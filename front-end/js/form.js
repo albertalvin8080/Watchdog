@@ -18,12 +18,26 @@ function showForm(formId) {
 }
 
 /* MAP REGISTER LOCATION */
-const registerCondominiumForm = document.querySelectorAll("#registerCondominiumForm");
+const registerCondominiumForm = document.querySelector("#registerCondominiumForm");
+const btnLocation = document.querySelector("#btnLocation");
 const locationBar = document.querySelector("#locationBar");
+let locationObj = null;
 
 async function openLocationSelector() {
-    const ret = await new Promise((resolve, reject) => {
+    locationObj = await new Promise((resolve, reject) => {
         mapApp.openLocationSelector(locationBar, resolve);
     });
-    console.log(ret);
+    if (locationObj) {
+        btnLocation.classList.remove("not-ok");
+        btnLocation.classList.add("ok");
+    } else {
+        btnLocation.classList.remove("ok");
+        btnLocation.classList.add("not-ok");
+    }
 }
+
+registerCondominiumForm.addEventListener("submit", (evt) => {
+    if (!locationObj) {
+        evt.preventDefault();
+    }
+});
