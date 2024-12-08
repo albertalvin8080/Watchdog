@@ -15,9 +15,6 @@ class MapApp {
             maxZoom: 20,
             attribution: "© OpenStreetMap"
         }).addTo(this.map);
-
-        // Handle map clicks
-        // this.map.on("click", this.onMapClick.bind(this));
     }
 
     openLocationSelector(locationBar, resolve) {
@@ -25,47 +22,47 @@ class MapApp {
         this.showMap();
 
         const btnCancel = locationBar.querySelector("#btnCancel");
-        btnCancel.addEventListener("click", (evt) => {
-            locationBar.style.display = "none";
-            this.hideMap();
-            resolve(false);
-        });
-
         const btnConfirm = locationBar.querySelector("#btnConfirm");
-        btnConfirm.addEventListener("click", (evt) => {
-            locationBar.style.display = "none";
-            this.hideMap();
-            resolve(this.coords);
-        });
-
         const inputSearch = locationBar.querySelector("#inputSearch");
         const btnSearch = locationBar.querySelector("#btnSearch");
 
-        const fetchNominatim = async (url) => {
+        const handleCancel = (evt) => {
+            cleanup();
+            resolve(false);
+        };
+
+        const handleConfirm = (evt) => {
+            cleanup();
+            resolve(this.coords);
+        };
+
+        const handleSearch = async (evt) => {
+            const strAddress = inputSearch.value.trim();
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.length === 0) {
-                    alert("Address not found.");
-                    return;
-                }
-
                 if (this.coords) {
-                    // Remove previously marked point.
                     this.map.removeLayer(this.coords.marker);
                 }
 
-                // WARNING: Do NOT change these names;
-                let { lat, lon, display_name } = data[0]; // Get the first result
+                if (data.length === 0) {
+                    alert("Address not found.");
+                    this.map.setView([51.5074, -0.1278], 2);
+                    return;
+                }
+
+                let { lat, lon, display_name } = data[0];
                 lat = parseFloat(lat);
                 lon = parseFloat(lon);
-                // Update the map
-                mapApp.map.setView([lat, lon], 15);
 
-                // Add a marker with a popup
+                mapApp.map.setView([lat, lon], 15);
                 const marker = L.marker([lat, lon]).addTo(mapApp.map);
-                marker.bindPopup(`📍 ${display_name}`).openPopup();
+                marker.bindPopup(`📍 ${display_name}`, {
+                    maxWidth: 200,
+                    minWidth: 100,
+                }).openPopup();
 
                 this.coords = { lat, lon, display_name, marker };
 
@@ -75,18 +72,62 @@ class MapApp {
             }
         };
 
-        btnSearch.addEventListener("click", (evt) => {
-            const strAddress = inputSearch.value.replace(/^\s+|\s+$/g, "");
-            // console.log(strAddress);
-            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
-            fetchNominatim(url);
-        });
-
-        this.map.on("click", (evt) => {
+        const handleMapClick = async (evt) => {
             const latlng = evt.latlng;
             const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`;
-            fetchNominatim(url);
-        });
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (this.coords) {
+                    this.map.removeLayer(this.coords.marker);
+                }
+
+                let { lat, lon, display_name } = data;
+                lat = parseFloat(latlng.lat);
+                lon = parseFloat(latlng.lng);
+
+                mapApp.map.setView([lat, lon]);
+                const marker = L.marker([lat, lon]).addTo(mapApp.map);
+                marker.bindPopup(`📍 ${display_name}`, {
+                    maxWidth: 200,
+                    minWidth: 100,
+                }).openPopup();
+
+                // Put the address name in the input.
+                inputSearch.value = display_name;
+
+                this.coords = { lat, lon, display_name, marker };
+
+            } catch (error) {
+                console.error("Error fetching geocoding data:", error);
+                alert("Failed to fetch location data.");
+            }
+        };
+
+        const handleInputSearchEnter = (evt) => {
+            if (evt.key === "Enter") {
+                evt.preventDefault();
+                btnSearch.click();
+            }
+        }
+
+        btnCancel.addEventListener("click", handleCancel);
+        btnConfirm.addEventListener("click", handleConfirm);
+        btnSearch.addEventListener("click", handleSearch);
+        inputSearch.addEventListener("keydown", handleInputSearchEnter)
+        this.map.on("click", handleMapClick);
+
+        const cleanup = () => {
+            locationBar.style.display = "none";
+            this.hideMap();
+
+            btnCancel.removeEventListener("click", handleCancel);
+            btnConfirm.removeEventListener("click", handleConfirm);
+            btnSearch.removeEventListener("click", handleSearch);
+            inputSearch.removeEventListener("keydown", handleInputSearchEnter);
+            this.map.off("click", handleMapClick);
+        };
     }
 
     hideMap() {
@@ -163,3 +204,4 @@ class MapApp {
 }
 
 const mapApp = new MapApp("map");
+mapApp.hideMap();

@@ -1,7 +1,5 @@
 "use strict";
 
-mapApp.hideMap();
-
 // function hideAllForms() {
 //     const forms = document.querySelectorAll("form");
 //     forms.forEach(form => {
@@ -39,5 +37,9 @@ async function openLocationSelector() {
 registerCondominiumForm.addEventListener("submit", (evt) => {
     if (!locationObj) {
         evt.preventDefault();
+        alert("Select the condominium location.");
+        btnLocation.classList.add("not-ok");
+        return;
     }
+    btnLocation.classList.add("ok");
 });
