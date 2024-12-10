@@ -17,6 +17,8 @@ public class Condominium
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "condominium_id")
     private Integer id;
+    @Column(name = "condom_trustee_name")
+    private String trusteeName;
     @Embedded
     private Location location;
     @Column(name = "condominium_name", columnDefinition = "VARCHAR(100)", nullable = false)
