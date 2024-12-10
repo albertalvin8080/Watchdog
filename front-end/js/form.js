@@ -42,10 +42,6 @@ registerCondominiumForm.addEventListener("submit", (evt) => {
         return;
     }
     btnLocation.classList.add("ok");
-});
-
-registerCondominiumForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
 
     const form = event.target;
 
@@ -53,11 +49,11 @@ registerCondominiumForm.addEventListener("submit", async (event) => {
         name: form.name.value,
         email: form.condominiumRegisterEmail.value,
         passwordHash: form.condominiumRegisterPassword.value,
-        location: locationObj ? {
+        location: {
             display_name: locationObj.display_name,
             latitude: locationObj.lat,
             longitude: locationObj.lon
-        } : null
+        }
     };
 
     try {
