@@ -69,16 +69,38 @@
                 </div>
             </form>
 
+            <!-- Entrance Register -->
+            <form id="registerEntranceForm">
+                <h1>Register Entrance</h1>
+                <div class="form-group">
+                    <label for="entranceRegisterEmail">E-mail:</label>
+                    <input type="text" id="entranceRegisterEmail" name="entranceRegisterEmail" placeholder="Enter e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="entranceRegisterPassword">Password:</label>
+                    <input type="password" id="entranceRegisterPassword" name="entranceRegisterPassword"
+                        placeholder="Enter password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+            
+
             <!-- Condominium Register -->
             <form id="registerCondominiumForm">
                 <h1>Register Condominium</h1>
                 <div class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input type="text" id="email" name="email" placeholder="Enter e-mail" required>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter name" required>
                 </div>
                 <div class="form-group">
-                    <label for="condominiumPassword">Password:</label>
-                    <input type="password" id="condominiumPassword" name="condominiumPassword"
+                    <label for="condominiumRegisterEmail">E-mail:</label>
+                    <input type="text" id="condominiumRegisterEmail" name="condominiumRegisterEmail" placeholder="Enter e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="condominiumRegisterPassword">Password:</label>
+                    <input type="password" id="condominiumRegisterPassword" name="condominiumRegisterPassword"
                         placeholder="Enter password" required>
                 </div>
                 <div class="form-group">
@@ -106,6 +128,7 @@
         <button onclick="showForm('entranceLoginForm')">EntranceLogin</button>
         <button onclick="showForm('condominiumLoginForm')">CondominiumLogin</button>
         <button onclick="showForm('registerCondominiumForm')">RegisterCondominium</button>
+        <button onclick="showForm('registerEntranceForm')">RegisterEntrance</button>
     </div>
 
     <!-- <button id="startButton">Start Voice Input</button> -->

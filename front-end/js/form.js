@@ -42,4 +42,39 @@ registerCondominiumForm.addEventListener("submit", (evt) => {
         return;
     }
     btnLocation.classList.add("ok");
+
+    const form = event.target;
+
+    const formData = {
+        name: form.name.value,
+        email: form.condominiumRegisterEmail.value,
+        passwordHash: form.condominiumRegisterPassword.value,
+        location: {
+            display_name: locationObj.display_name,
+            latitude: locationObj.lat,
+            longitude: locationObj.lon
+        }
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/condom/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to register condominium.");
+        }
+
+        const result = await response.json();
+        alert("Condominium registered successfully!");
+        console.log(result);
+
+    } catch (error) {
+        console.error("Error during registration:", error);
+        alert("An error occurred while registering the condominium.");
+    }
 });
