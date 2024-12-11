@@ -1,11 +1,11 @@
 "use strict";
 
-// function hideAllForms() {
-//     const forms = document.querySelectorAll("form");
-//     forms.forEach(form => {
-//         form.style.display = "none";
-//     });
-// }
+function hideAllForms() {
+    const forms = document.querySelectorAll("#form-container > form");
+    forms.forEach(form => {
+        form.style.display = "none";
+    });
+}
 // hideAllForms();
 
 function showForm(formId) {
@@ -34,17 +34,18 @@ async function openLocationSelector() {
     }
 }
 
-registerCondominiumForm.addEventListener("submit", (evt) => {
+
+registerCondominiumForm.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+    
     if (!locationObj) {
-        evt.preventDefault();
         alert("Select the condominium location.");
         btnLocation.classList.add("not-ok");
         return;
     }
     btnLocation.classList.add("ok");
-
-    const form = event.target;
-
+    
+    const form = evt.target;
     const formData = {
         name: form.name.value,
         email: form.condominiumRegisterEmail.value,
@@ -52,10 +53,10 @@ registerCondominiumForm.addEventListener("submit", (evt) => {
         location: {
             display_name: locationObj.display_name,
             latitude: locationObj.lat,
-            longitude: locationObj.lon
+            longitude: locationObj.lon,
         }
     };
-
+    
     try {
         const response = await fetch("http://localhost:8080/condom/register", {
             method: "POST",
@@ -64,17 +65,27 @@ registerCondominiumForm.addEventListener("submit", (evt) => {
             },
             body: JSON.stringify(formData),
         });
-
+        
         if (!response.ok) {
             throw new Error("Failed to register condominium.");
         }
-
+        
         const result = await response.json();
         alert("Condominium registered successfully!");
         console.log(result);
-
+        
     } catch (error) {
         console.error("Error during registration:", error);
         alert("An error occurred while registering the condominium.");
     }
 });
+
+// MAIN SCREEN
+
+const mainScreen = document.querySelector("#main-screen");
+const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
+
+condominiumLoginForm.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+    mainScreen.style.display = "flex";
+})

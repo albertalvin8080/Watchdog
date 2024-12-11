@@ -203,3 +203,18 @@ body {
 .not-ok:hover {
     background-color: var(--color6);
 }
+
+/* MAIN SCREEN */
+
+#main-screen {
+    z-index: 100;
+    background-color: #007BFF;
+    
+    width: calc(var(--width) * var(--width-factor));
+    height: calc(var(--height) * var(--height-factor));
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

@@ -15,8 +15,14 @@
     <!-- https://gopesh3652.medium.com/building-a-voice-to-text-app-with-javascript-a-step-by-step-guide-9042493bdd63 -->
     <!-- https://openjavascript.info/2022/12/11/map-live-user-location-using-leaflet-js/ -->
     <div id="outer-container">
-        <!-- Remember to uncomment this -->
         <div id="map"></div>
+
+        <!-- Main Screen -->
+        <div id="main-screen">
+            <button type="button" id="recordStart">Start</button>
+            <button type="button" id="recordStop">Stop</button>
+        </div>
+
         <div id="form-container">
             <!-- Adm Login -->
             <form id="admLoginForm">
@@ -57,12 +63,12 @@
                 <div class="form-group">
                     <label for="condominiumEmail">E-mail:</label>
                     <input type="text" id="condominiumEmail" name="condominiumEmail" placeholder="Enter e-mail"
-                        required>
+                        required value="remove me">
                 </div>
                 <div class="form-group">
                     <label for="condominiumPassword">Password:</label>
                     <input type="password" id="condominiumPassword" name="condominiumPassword"
-                        placeholder="Enter password" required>
+                        placeholder="Enter password" required value="remove me">
                 </div>
                 <div class="form-group">
                     <button type="submit">Login</button>
@@ -139,6 +145,7 @@
     <script src="js/location.js"></script>
     <script src="js/speech.js"></script>
     <script src="js/form.js"></script>
+    <script src="js/recorder.js"></script>
 </body>
 
 </html>
