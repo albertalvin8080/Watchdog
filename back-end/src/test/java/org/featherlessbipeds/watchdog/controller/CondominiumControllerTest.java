@@ -1,6 +1,6 @@
 package org.featherlessbipeds.watchdog.controller;
 
-import org.featherlessbipeds.watchdog.DTO.CondominiumRegisterDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
 import org.featherlessbipeds.watchdog.entity.Location;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.featherlessbipeds.watchdog.Util.JsonUtil.asJsonString;
+import static org.featherlessbipeds.watchdog.util.JsonUtil.asJsonString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

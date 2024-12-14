@@ -1,4 +1,4 @@
-package org.featherlessbipeds.watchdog.Util;
+package org.featherlessbipeds.watchdog.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

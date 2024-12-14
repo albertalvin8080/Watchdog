@@ -23,7 +23,7 @@ let locationObj = null;
 
 async function openLocationSelector() {
     locationObj = await new Promise((resolve, reject) => {
-        mapApp.openLocationSelector(locationBar, resolve);
+        mapApp.openLocationSelectorView(locationBar, resolve);
     });
     if (locationObj) {
         btnLocation.classList.remove("not-ok");
@@ -34,17 +34,16 @@ async function openLocationSelector() {
     }
 }
 
-
 registerCondominiumForm.addEventListener("submit", async (evt) => {
     evt.preventDefault();
-    
+
     if (!locationObj) {
         alert("Select the condominium location.");
         btnLocation.classList.add("not-ok");
         return;
     }
     btnLocation.classList.add("ok");
-    
+
     const form = evt.target;
     const formData = {
         name: form.name.value,
@@ -56,7 +55,7 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
             longitude: locationObj.lon,
         }
     };
-    
+
     try {
         const response = await fetch("http://localhost:8080/condom/register", {
             method: "POST",
@@ -65,15 +64,15 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
             },
             body: JSON.stringify(formData),
         });
-        
+
         if (!response.ok) {
             throw new Error("Failed to register condominium.");
         }
-        
+
         const result = await response.json();
         alert("Condominium registered successfully!");
         console.log(result);
-        
+
     } catch (error) {
         console.error("Error during registration:", error);
         alert("An error occurred while registering the condominium.");
@@ -93,17 +92,26 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
     const formData = new FormData(condominiumLoginForm);
     const formObject = Object.fromEntries(formData.entries());
     try {
-        // Send the POST request with JSON body
-        const response = await fetch("https://localhost:8080/condom/login", {
+        const response = await fetch("http://localhost:8080/condom/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(formObject)
+            body: JSON.stringify(formObject),
         });
         const result = await response.json();
-        console.log(result);  
+
+        // Remember to expose this header at the cors filter
+        const success = Boolean(response.headers.get("login-success"));
+
+        if (success) {
+            mapApp.openCondominiumView(result);
+        }
+        else {
+        }
+
+        console.log(result);
     } catch (error) {
-        console.error("Error:", error);  
+        console.error("Error:", error);
     }
 })
