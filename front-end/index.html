@@ -15,13 +15,16 @@
     <!-- https://gopesh3652.medium.com/building-a-voice-to-text-app-with-javascript-a-step-by-step-guide-9042493bdd63 -->
     <!-- https://openjavascript.info/2022/12/11/map-live-user-location-using-leaflet-js/ -->
     <div id="outer-container">
-        <div id="map"></div>
+        <div id="map">
+        </div>
 
-        <!-- Main Screen -->
-        <!-- <div id="main-screen">
-            <button type="button" id="recordStart">Start</button>
-            <button type="button" id="recordStop">Stop</button>
-        </div> -->
+        <div id="menu-container">
+            <div id="menu-screen">
+                <hr id="btnOpenMenu">
+                <button type="button" id="recordStart">Start</button>
+                <button type="button" id="recordStop">Stop</button>
+            </div>
+        </div>
 
         <div id="form-container">
             <!-- Adm Login -->
@@ -62,13 +65,13 @@
                 <h1>Condominium Login</h1>
                 <div class="form-group">
                     <label for="condominiumEmail">E-mail:</label>
-                    <input type="text" id="condominiumEmail" name="email" placeholder="Enter e-mail"
-                        required value="trustee1@sunrisevillas.com">
+                    <input type="text" id="condominiumEmail" name="email" placeholder="Enter e-mail" required
+                        value="trustee1@sunrisevillas.com">
                 </div>
                 <div class="form-group">
                     <label for="condominiumPassword">Password:</label>
-                    <input type="password" id="condominiumPassword" name="password"
-                        placeholder="Enter password" required value="123">
+                    <input type="password" id="condominiumPassword" name="password" placeholder="Enter password"
+                        required value="123">
                 </div>
                 <div class="form-group">
                     <button type="submit">Login</button>
@@ -80,7 +83,8 @@
                 <h1>Register Entrance</h1>
                 <div class="form-group">
                     <label for="entranceRegisterEmail">E-mail:</label>
-                    <input type="text" id="entranceRegisterEmail" name="entranceRegisterEmail" placeholder="Enter e-mail" required>
+                    <input type="text" id="entranceRegisterEmail" name="entranceRegisterEmail"
+                        placeholder="Enter e-mail" required>
                 </div>
                 <div class="form-group">
                     <label for="entranceRegisterPassword">Password:</label>
@@ -91,7 +95,7 @@
                     <button type="submit">Register</button>
                 </div>
             </form>
-            
+
 
             <!-- Condominium Register -->
             <form id="registerCondominiumForm">
@@ -102,7 +106,8 @@
                 </div>
                 <div class="form-group">
                     <label for="condominiumRegisterEmail">E-mail:</label>
-                    <input type="text" id="condominiumRegisterEmail" name="condominiumRegisterEmail" placeholder="Enter e-mail" required>
+                    <input type="text" id="condominiumRegisterEmail" name="condominiumRegisterEmail"
+                        placeholder="Enter e-mail" required>
                 </div>
                 <div class="form-group">
                     <label for="condominiumRegisterPassword">Password:</label>

@@ -8,6 +8,7 @@ import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
 import org.featherlessbipeds.watchdog.dto.CondominiumLoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
+import org.featherlessbipeds.watchdog.util.JsonUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CondominiumController
 {
+    private final JsonUtil jsonUtil;
     private final CondominiumService service;
 
     @PostMapping("/register")
@@ -64,7 +66,7 @@ public class CondominiumController
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Invalid email and/or password.");
-        String json = new ObjectMapper().writer().writeValueAsString(response);
+        String json = jsonUtil.asJsonString(response);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("login-success", "false").body(json);
     }
 
