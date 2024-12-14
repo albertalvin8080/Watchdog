@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: watchdog
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 # docker-compose up -d --build
 # docker exec -it postgresql bash

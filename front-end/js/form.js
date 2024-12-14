@@ -85,7 +85,25 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
 const mainScreen = document.querySelector("#main-screen");
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 
-condominiumLoginForm.addEventListener("submit", (evt) => {
+condominiumLoginForm.addEventListener("submit", async (evt) => {
     evt.preventDefault();
-    mainScreen.style.display = "flex";
+    // mainScreen.style.display = "flex";
+    // mapApp.openMap();
+
+    const formData = new FormData(condominiumLoginForm);
+    const formObject = Object.fromEntries(formData.entries());
+    try {
+        // Send the POST request with JSON body
+        const response = await fetch("https://localhost:8080/condom/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formObject)
+        });
+        const result = await response.json();
+        console.log(result);  
+    } catch (error) {
+        console.error("Error:", error);  
+    }
 })

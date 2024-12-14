@@ -2,6 +2,7 @@ package org.featherlessbipeds.watchdog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.featherlessbipeds.watchdog.entity.notused.Doorman;
 
 import java.util.Set;
 
@@ -21,10 +22,8 @@ public class Entrance
     @Embedded
     private Location location;
     @ManyToOne
-    @JoinColumn(name = "condominium_id")
+    @JoinColumn(name = "condominium_id", nullable = false)
     private Condominium condominium;
-//    @OneToMany(mappedBy = "entrance", fetch = FetchType.LAZY, cascade = {})
-//    private Set<Alert> alertSet;
-    @OneToMany(mappedBy = "entrance", fetch = FetchType.EAGER, cascade = {})
-    private Set<Doorman> doormanSet;
+    @OneToMany(mappedBy = "entrance", fetch = FetchType.LAZY, cascade = {})
+    private Set<Alert> alertSet;
 }

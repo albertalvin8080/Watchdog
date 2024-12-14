@@ -7,19 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CondominiumService {
-
+public class CondominiumService
+{
     private final CondominiumRepository repository;
 
-    public Condominium registerCondominium(Condominium condominium){
+    public Condominium registerCondominium(Condominium condominium)
+    {
         return repository.save(condominium);
-
     }
 
-    public boolean loginCondominium(String email, String password){
-
-        return repository.existsByEmailAndPasswordHash(email,password);
-
+    public Condominium loginCondominium(String email, String password)
+    {
+        return repository.findByEmailAndPasswordHash(email, password);
     }
 
 }
