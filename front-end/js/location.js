@@ -17,6 +17,11 @@ class MapApp {
         }).addTo(this.map);
     }
 
+    openMap()
+    {
+        this.showMap();
+    }
+
     openLocationSelector(locationBar, resolve) {
         locationBar.style.display = "flex";
         this.showMap();

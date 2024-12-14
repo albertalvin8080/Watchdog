@@ -1,7 +1,7 @@
 package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.watchdog.DTO.LoginDTO;
+import org.featherlessbipeds.watchdog.DTO.CondominiumLoginDTO;
 import org.featherlessbipeds.watchdog.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class AdminController {
     private final AdminService service;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody LoginDTO admin){
+    public ResponseEntity<String> login(@RequestBody CondominiumLoginDTO admin){
 
         boolean found = service.login(admin.email(), admin.password());
 

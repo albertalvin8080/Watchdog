@@ -50,11 +50,10 @@ function main() {
         audio.src = audioURL;
         document.querySelector("#main-screen").appendChild(audio);
 
-        // Optionally, provide a way to download the recording
-        const downloadLink = document.createElement("a");
-        downloadLink.href = audioURL;
-        downloadLink.download = "recording.webm";
-        downloadLink.textContent = "Download Recording";
+        // const downloadLink = document.createElement("a");
+        // downloadLink.href = audioURL;
+        // downloadLink.download = "recording.webm";
+        // downloadLink.textContent = "Download Recording";
         // document.body.appendChild(downloadLink);
     };
 

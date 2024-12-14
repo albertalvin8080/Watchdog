@@ -1,7 +1,8 @@
-package org.featherlessbipeds.watchdog.entity;
+package org.featherlessbipeds.watchdog.entity.notused;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.featherlessbipeds.watchdog.entity.Condominium;
 
 @Entity
 @Getter

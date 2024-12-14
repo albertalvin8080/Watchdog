@@ -11,13 +11,14 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+// NOTE: Remember that this guy also represents the trustee.
 public class Condominium
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "condominium_id")
     private Integer id;
-    @Column(name = "condom_trustee_name")
+    @Column(name = "condominium_trustee_name")
     private String trusteeName;
     @Embedded
     private Location location;
@@ -29,6 +30,4 @@ public class Condominium
     private String passwordHash;
     @OneToMany(mappedBy = "condominium", fetch = FetchType.EAGER, cascade = {})
     private Set<Entrance> entranceSet;
-    @OneToMany(mappedBy = "condominium", fetch = FetchType.EAGER, cascade = {})
-    private Set<Trustee> trusteeSet;
 }
