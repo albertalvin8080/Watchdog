@@ -1,7 +1,7 @@
 package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.watchdog.DTO.CondominiumLoginDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumLoginDTO;
 import org.featherlessbipeds.watchdog.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

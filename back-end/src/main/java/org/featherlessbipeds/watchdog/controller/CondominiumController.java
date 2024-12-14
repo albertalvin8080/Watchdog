@@ -1,18 +1,20 @@
 package org.featherlessbipeds.watchdog.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.watchdog.DTO.CondominiumDTO;
-import org.featherlessbipeds.watchdog.DTO.CondominiumRegisterDTO;
-import org.featherlessbipeds.watchdog.DTO.CondominiumLoginDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumLoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/condom")
@@ -48,19 +50,22 @@ public class CondominiumController
         }
     }
 
-//  curl -X POST "http://localhost:8080/condom/login" -H "Content-Type: application/json" -d "{\"email\":\"trustee1@sunrisevillas.com\",\"password\":\"123\"}"
+    // curl -X POST "http://localhost:8080/condom/login" -H "Content-Type: application/json" -d "{\"email\":\"trustee1@sunrisevillas.com\",\"password\":\"123\"}"
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody CondominiumLoginDTO loginDTO)
+    public ResponseEntity<?> login(@RequestBody CondominiumLoginDTO loginDTO) throws JsonProcessingException
     {
         var condominium = service.loginCondominium(loginDTO.email(), loginDTO.password());
 
         if (condominium != null)
         {
             var condominiumDTO = new CondominiumDTO(condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
-            return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
+            return ResponseEntity.status(HttpStatus.OK).header("login-success", "true").body(condominiumDTO);
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email e/ou senha inválidos.");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Invalid email and/or password.");
+        String json = new ObjectMapper().writer().writeValueAsString(response);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("login-success", "false").body(json);
     }
 
 }

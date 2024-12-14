@@ -17,12 +17,47 @@ class MapApp {
         }).addTo(this.map);
     }
 
-    openMap()
-    {
+    openMap() {
         this.showMap();
     }
 
-    openLocationSelector(locationBar, resolve) {
+    async openCondominiumView(condom) {
+        this.condom = condom;
+        const latC = condom.location.latitude;
+        const lonC = condom.location.longitude;
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latC}&lon=${lonC}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (this.coords) {
+                this.map.removeLayer(this.coords.marker);
+            }
+
+            let { lat, lon, display_name } = data;
+            lat = parseFloat(latC);
+            lon = parseFloat(lonC);
+
+            this.map.setView([lat, lon], 15);
+            const marker = L.marker([lat, lon]).addTo(this.map);
+
+            marker.bindPopup(`📍 ${display_name}`, {
+                maxWidth: 200,
+                minWidth: 100,
+            })
+            // .openPopup(); // The popup is slight deslocated to the right.
+
+            this.coords = { lat, lon, display_name, marker };
+
+        } catch (error) {
+            console.error("Error fetching geocoding data:", error);
+            alert("Failed to fetch location data.");
+        }
+
+        this.showMap();
+    }
+
+    openLocationSelectorView(locationBar, resolve) {
         locationBar.style.display = "flex";
         this.showMap();
 
@@ -62,8 +97,8 @@ class MapApp {
                 lat = parseFloat(lat);
                 lon = parseFloat(lon);
 
-                mapApp.map.setView([lat, lon], 15);
-                const marker = L.marker([lat, lon]).addTo(mapApp.map);
+                this.map.setView([lat, lon], 15);
+                const marker = L.marker([lat, lon]).addTo(this.map);
                 marker.bindPopup(`📍 ${display_name}`, {
                     maxWidth: 200,
                     minWidth: 100,
@@ -92,8 +127,8 @@ class MapApp {
                 lat = parseFloat(latlng.lat);
                 lon = parseFloat(latlng.lng);
 
-                mapApp.map.setView([lat, lon]);
-                const marker = L.marker([lat, lon]).addTo(mapApp.map);
+                this.map.setView([lat, lon]);
+                const marker = L.marker([lat, lon]).addTo(this.map);
                 marker.bindPopup(`📍 ${display_name}`, {
                     maxWidth: 200,
                     minWidth: 100,
