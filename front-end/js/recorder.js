@@ -1,7 +1,7 @@
 "use strict";
 
 const recordStart = document.querySelector("#recordStart");
-const recordStop = document.querySelector("#recordStop");
+// const recordStop = document.querySelector("#recordStop");
 let myStream = null;
 let mediaRecorder = null;
 let audioChunks = [];
@@ -48,7 +48,7 @@ function main() {
         const audio = document.createElement("audio");
         audio.controls = true;
         audio.src = audioURL;
-        document.querySelector("#main-screen").appendChild(audio);
+        document.querySelector("#menu-screen > #content").appendChild(audio);
 
         // const downloadLink = document.createElement("a");
         // downloadLink.href = audioURL;
@@ -60,12 +60,10 @@ function main() {
     recordStart.addEventListener("click", () => {
         if (mediaRecorder.state === "inactive") {
             mediaRecorder.start();
-        }
-    });
-
-    recordStop.addEventListener("click", () => {
-        if (mediaRecorder.state === "recording") {
+            recordStart.innerText = "Listening";
+        } else if (mediaRecorder.state === "recording") {
             mediaRecorder.stop();
+            recordStart.innerText = "Alert";
         }
     });
 }

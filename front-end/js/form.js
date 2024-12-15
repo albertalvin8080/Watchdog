@@ -6,7 +6,6 @@ function hideAllForms() {
         form.style.display = "none";
     });
 }
-// hideAllForms();
 
 function showForm(formId) {
     const forms = document.querySelectorAll("form");
@@ -83,9 +82,14 @@ const warnMsg = document.querySelector(".warn-msg.msg");
 const errorMsg = document.querySelector(".error-msg.msg");
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 
+let processing = false;
 condominiumLoginForm.addEventListener("submit", async (evt) => {
     evt.preventDefault();
     // mapApp.openMap();
+
+    if (processing) // Prevent multiple requests in sucession.
+        return;
+    processing = true;
 
     const formData = new FormData(condominiumLoginForm);
     const formObject = Object.fromEntries(formData.entries());
@@ -115,6 +119,8 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
         console.error("Error:", error);
         showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
+
+    processing = false;
 })
 
 let id1 = null;

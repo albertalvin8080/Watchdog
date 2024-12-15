@@ -11,8 +11,11 @@ function configureMenu(mapApp) {
         mapApp.menuScreen.style.animation = `${animationName} 0.3s ease forwards`;
     };
 
+    const menuScreenContent = mapApp.menuScreen.querySelector("#content");
     mapApp.menuScreen.addEventListener("click", (evt) => {
-        if (evt.target === mapApp.menuScreen) {
+        if (evt.target === mapApp.menuScreen ||
+            evt.target == menuScreenContent
+        ) {
             toggleMenu();
         }
     });

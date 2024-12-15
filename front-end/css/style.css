@@ -7,6 +7,7 @@
     --color3: #2fd379;
     --color4: #13aa57;
     --color5: #f44336;
+    --color5-2: #ff0000;
     --color6: #d32f2f;
 }
 
@@ -317,6 +318,15 @@ body {
     overflow: hidden;
 }
 
+#menu-screen > #content
+{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+}
+
 #menu-screen #btnOpenMenu {
     background-color: black;
 
@@ -347,4 +357,30 @@ body {
     to {
         bottom: -90%;
     }
+}
+
+/* RECORDER */
+
+#recordStart {
+    --top-bottom: 5px;
+    --left-right: 10px;
+    padding: var(--top-bottom) var(--left-right) var(--top-bottom) var(--left-right);
+
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 30px;
+    color: white;
+    background-color: var(--color5-2);
+}
+
+#recordStart:hover {
+    background-color: var(--color6);
+}
+
+.not-recording {
+
+}
+
+.recording {
+
 }
