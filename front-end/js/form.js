@@ -79,6 +79,8 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
     }
 });
 
+const warnMsg = document.querySelector(".warn-msg.msg");
+const errorMsg = document.querySelector(".error-msg.msg");
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 
 condominiumLoginForm.addEventListener("submit", async (evt) => {
@@ -98,16 +100,44 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
         const result = await response.json();
 
         // Remember to expose this header at the cors filter
-        const success = Boolean(response.headers.get("login-success"));
+        // const success = Boolean(response.headers.get("login-success"));
+        const success = response.ok;
 
         if (success) {
             mapApp.openCondominiumView(result);
         }
         else {
+            showMsg(warnMsg, result.message);
         }
-        
+
         console.log(result);
     } catch (error) {
         console.error("Error:", error);
+        showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
 })
+
+let id1 = null;
+let id2 = null;
+function showMsg(msgE, msgStr) {
+    clearTimeout(id1);
+    clearTimeout(id2);
+
+    const seconds = 0.3;
+    const showDuration = 2000; 
+    msgE.style.display = "flex";
+    msgE.innerText = msgStr;
+
+    msgE.style.animation = "none";
+    // NOTE: Accessing msgE.offsetHeight forces the browser to recompute styles.
+    msgE.offsetHeight; // Force reflow to restart animation
+
+    msgE.style.animation = `showMsg ${seconds}s ease forwards`;
+
+    id1 = setTimeout(() => {
+        msgE.style.animation = `hideMsg ${seconds}s ease forwards`;
+        id2 = setTimeout(() => {
+            msgE.style.display = "none";
+        }, seconds * 1000);  
+    }, showDuration);
+}
