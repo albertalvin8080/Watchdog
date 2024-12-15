@@ -79,14 +79,10 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
     }
 });
 
-// MAIN SCREEN
-
-const mainScreen = document.querySelector("#main-screen");
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 
 condominiumLoginForm.addEventListener("submit", async (evt) => {
     evt.preventDefault();
-    // mainScreen.style.display = "flex";
     // mapApp.openMap();
 
     const formData = new FormData(condominiumLoginForm);
@@ -109,7 +105,7 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
         }
         else {
         }
-
+        
         console.log(result);
     } catch (error) {
         console.error("Error:", error);
