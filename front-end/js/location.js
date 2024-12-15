@@ -17,7 +17,6 @@ class MapApp {
         }).addTo(this.map);
 
         configureMenu(this);
-        this.menuScreen.style.display = "flex";
     }
 
     openMap() {
@@ -58,6 +57,7 @@ class MapApp {
         }
 
         this.showMap();
+        this.showMenu();
     }
 
     openLocationSelectorView(locationBar, resolve) {
@@ -179,6 +179,14 @@ class MapApp {
 
     showMap() {
         this.mapElement.style.display = "flex";
+    }
+
+    showMenu() {
+        this.menuScreen.style.display = "flex";
+    }
+
+    hideMenu() {
+        this.menuScreen.style.display = "none";
     }
 
     watchGeolocation() {

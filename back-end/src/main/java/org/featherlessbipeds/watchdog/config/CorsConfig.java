@@ -17,7 +17,7 @@ public class CorsConfig
         config.addAllowedOrigin("http://127.0.0.1:5500");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addExposedHeader("login-success");
+//        config.addExposedHeader("login-success");
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

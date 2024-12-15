@@ -225,6 +225,7 @@ body {
     z-index: initial;
     /* If you see something red, that's a bad sign. */
     background-color: red;
+    position: relative;
 
     width: calc(var(--width) * var(--width-factor));
     height: calc(var(--height) * var(--height-factor));
@@ -235,6 +236,58 @@ body {
     flex-direction: column;
 
     overflow: hidden !important;
+}
+
+@keyframes showMsg {
+    from {
+        top: 0%;
+        opacity: 0;
+    }
+
+    to {
+        top: 2%;
+        opacity: 1;
+    }
+}
+
+@keyframes hideMsg {
+    from {
+        top: 2%;
+        opacity: 1;
+    }
+
+    to {
+        top: 0%;
+        opacity: 0;
+    }
+}
+
+.msg {
+    z-index: 100;
+    position: absolute;
+    top: 2%;
+
+    opacity: 0;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.error-msg {
+    display: none;
+    background-color: red;
+}
+
+.warn-msg {
+    /* -webkit-text-stroke: 0.2px black;  */
+    color: black;
+    display: none;
+    background-color: yellow;
+}
+
+.load-msg {
+    display: none;
+    background-color: blue;
 }
 
 #menu-screen {

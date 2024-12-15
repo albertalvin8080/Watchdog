@@ -3,6 +3,9 @@ package org.featherlessbipeds.watchdog.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 public class JsonUtil
 {
@@ -23,6 +26,13 @@ public class JsonUtil
         {
             throw new RuntimeException("Erro ao converter objeto para JSON", e);
         }
+    }
+
+    public String createMsg(String msg)
+    {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", msg);
+        return this.asJsonString(response);
     }
 
 }
