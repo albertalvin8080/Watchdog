@@ -56,6 +56,7 @@ public class CondominiumController
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody CondominiumLoginDTO loginDTO) throws JsonProcessingException
     {
+        System.out.println(loginDTO);
         var condominium = service.loginCondominium(loginDTO.email(), loginDTO.password());
 
         if (condominium != null)

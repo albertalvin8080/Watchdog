@@ -3,7 +3,7 @@
 class MapApp {
     constructor(divId) {
         this.map = L.map(divId);
-        this.mapElement = document.querySelector("#map");
+        this.mapElement = document.querySelector(`#${divId}`);
         this.marker = null;
         this.circle = null;
         this.zoomed = false;
@@ -13,8 +13,11 @@ class MapApp {
 
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 20,
-            attribution: "© OpenStreetMap"
+            attribution: "© OpenStreetMap",
         }).addTo(this.map);
+
+        configureMenu(this);
+        this.menuScreen.style.display = "flex";
     }
 
     openMap() {

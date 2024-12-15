@@ -238,8 +238,6 @@ body {
 }
 
 #menu-screen {
-    --bottom-percent: -90%;
-
     z-index: 100;
     background-color: #e0e0e0;
     position: relative;
@@ -254,7 +252,8 @@ body {
     width: calc(var(--width) * var(--width-factor));
     height: calc(var(--height) * var(--height-factor));
 
-    display: flex;
+    /* display: flex; */
+    display: none;
     padding: 7px;
     gap: 15px;
     align-items: center;
@@ -275,4 +274,24 @@ body {
     border-radius: 10px;
 
     cursor: pointer;
+}
+
+@keyframes slideUp {
+    from {
+        bottom: -90%;
+    }
+
+    to {
+        bottom: -50%;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        bottom: -50%;
+    }
+
+    to {
+        bottom: -90%;
+    }
 }
