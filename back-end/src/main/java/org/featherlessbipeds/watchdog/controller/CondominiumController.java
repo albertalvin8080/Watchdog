@@ -3,7 +3,7 @@ package org.featherlessbipeds.watchdog.controller;
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.dto.CondominiumDTO;
 import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
-import org.featherlessbipeds.watchdog.dto.CondominiumLoginDTO;
+import org.featherlessbipeds.watchdog.dto.LoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
@@ -49,7 +49,7 @@ public class CondominiumController
 
     // curl -X POST "http://localhost:8080/condom/login" -H "Content-Type: application/json" -d "{\"email\":\"trustee1@sunrisevillas.com\",\"password\":\"123\"}"
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody CondominiumLoginDTO loginDTO)
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO)
     {
         System.out.println(loginDTO);
         var condominium = service.loginCondominium(loginDTO.email(), loginDTO.password());
