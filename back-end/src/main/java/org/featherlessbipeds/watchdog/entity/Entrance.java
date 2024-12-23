@@ -16,7 +16,7 @@ import java.util.Set;
 public class Entrance
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entrance_id")
     private Integer id;
     @Embedded

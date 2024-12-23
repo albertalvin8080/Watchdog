@@ -13,7 +13,7 @@ import lombok.*;
 public class Admin
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
     private Integer id;
     @Column(name = "admin_username", columnDefinition = "VARCHAR(100)", nullable = false)

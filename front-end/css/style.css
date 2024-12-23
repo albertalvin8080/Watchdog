@@ -9,6 +9,13 @@
     --color5: #f44336;
     --color5-2: #ff0000;
     --color6: #d32f2f;
+
+    --pallete1: #F6AB45;
+    --pallete2: #FDCA4B;
+    --pallete3: #4490C9;
+    --pallete4: #0D213A;
+    --pallete5: white;
+    --pallete6: black;
 }
 
 * {
@@ -30,6 +37,8 @@ body {
 }
 
 #outer-container {
+    position: relative;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,26 +65,38 @@ body {
 }
 
 #locationBar {
+    z-index: initial;
+    --z-index: 100;
+
     /* display: flex; */
-    display: none;
-    width: 80%;
-    z-index: 100;
-    position: absolute;
-    top: 1.81%;
-    left: 16.5%;
+    padding-top: 11px;
+    padding-right: 10px;
     /* box-shadow: 0 1px 5px rgba(0,0,0,0.65); */
-    border: 2px solid rgba(0, 0, 0, 0.2);
+    justify-content: end;
+    display: none;
+    position: absolute;
+
+    width: calc(var(--width) * var(--width-factor));
+    height: calc(var(--height) * var(--height-factor));
 
     --b-radius: 4px;
     border-radius: var(--b-radius);
+
+    --bar-height: 7%;
 }
 
 #locationBar #inputSearch {
-    flex-grow: 1;
+    z-index: var(--z-index);
+    height: var(--bar-height);
+    /* border: 2px solid rgba(0, 0, 0, 0.2); */
+    
+    /* flex-grow: 1; */
     padding: 8px;
     font-size: 16px;
     border-right: 1px solid var(--color2);
     border-radius: var(--b-radius) 0 0 var(--b-radius);
+
+    width: 70%;
 }
 
 #locationBar #inputSearch:focus {
@@ -83,13 +104,16 @@ body {
 }
 
 #locationBar #btnSearch {
+    z-index: var(--z-index);
+    height: var(--bar-height);
+    /* border: 2px solid rgba(0, 0, 0, 0.2); */
+
     padding: 8px;
-    font-size: 16px;
-    background: var(--color1);
     color: white;
-    /* border: 1px solid var(--color2); */
-    border-radius: 0 4px 4px 0;
+    font-size: 16px;
     cursor: pointer;
+    background: var(--color1);
+    border-radius: 0 4px 4px 0;
 }
 
 #locationBar #btnSearch:hover {
@@ -97,8 +121,10 @@ body {
 }
 
 #btnWrapper {
-    top: 1342%;
-    left: -20%;
+    z-index: var(--z-index);
+
+    bottom: 0.7%;
+    left: 1.3%;
     position: absolute;
 }
 
@@ -286,9 +312,10 @@ body {
     background-color: yellow;
 }
 
-.load-msg {
+.success-msg {
     display: none;
-    background-color: blue;
+    color: white;
+    background-color: green;
 }
 
 #menu-screen {

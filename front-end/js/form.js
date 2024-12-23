@@ -1,5 +1,9 @@
 "use strict";
 
+const warnMsg = document.querySelector(".warn-msg.msg");
+const errorMsg = document.querySelector(".error-msg.msg");
+const successMsg = document.querySelector(".success-msg.msg");
+
 function hideAllForms() {
     const forms = document.querySelectorAll("#form-container > form");
     forms.forEach(form => {
@@ -37,7 +41,7 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
     evt.preventDefault();
 
     if (!locationObj) {
-        alert("Select the condominium location.");
+        showMsg(warnMsg, "Select the condominium location.");
         btnLocation.classList.add("not-ok");
         return;
     }
@@ -69,17 +73,15 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
         }
 
         const result = await response.json();
-        alert("Condominium registered successfully!");
+        showMsg(successMsg, "Condominium registered successfully!");
         console.log(result);
 
     } catch (error) {
         console.error("Error during registration:", error);
-        alert("An error occurred while registering the condominium.");
+        showMsg(errorMsg, "Ops! Try again in a few minutes.")
     }
 });
 
-const warnMsg = document.querySelector(".warn-msg.msg");
-const errorMsg = document.querySelector(".error-msg.msg");
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 
 let processing = false;

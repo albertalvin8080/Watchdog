@@ -15,7 +15,7 @@ import java.util.Date;
 public class AlertItem
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alert_item_id")
     private Integer id;
     @Temporal(TemporalType.TIMESTAMP)
