@@ -15,7 +15,7 @@ import java.util.Set;
 public class Condominium
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "condominium_id")
     private Integer id;
     @Column(name = "condominium_trustee_name")

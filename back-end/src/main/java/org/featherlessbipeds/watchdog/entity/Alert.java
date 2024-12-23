@@ -16,7 +16,7 @@ import java.util.List;
 public class Alert
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alert_id")
     private Integer id;
     @Enumerated(EnumType.STRING)

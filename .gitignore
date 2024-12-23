@@ -1,3 +1,4 @@
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -110,6 +111,8 @@ JPA_Hibernate/first-test/mysql-data/
 **/*.h5
 **/*.weights.h5
 
+!libs/x64/opencv_java4100.dll # didnt work
+!libs/x86/opencv_java4100.dll # didnt work
 **/*.dll
 **/*.so
 **/*.lib
@@ -122,8 +125,11 @@ tensorflow/*/tfrecords
 
 **/.ipynb_checkpoints
 **/evaluation*/
-*/*/train/
-*/*/val/
+#*/*/train/
+#*/*/val/
 */*/bundle/
 YOLOv10-structure.zip
 Ground-Truth-Evaluation/yolov10/
+
+analises/
+GCMS/GCMS-Albert-Sobral*/

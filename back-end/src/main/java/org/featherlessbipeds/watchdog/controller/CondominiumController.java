@@ -1,7 +1,5 @@
 package org.featherlessbipeds.watchdog.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.dto.CondominiumDTO;
 import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
@@ -13,9 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/condom")
@@ -38,17 +33,17 @@ public class CondominiumController
         try
         {
             service.registerCondominium(condominium);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Condominio criado");
+            return ResponseEntity.status(HttpStatus.CREATED).body(jsonUtil.createMsg("Condominio criado"));
         }
         catch (DataIntegrityViolationException e)
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro de integridade (Talvez a entidade ja exista): " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(jsonUtil.createMsg("Erro de integridade (Talvez a entidade ja exista): " + e.getMessage()));
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("BOoooM a bomba explodiu: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg("BOoooM a bomba explodiu: " + e.getMessage()));
         }
     }
 
