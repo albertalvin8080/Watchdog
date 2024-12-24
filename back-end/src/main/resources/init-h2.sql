@@ -15,6 +15,9 @@ CREATE TABLE entrance
     latitude DOUBLE NOT NULL,
     longitude DOUBLE NOT NULL,
     condominium_id INTEGER NOT NULL,
+    entrance_email VARCHAR(255) NOT NULL UNIQUE,
+    entrance_password_hash VARCHAR(255) NOT NULL,
+
     CONSTRAINT fk_condominium_id FOREIGN KEY (condominium_id) REFERENCES Condominium (condominium_id) ON DELETE CASCADE
 );
 
@@ -23,8 +26,8 @@ VALUES ('Franz Bonaparta', 'Sunrise Villas', 'trustee1@sunrisevillas.com', '123'
        ('Helmuth Voss', 'Ocean Breeze Condos', 'trustee2@oceanbreeze.com', '123', 34.0522, -118.2437),
        ('Klaus Poppe', 'Mountain View Residences', 'trustee3@mountainview.com', '123', 37.7749, -122.4194);
 
-INSERT INTO entrance (condominium_id, latitude, longitude)
-VALUES (1, 40.7130, -74.0070),
-       (1, 40.7125, -74.0065),
-       (2, 34.0525, -118.2440),
-       (3, 37.7750, -122.4190);
+INSERT INTO entrance (condominium_id, latitude, longitude,entrance_email,entrance_password_hash)
+VALUES (1, 40.7130, -74.0070,'entrance1@entrance.com','123'),
+       (1, 40.7125, -74.0065,'entrance2@entrance.com','123'),
+       (2, 34.0525, -118.2440,'entrance3@entrance.com','123'),
+       (3, 37.7750, -122.4190,'entrance4@entrance.com','123');

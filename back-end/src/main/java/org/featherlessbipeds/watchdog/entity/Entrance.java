@@ -21,6 +21,10 @@ public class Entrance
     private Integer id;
     @Embedded
     private Location location;
+    @Column(name = "entrance_email", columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
+    private String email;
+    @Column(name = "entrance_password_hash", columnDefinition = "VARCHAR(255)", nullable = false)
+    private String passwordHash;
     @ManyToOne
     @JoinColumn(name = "condominium_id", nullable = false)
     private Condominium condominium;
