@@ -21,6 +21,16 @@ CREATE TABLE entrance
     CONSTRAINT fk_condominium_id FOREIGN KEY (condominium_id) REFERENCES Condominium (condominium_id) ON DELETE CASCADE
 );
 
+CREATE TABLE alert (
+    alert_id INT AUTO_INCREMENT PRIMARY KEY,
+    alert_danger_level VARCHAR(20) NOT NULL,
+    alert_date TIMESTAMP NOT NULL,
+    alert_description MEDIUMBLOB  NOT NULL,
+    entrance_id INT,
+    CONSTRAINT fk_entrance FOREIGN KEY (entrance_id) REFERENCES entrance(entrance_id)
+);
+
+
 INSERT INTO condominium (condominium_trustee_name, condominium_name, condominium_email, condominium_password_hash, latitude, longitude)
 VALUES ('Franz Bonaparta', 'Sunrise Villas', 'trustee1@sunrisevillas.com', '123', 40.7128, -74.0060),
        ('Helmuth Voss', 'Ocean Breeze Condos', 'trustee2@oceanbreeze.com', '123', 34.0522, -118.2437),
