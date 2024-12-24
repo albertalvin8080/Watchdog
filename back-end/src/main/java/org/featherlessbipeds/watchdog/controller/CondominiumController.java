@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/condom")
 @RequiredArgsConstructor
@@ -63,5 +65,15 @@ public class CondominiumController
         String json = jsonUtil.createMsg("Invalid email and/or password.");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);
     }
+
+    @GetMapping("/all")
+
+    public ResponseEntity<List<Condominium>> getAll(){
+
+        return ResponseEntity.ok(service.getAll());
+
+    }
+
+
 
 }

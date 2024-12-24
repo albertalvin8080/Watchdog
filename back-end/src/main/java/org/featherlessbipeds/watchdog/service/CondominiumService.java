@@ -5,6 +5,8 @@ import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.repository.CondominiumRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CondominiumService
@@ -20,5 +22,12 @@ public class CondominiumService
     {
         return repository.findByEmailAndPasswordHash(email, password);
     }
+
+    public List<Condominium> getAll(){
+
+        return repository.findAll();
+
+    }
+
 
 }
