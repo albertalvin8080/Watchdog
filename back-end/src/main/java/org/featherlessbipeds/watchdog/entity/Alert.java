@@ -22,8 +22,12 @@ public class Alert
     @Enumerated(EnumType.STRING)
     @Column(name = "alert_danger_level", columnDefinition = "VARCHAR(20)", nullable = false)
     private DangerLevel dangerLevel;
-    @OneToMany(mappedBy = "alert", fetch = FetchType.EAGER)
-    private List<AlertItem> alertItemList;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "alert_date", nullable = false)
+    private Date date;
+    @Lob
+    @Column(name = "alert_description",columnDefinition = "MEDIUMBLOB" ,nullable = false)
+    private byte[] description;
     @ManyToOne
     @JoinColumn(name = "entrance_id")
     private Entrance entrance;
