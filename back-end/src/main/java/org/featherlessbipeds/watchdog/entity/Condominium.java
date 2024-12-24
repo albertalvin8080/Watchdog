@@ -1,5 +1,6 @@
 package org.featherlessbipeds.watchdog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,7 @@ public class Condominium
     @Column(name = "condominium_email", columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     private String email;
     @Column(name = "condominium_password_hash", columnDefinition = "VARCHAR(255)", nullable = false)
+    @JsonIgnore
     private String passwordHash;
     @OneToMany(mappedBy = "condominium", fetch = FetchType.EAGER, cascade = {})
     private Set<Entrance> entranceSet;

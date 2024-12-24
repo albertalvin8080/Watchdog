@@ -1,5 +1,6 @@
 package org.featherlessbipeds.watchdog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.featherlessbipeds.watchdog.entity.notused.Doorman;
@@ -27,6 +28,7 @@ public class Entrance
     private String passwordHash;
     @ManyToOne
     @JoinColumn(name = "condominium_id", nullable = false)
+    @JsonIgnore
     private Condominium condominium;
     @OneToMany(mappedBy = "entrance", fetch = FetchType.LAZY, cascade = {})
     private Set<Alert> alertSet;
