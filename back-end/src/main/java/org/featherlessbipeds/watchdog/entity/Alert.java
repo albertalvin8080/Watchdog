@@ -1,5 +1,6 @@
 package org.featherlessbipeds.watchdog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +31,6 @@ public class Alert
     private byte[] description;
     @ManyToOne
     @JoinColumn(name = "entrance_id")
+    @JsonIgnore
     private Entrance entrance;
 }
