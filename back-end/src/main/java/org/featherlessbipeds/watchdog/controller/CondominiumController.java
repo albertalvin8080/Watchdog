@@ -53,12 +53,11 @@ public class CondominiumController
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO)
     {
-        System.out.println(loginDTO);
         var condominium = service.loginCondominium(loginDTO.email(), loginDTO.password());
 
         if (condominium != null)
         {
-            var condominiumDTO = new CondominiumDTO(condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
 
