@@ -57,7 +57,44 @@ class MapApp {
         }
 
         this.showMap();
+    }
+
+    async openEntranceView(entrance) {
+        this.entrance = entrance;
+        const latE = entrance.location.latitude;
+        const lonE = entrance.location.longitude;
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latE}&lon=${lonE}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (this.coords) {
+                this.map.removeLayer(this.coords.marker);
+            }
+
+            let { lat, lon, display_name } = data;
+            lat = parseFloat(latE);
+            lon = parseFloat(lonE);
+
+            this.map.setView([lat, lon], 15);
+            const marker = L.marker([lat, lon]).addTo(this.map);
+
+            marker.bindPopup(`📍 ${display_name}`, {
+                maxWidth: 200,
+                minWidth: 100,
+            })
+            
+            this.coords = { lat, lon, display_name, marker };
+
+        } catch (error) {
+            console.error("Error fetching geocoding data:", error);
+            alert("Failed to fetch location data.");
+        }
+
+        this.showMap();
         this.showMenu();
+
+
     }
 
     openLocationSelectorView(locationBar, resolve) {
