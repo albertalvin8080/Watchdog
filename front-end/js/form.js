@@ -83,6 +83,7 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
 });
 
 const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
+const entranceLoginForm = document.querySelector("#entranceLoginForm");
 
 let processing = false;
 condominiumLoginForm.addEventListener("submit", async (evt) => {
@@ -123,6 +124,43 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
     }
 
     processing = false;
+})
+
+
+entranceLoginForm.addEventListener("submit", async (evt) => {
+
+    evt.preventDefault();
+
+    const formData = new FormData(entranceLoginForm);
+    const formObject = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch("http://localhost:8080/entrance/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formObject),
+        });
+
+        const result = await response.json();
+
+        const success = response.ok;
+
+        if (success) {
+            
+            mapApp.openEntranceView(result);
+        }
+        else {
+            showMsg(warnMsg, result.message);
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        showMsg(errorMsg, "Ops! Try again in a few moments.");
+    }
+
+ 
 })
 
 let id1 = null;
