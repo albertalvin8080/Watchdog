@@ -3,6 +3,7 @@
 function configureMenu(mapApp) {
     mapApp.menuScreen = document.querySelector("#menu-screen");
     mapApp.btnOpenMenu = mapApp.menuScreen.querySelector("#btnOpenMenu");
+    mapApp.entranceRegisterBtn = document.querySelector("#entrance-register-btn");
     mapApp.open = false;
 
     const toggleMenu = () => {
