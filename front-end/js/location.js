@@ -57,6 +57,7 @@ class MapApp {
         }
 
         this.showMap();
+        this.showEntranceRegister();
     }
 
     async openEntranceView(entrance) {
@@ -224,6 +225,14 @@ class MapApp {
 
     hideMenu() {
         this.menuScreen.style.display = "none";
+    }
+
+    showEntranceRegister() {
+    this.entranceRegisterBtn.style.display = "flex";
+    }
+
+    hideEntranceRegister() {
+        this.entranceRegisterBtn.style.display = "none";
     }
 
     watchGeolocation() {
