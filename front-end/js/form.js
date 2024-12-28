@@ -12,6 +12,9 @@ function hideAllForms() {
 }
 
 function showForm(formId) {
+    mapApp.hideMap();
+    mapApp.hideMenu();
+    mapApp.hideEntranceRegister();
     const forms = document.querySelectorAll("form");
     forms.forEach(form => form.style.display = "none");
     const formToShow = document.getElementById(formId);
