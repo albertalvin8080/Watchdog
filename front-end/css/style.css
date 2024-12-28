@@ -251,7 +251,7 @@ body {
 #menu-container {
     z-index: initial;
     /* If you see something red, that's a bad sign. */
-    background-color: red;
+    background-color: transparent;
     position: relative;
 
     width: calc(var(--width) * var(--width-factor));
@@ -364,6 +364,19 @@ body {
     border-radius: 10px;
 
     cursor: pointer;
+}
+
+#entrance-register-btn{ 
+z-index: 101;
+display: none;
+cursor: pointer;
+position: relative;
+background-color: var(--pallete3);
+color: white;
+padding: 20px;
+border-radius: 10px;
+font-weight: 600;
+top: 500px;
 }
 
 @keyframes slideUp {
