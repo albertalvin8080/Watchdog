@@ -72,7 +72,4 @@ public class CondominiumController
         return ResponseEntity.ok(service.getAll());
 
     }
-
-
-
 }

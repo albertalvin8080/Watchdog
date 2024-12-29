@@ -31,8 +31,9 @@
             <div class="error-msg msg">
                 Ops! Try again in a few moments.
             </div>
+            <div class="success-msg msg">
+            </div>
             <div class="load-msg msg">
-
             </div>
             <div class="warn-msg msg">
             </div>
@@ -68,12 +69,13 @@
                 <h1>Entrance Login</h1>
                 <div class="form-group">
                     <label for="entranceEmail">E-mail:</label>
-                    <input type="text" id="entranceEmail" name="email" placeholder="Enter e-mail" required value="entrance1@entrance.com" >
+                    <input type="text" id="entranceEmail" name="email" placeholder="Enter e-mail" required
+                        value="entrance1@entrance.com">
                 </div>
                 <div class="form-group">
                     <label for="entrancePassword">Password:</label>
-                    <input type="password" id="entrancePassword" name="password" placeholder="Enter password"
-                        required value="123"> 
+                    <input type="password" id="entrancePassword" name="password" placeholder="Enter password" required
+                        value="123">
                 </div>
                 <div class="form-group">
                     <button type="submit">Login</button>
@@ -112,6 +114,10 @@
                         placeholder="Enter password" required>
                 </div>
                 <div class="form-group">
+                    <label for="btnLocation">Location:</label>
+                    <input type="button" class="btnLocation" value="SELECT LOCATION" onclick="openLocationSelector()">
+                </div>
+                <div class="form-group">
                     <button type="submit">Register</button>
                 </div>
             </form>
@@ -135,7 +141,7 @@
                 </div>
                 <div class="form-group">
                     <label for="btnLocation">Location:</label>
-                    <input type="button" id="btnLocation" value="SELECT LOCATION" onclick="openLocationSelector()">
+                    <input type="button" class="btnLocation" value="SELECT LOCATION" onclick="openLocationSelector()">
                 </div>
                 <div class="form-group">
                     <button type="submit">Register</button>
@@ -149,6 +155,7 @@
         <button onclick="showForm('entranceLoginForm')">EntranceLogin</button>
         <button onclick="showForm('condominiumLoginForm')">CondominiumLogin</button>
         <button onclick="showForm('registerCondominiumForm')">RegisterCondominium</button>
+        <button onclick="showForm('registerEntranceForm')">RegisterEntrance</button>
     </div>
 
     <!-- <button id="startButton">Start Voice Input</button> -->

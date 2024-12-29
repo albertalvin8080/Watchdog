@@ -23,7 +23,8 @@ function showForm(formId) {
 
 /* MAP REGISTER LOCATION */
 const registerCondominiumForm = document.querySelector("#registerCondominiumForm");
-const btnLocation = document.querySelector("#btnLocation");
+const registerEntranceForm = document.querySelector("#registerEntranceForm")
+const btnLocation = document.querySelector(".btnLocation");
 const locationBar = document.querySelector("#locationBar");
 let locationObj = null;
 
@@ -114,6 +115,7 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
         const success = response.ok;
 
         if (success) {
+            localStorage.setItem('condominiumId', result.id);
             mapApp.openCondominiumView(result);
         }
         else {
@@ -128,6 +130,60 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
 
     processing = false;
 })
+
+/* REGISTER ENTRANCE */
+registerEntranceForm.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+
+    if (!locationObj) {
+        showMsg(warnMsg, "Select the entrance location.");
+        btnLocation.classList.add("not-ok");
+        return;
+    }
+    btnLocation.classList.add("ok");
+
+    const condominiumId = localStorage.getItem('condominiumId');
+    console.log('Retrieved condominiumId:', condominiumId);
+
+    if (!condominiumId) {
+        showMsg(errorMsg, "Condominium not selected. Please login first.");
+        return;
+    }
+
+    const form = evt.target;
+    const formData = {
+        email: form.entranceRegisterEmail.value,
+        passwordHash: form.entranceRegisterPassword.value,
+        location: {
+            display_name: locationObj.display_name,
+            latitude: locationObj.lat,
+            longitude: locationObj.lon,
+        },
+        condominiumId: parseInt(condominiumId)
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/entrance/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to register entrance.");
+        }
+
+        const result = await response.json();
+        showMsg(successMsg, "Entrance registered successfully!");
+        console.log(result);
+
+    } catch (error) {
+        console.error("Error during registration:", error);
+        showMsg(errorMsg, "Ops! Try again in a few minutes.")
+    }
+});
 
 
 entranceLoginForm.addEventListener("submit", async (evt) => {
@@ -162,9 +218,9 @@ entranceLoginForm.addEventListener("submit", async (evt) => {
         console.error("Error:", error);
         showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
-
- 
 })
+
+
 
 let id1 = null;
 let id2 = null;
