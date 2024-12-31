@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Alert
     private DangerLevel dangerLevel;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "alert_date", nullable = false)
-    private Date date;
+    private LocalDateTime date;
     @Lob
     @Column(name = "alert_description",columnDefinition = "MEDIUMBLOB" ,nullable = false)
     private byte[] description;
