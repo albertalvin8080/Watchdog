@@ -1,26 +1,46 @@
 package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.service.AlertService;
+import org.featherlessbipeds.watchdog.util.JsonUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/alert")
 @RequiredArgsConstructor
+@Slf4j
 public class AlertController
 {
     private final AlertService service;
+    private final JsonUtil jsonUtil;
+
 
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Alert>> findAll()
     {
         return ResponseEntity.ok(service.findAll());
+    }
+
+    @PostMapping(path = "/register")
+    public ResponseEntity<?> createAlert(@RequestBody AlertRegisterDTO alert){
+
+        try {
+           return ResponseEntity.status(HttpStatus.CREATED).body(service.createAlert(alert));
+        }
+
+        catch (Exception e){
+           log.error("Error while trying to create alert");
+           e.printStackTrace();
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
+        }
+
     }
 }
