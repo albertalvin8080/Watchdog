@@ -27,7 +27,7 @@ public class AlertService
 
     public Alert createAlert(AlertRegisterDTO alert){
 
-        Optional<Entrance> op = entranceService.findbyId(alert.entranceId());
+        Optional<Entrance> op = entranceService.findById(alert.entranceId());
 
         if (op.isPresent()) {
 
