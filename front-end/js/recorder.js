@@ -6,6 +6,8 @@ let myStream = null;
 let mediaRecorder = null;
 let audioChunks = [];
 
+const baseurl = "http://localhost:8080";
+
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     console.log("getUserMedia supported.");
     navigator.mediaDevices
@@ -49,6 +51,8 @@ function main() {
         audio.controls = true;
         audio.src = audioURL;
         document.querySelector("#menu-screen > #content").appendChild(audio);
+        
+        persistAudio(audioBlob);
 
         // const downloadLink = document.createElement("a");
         // downloadLink.href = audioURL;
@@ -66,4 +70,37 @@ function main() {
             recordStart.innerText = "Alert";
         }
     });
+}
+
+
+function persistAudio(audioBlob) {
+    
+    const dangerLevel = getDangetLevel();
+    const entranceId = localStorage.getItem('entranceId');
+
+    const formData = new FormData();
+    formData.append("dangerLevel", dangerLevel);
+    formData.append("entranceId", entranceId);
+    formData.append("description", audioBlob);
+
+
+    fetch(baseurl+"/alert/register", {
+        method: "POST",
+        body: formData
+      
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+function getDangetLevel() {
+    // Retonando na tora, depois bota a IA pra adivinhar
+    return "HIGH";
+
+
 }
