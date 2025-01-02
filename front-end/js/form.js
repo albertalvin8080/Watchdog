@@ -207,7 +207,7 @@ entranceLoginForm.addEventListener("submit", async (evt) => {
         const success = response.ok;
 
         if (success) {
-            
+            localStorage.setItem('entranceId', result.id);
             mapApp.openEntranceView(result);
         }
         else {
