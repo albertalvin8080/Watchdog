@@ -25,7 +25,6 @@ public class AlertController
     private final AlertService service;
     private final JsonUtil jsonUtil;
 
-
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Alert>> findAll()
     {
@@ -36,19 +35,21 @@ public class AlertController
     public ResponseEntity<?> createAlert(
             @RequestParam("dangerLevel") DangerLevel dangerLevel,
             @RequestParam("entranceId") Integer entranceId,
-            @RequestParam("description") MultipartFile description) throws IOException {
+            @RequestParam("description") MultipartFile description
+    ) throws IOException
+    {
+        AlertRegisterDTO alert = new AlertRegisterDTO(dangerLevel, description.getBytes(), entranceId);
 
-        AlertRegisterDTO alert = new AlertRegisterDTO(dangerLevel,description.getBytes(),entranceId);
-
-        try {
-           return ResponseEntity.status(HttpStatus.CREATED).body(service.createAlert(alert));
+        try
+        {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createAlert(alert));
         }
 
-        catch (Exception e){
-           log.error("Error while trying to create alert");
-           e.printStackTrace();
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
+        catch (Exception e)
+        {
+            log.error("Error while trying to create alert");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
-
     }
 }
