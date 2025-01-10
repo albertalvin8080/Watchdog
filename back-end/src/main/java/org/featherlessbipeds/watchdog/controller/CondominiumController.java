@@ -27,10 +27,12 @@ public class CondominiumController
     {
         Condominium condominium = new Condominium();
         condominium.setLocation(condom.location());
-        condominium.setName(condom.name());
+        condominium.setName(condom.condomName());
+        condominium.setTrusteeName(condom.trusteeName());
         condominium.setEmail(condom.email());
         //A senha ta sem hash, dps v isso
         condominium.setPasswordHash(condom.passwordHash());
+        System.out.println(condom);
 
         try
         {
@@ -66,8 +68,8 @@ public class CondominiumController
     }
 
     @GetMapping("/all")
-
-    public ResponseEntity<List<Condominium>> getAll(){
+    public ResponseEntity<List<Condominium>> getAll()
+    {
 
         return ResponseEntity.ok(service.getAll());
 

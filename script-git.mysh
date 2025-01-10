@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git pull
+# git pull
 
 list=("feat" "wip" "fix" "build" "chore" "style" "refactor" "perf" "revert" "test" "docs")
 # list=("feat" "wip" "fix" "build" "chore" "style" "refactor" "perf" "revert" "test")

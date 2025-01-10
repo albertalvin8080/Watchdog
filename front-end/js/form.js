@@ -53,7 +53,8 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
 
     const form = evt.target;
     const formData = {
-        name: form.name.value,
+        condomName: form.condomName.value,
+        trusteeName: form.trusteeName.value,
         email: form.condominiumRegisterEmail.value,
         passwordHash: form.condominiumRegisterPassword.value,
         location: {

@@ -61,10 +61,12 @@ JPA_Hibernate/first-test/mysql-data/
 **/*.d
 
 **/mongodb_data/
+**/.env
 
 # C/*/*.exe
 # C/*.exe
 **/*.exe
+**/*.pdb
 
 **/node_modules/
 
@@ -86,7 +88,7 @@ JPA_Hibernate/first-test/mysql-data/
 
 **/.metadata
 
-**/.venv
+**/.venv*
 **/__pycache__
 **/.pytest_cache
 
@@ -133,3 +135,4 @@ Ground-Truth-Evaluation/yolov10/
 
 analises/
 GCMS/GCMS-Albert-Sobral*/
+Ground-Truth-Evaluation/weights_v2/*.zip
