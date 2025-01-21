@@ -4,14 +4,15 @@
     --color1: #fff;
     --color2: #ccc;
     --color2-1: #F4F4F4;
-    --color3: #2fd379;
+    --color3: #20bd5b;
     --color4: #13aa57;
+    /* --color5: #f44336; */
     --color5: #f44336;
     --color5-2: #ff0000;
     --color6: #d32f2f;
 
-    --pallete1: #F6AB45;
-    --pallete2: #FDCA4B;
+    --pallete1: #ff6e07;
+    --pallete2: #ff5e00;
     --pallete3: #4490C9;
     --pallete4: #0D213A;
     --pallete5: white;
@@ -159,23 +160,16 @@ body {
 
 /* FORMS */
 
-#form-container {
-    width: calc(var(--width) * var(--width-factor));
-    height: calc(var(--height) * var(--height-factor));
-
-    padding: 20px;
-    position: absolute;
-    background-color: white;
-}
-
 #form-container form {
     display: none;
 }
 
 #form-container h1 {
+    font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 30px;
     font-size: 20px;
     text-align: center;
+    text-transform: uppercase;
 }
 
 #form-container .form-group {
@@ -193,24 +187,19 @@ body {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     border-radius: 4px;
 }
 
 #form-container>form button {
-    background-color: #007BFF;
+    background-color: var(--pallete1);
     color: white;
     border: none;
     cursor: pointer;
 }
 
 #form-container>form button:hover {
-    background-color: #0056b3;
-}
-
-#form-container>form #btnLocation {
-    color: black;
-    border: 0;
+    background-color: var(--pallete2);
 }
 
 .ok {
@@ -223,12 +212,12 @@ body {
 }
 
 .not-ok {
-    background-color: var(--color5);
-    color: white !important;
+    /* background-color: var(--color5); */
+    /* color: white !important; */
 }
 
 .not-ok:hover {
-    background-color: var(--color6);
+    /* background-color: var(--color6); */
 }
 
 /* MAIN SCREEN */
@@ -423,4 +412,36 @@ top: 500px;
 
 .recording {
 
+}
+
+
+form h1, form label {
+    color: var(--pallete1)
+}
+
+#form-container {
+    width: calc(var(--width) * var(--width-factor));
+    height: calc(var(--height) * var(--height-factor));
+
+    padding: 20px;
+    position: absolute;
+    background-color: white;
+}
+
+#form-container>form #btnLocation {
+    color: black;
+    border: 0;
+}
+
+#form-container>form .btnLocation {
+    border: none;
+}
+
+.btnLocation {
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.btnLocation:hover {
+    background-color: #dfdfdf;
 }
