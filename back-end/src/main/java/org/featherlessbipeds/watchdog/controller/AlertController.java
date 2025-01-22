@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/alert")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class AlertController
 {
     private final AlertService service;

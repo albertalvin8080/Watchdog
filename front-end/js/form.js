@@ -1,17 +1,22 @@
 "use strict";
 
+let g_condom_metadata = null;
+
 const warnMsg = document.querySelector(".warn-msg.msg");
 const errorMsg = document.querySelector(".error-msg.msg");
 const successMsg = document.querySelector(".success-msg.msg");
 
-function hideAllForms() {
+function hideAllForms()
+{
     const forms = document.querySelectorAll("#form-container > form");
-    forms.forEach(form => {
+    forms.forEach(form =>
+    {
         form.style.display = "none";
     });
 }
 
-function showForm(formId) {
+function showForm(formId)
+{
     mapApp.hideMap();
     mapApp.hideMenu();
     mapApp.hideEntranceRegister();
@@ -28,23 +33,29 @@ const btnLocation = document.querySelector(".btnLocation");
 const locationBar = document.querySelector("#locationBar");
 let locationObj = null;
 
-async function openLocationSelector() {
-    locationObj = await new Promise((resolve, reject) => {
-        mapApp.openLocationSelectorView(locationBar, resolve);
+async function openLocationSelector(boundByCondom)
+{
+    locationObj = await new Promise((resolve, reject) =>
+    {
+        mapApp.openLocationSelectorView(locationBar, resolve, { boundByCondom, condom: g_condom_metadata });
     });
-    if (locationObj) {
+    if (locationObj)
+    {
         btnLocation.classList.remove("not-ok");
         btnLocation.classList.add("ok");
-    } else {
+    } else
+    {
         btnLocation.classList.remove("ok");
         btnLocation.classList.add("not-ok");
     }
 }
 
-registerCondominiumForm.addEventListener("submit", async (evt) => {
+registerCondominiumForm.addEventListener("submit", async (evt) =>
+{
     evt.preventDefault();
 
-    if (!locationObj) {
+    if (!locationObj)
+    {
         showMsg(warnMsg, "Select the condominium location.");
         btnLocation.classList.add("not-ok");
         return;
@@ -64,24 +75,29 @@ registerCondominiumForm.addEventListener("submit", async (evt) => {
         }
     };
 
-    try {
+    try
+    {
         const response = await fetch("http://localhost:8080/condom/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify(formData),
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error("Failed to register condominium.");
         }
 
         const result = await response.json();
         showMsg(successMsg, "Condominium registered successfully!");
         console.log(result);
+        g_condom_metadata = result;
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error("Error during registration:", error);
         showMsg(errorMsg, "Ops! Try again in a few minutes.")
     }
@@ -91,7 +107,8 @@ const condominiumLoginForm = document.querySelector("#condominiumLoginForm");
 const entranceLoginForm = document.querySelector("#entranceLoginForm");
 
 let processing = false;
-condominiumLoginForm.addEventListener("submit", async (evt) => {
+condominiumLoginForm.addEventListener("submit", async (evt) =>
+{
     evt.preventDefault();
     // mapApp.openMap();
 
@@ -101,11 +118,13 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
 
     const formData = new FormData(condominiumLoginForm);
     const formObject = Object.fromEntries(formData.entries());
-    try {
+    try
+    {
         const response = await fetch("http://localhost:8080/condom/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify(formObject),
         });
@@ -115,16 +134,20 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
         // const success = Boolean(response.headers.get("login-success"));
         const success = response.ok;
 
-        if (success) {
+        if (success)
+        {
             localStorage.setItem('condominiumId', result.id);
             mapApp.openCondominiumView(result);
         }
-        else {
+        else
+        {
             showMsg(warnMsg, result.message);
         }
 
         console.log(result);
-    } catch (error) {
+        g_condom_metadata = result;
+    } catch (error)
+    {
         console.error("Error:", error);
         showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
@@ -133,10 +156,12 @@ condominiumLoginForm.addEventListener("submit", async (evt) => {
 })
 
 /* REGISTER ENTRANCE */
-registerEntranceForm.addEventListener("submit", async (evt) => {
+registerEntranceForm.addEventListener("submit", async (evt) =>
+{
     evt.preventDefault();
 
-    if (!locationObj) {
+    if (!locationObj)
+    {
         showMsg(warnMsg, "Select the entrance location.");
         btnLocation.classList.add("not-ok");
         return;
@@ -146,7 +171,8 @@ registerEntranceForm.addEventListener("submit", async (evt) => {
     const condominiumId = localStorage.getItem('condominiumId');
     console.log('Retrieved condominiumId:', condominiumId);
 
-    if (!condominiumId) {
+    if (!condominiumId)
+    {
         showMsg(errorMsg, "Condominium not selected. Please login first.");
         return;
     }
@@ -163,16 +189,19 @@ registerEntranceForm.addEventListener("submit", async (evt) => {
         condominiumId: parseInt(condominiumId)
     };
 
-    try {
+    try
+    {
         const response = await fetch("http://localhost:8080/entrance/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify(formData),
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error("Failed to register entrance.");
         }
 
@@ -180,25 +209,29 @@ registerEntranceForm.addEventListener("submit", async (evt) => {
         showMsg(successMsg, "Entrance registered successfully!");
         console.log(result);
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error("Error during registration:", error);
         showMsg(errorMsg, "Ops! Try again in a few minutes.")
     }
 });
 
 
-entranceLoginForm.addEventListener("submit", async (evt) => {
+entranceLoginForm.addEventListener("submit", async (evt) =>
+{
 
     evt.preventDefault();
 
     const formData = new FormData(entranceLoginForm);
     const formObject = Object.fromEntries(formData.entries());
 
-    try {
+    try
+    {
         const response = await fetch("http://localhost:8080/entrance/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify(formObject),
         });
@@ -207,15 +240,18 @@ entranceLoginForm.addEventListener("submit", async (evt) => {
 
         const success = response.ok;
 
-        if (success) {
+        if (success)
+        {
             localStorage.setItem('entranceId', result.id);
             mapApp.openEntranceView(result);
         }
-        else {
+        else
+        {
             showMsg(warnMsg, result.message);
         }
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error("Error:", error);
         showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
@@ -225,12 +261,13 @@ entranceLoginForm.addEventListener("submit", async (evt) => {
 
 let id1 = null;
 let id2 = null;
-function showMsg(msgE, msgStr) {
+function showMsg(msgE, msgStr)
+{
     clearTimeout(id1);
     clearTimeout(id2);
 
     const seconds = 0.3;
-    const showDuration = 2000; 
+    const showDuration = 2000;
     msgE.style.display = "flex";
     msgE.innerText = msgStr;
 
@@ -240,10 +277,12 @@ function showMsg(msgE, msgStr) {
 
     msgE.style.animation = `showMsg ${seconds}s ease forwards`;
 
-    id1 = setTimeout(() => {
+    id1 = setTimeout(() =>
+    {
         msgE.style.animation = `hideMsg ${seconds}s ease forwards`;
-        id2 = setTimeout(() => {
+        id2 = setTimeout(() =>
+        {
             msgE.style.display = "none";
-        }, seconds * 1000);  
+        }, seconds * 1000);
     }, showDuration);
 }

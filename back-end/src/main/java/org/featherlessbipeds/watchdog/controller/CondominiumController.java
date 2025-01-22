@@ -17,13 +17,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/condom")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CondominiumController
 {
     private final JsonUtil jsonUtil;
     private final CondominiumService service;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerCondominium(@RequestBody CondominiumRegisterDTO condom)
+    public ResponseEntity<?> registerCondominium(@RequestBody CondominiumRegisterDTO condom)
     {
         Condominium condominium = new Condominium();
         condominium.setLocation(condom.location());
@@ -36,8 +37,9 @@ public class CondominiumController
 
         try
         {
-            service.registerCondominium(condominium);
-            return ResponseEntity.status(HttpStatus.CREATED).body(jsonUtil.createMsg("Condominio criado"));
+            condominium = service.registerCondominium(condominium);
+            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
         catch (DataIntegrityViolationException e)
         {
