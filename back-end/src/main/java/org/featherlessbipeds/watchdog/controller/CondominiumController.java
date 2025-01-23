@@ -7,6 +7,7 @@ import org.featherlessbipeds.watchdog.dto.LoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
+import org.featherlessbipeds.watchdog.util.MapperDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class CondominiumController
 
         if (condominium != null)
         {
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
+            var condominiumDTO = MapperDto.convert(condominium);
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
 

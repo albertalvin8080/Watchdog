@@ -2,14 +2,18 @@ package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.catalina.mapper.Mapper;
 import org.featherlessbipeds.watchdog.dto.EntranceDTO;
 import org.featherlessbipeds.watchdog.dto.EntranceRegisterDTO;
+import org.featherlessbipeds.watchdog.dto.EntranceWithCondomDTO;
 import org.featherlessbipeds.watchdog.dto.LoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.featherlessbipeds.watchdog.service.EntranceService;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
+import org.featherlessbipeds.watchdog.util.MapperDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +40,20 @@ public class EntranceController
             if (entrance != null)
             {
                 log.info("Login com: {}", loginDTO.email());
-                EntranceDTO entranceDTO = new EntranceDTO(entrance.getId(), entrance.getLocation(), entrance.getCondominium().getId(), entrance.getAlertSet());
-                return ResponseEntity.status(HttpStatus.OK).body(entranceDTO);
+                // EntranceDTO entranceDTO = new EntranceDTO(
+                //     entrance.getId(), 
+                //     entrance.getLocation(), 
+                //     entrance.getCondominium().getId(), 
+                //     entrance.getAlertSet(),
+                //     MapperDto.convert(entrance.getCondominium())
+                // );
+                EntranceWithCondomDTO dto = new EntranceWithCondomDTO(
+                    entrance.getId(), 
+                    MapperDto.convert(entrance.getCondominium())
+                );
+                return ResponseEntity.status(HttpStatus.OK).body(dto);
             }
+            
             log.warn("Falha ao logar com: {}", loginDTO.email());
             String json = jsonUtil.createMsg("Invalid email and/or password.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);

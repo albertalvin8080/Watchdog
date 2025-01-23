@@ -5,5 +5,9 @@ import org.featherlessbipeds.watchdog.entity.Location;
 
 import java.util.Set;
 
-public record EntranceDTO(Integer id, Location location, Integer condominiumID, Set<Alert> alertSet) {
+public record EntranceDTO(
+    Integer id, 
+    Location location, 
+    Integer condominiumID, 
+    Set<Alert> alertSet) {
 }
