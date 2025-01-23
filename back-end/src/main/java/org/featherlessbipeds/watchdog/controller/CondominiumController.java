@@ -38,7 +38,7 @@ public class CondominiumController
         try
         {
             condominium = service.registerCondominium(condominium);
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
         catch (DataIntegrityViolationException e)
@@ -61,7 +61,7 @@ public class CondominiumController
 
         if (condominium != null)
         {
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
 
@@ -72,8 +72,6 @@ public class CondominiumController
     @GetMapping("/all")
     public ResponseEntity<List<Condominium>> getAll()
     {
-
         return ResponseEntity.ok(service.getAll());
-
     }
 }

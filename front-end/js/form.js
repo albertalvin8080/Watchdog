@@ -37,7 +37,7 @@ async function openLocationSelector(boundByCondom)
 {
     locationObj = await new Promise((resolve, reject) =>
     {
-        mapApp.openLocationSelectorView(locationBar, resolve, { boundByCondom, condom: g_condom_metadata });
+        mapApp.openLocationSelectorView(locationBar, resolve, { radius: 1000, boundByCondom, condom: g_condom_metadata });
     });
     if (locationObj)
     {

@@ -1,7 +1,9 @@
 "use strict";
 
-class MapApp {
-    constructor(divId) {
+class MapApp
+{
+    constructor(divId)
+    {
         this.map = L.map(divId);
         this.mapElement = document.querySelector(`#${divId}`);
         this.marker = null;
@@ -19,20 +21,24 @@ class MapApp {
         configureMenu(this);
     }
 
-    openMap() {
+    openMap()
+    {
         this.showMap();
     }
 
-    async openCondominiumView(condom) {
-        this.condom = condom;
+    async openCondominiumView(condom)
+    {
+        // this.condom = condom;
         const latC = condom.location.latitude;
         const lonC = condom.location.longitude;
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latC}&lon=${lonC}`;
-        try {
+        try
+        {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (this.coords) {
+            if (this.coords)
+            {
                 this.map.removeLayer(this.coords.marker);
             }
 
@@ -41,7 +47,23 @@ class MapApp {
             lon = parseFloat(lonC);
 
             this.map.setView([lat, lon], 15);
-            const marker = L.marker([lat, lon]).addTo(this.map);
+            const radius = 1000; // Radius in meters
+            const circle = L.circle([lat, lon], {
+                color: 'red',
+                fillColor: '#0000FF',
+                fillOpacity: 0.15,
+                radius: radius,
+            }).addTo(this.map);
+
+            const customIcon = L.icon({
+                iconUrl: '../assets/location-red-3.png', // path to your PNG image
+                iconSize: [40, 41], // size of the icon [width, height]
+                iconAnchor: [20, 41], // point of the icon which will correspond to marker's location [x, y]
+                popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor [x, y]
+            });
+
+            // const marker = L.marker([lat, lon]).addTo(this.map);
+            const marker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
 
             marker.bindPopup(`📍 ${display_name}`, {
                 maxWidth: 200,
@@ -49,9 +71,18 @@ class MapApp {
             });
             // .openPopup(); // The popup is slight deslocated to the right.
 
-            this.coords = { lat, lon, display_name, marker };
+            const entranceMarkers = [];
+            condom.entranceSet.forEach(e =>
+            {
+                const location = e.location;
+                const e_marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
+                entranceMarkers.push(e_marker);
+            })
 
-        } catch (error) {
+            this.coords = { lat, lon, display_name, marker, circle, entranceMarkers };
+
+        } catch (error)
+        {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
         }
@@ -60,16 +91,19 @@ class MapApp {
         this.showEntranceRegister();
     }
 
-    async openEntranceView(entrance) {
+    async openEntranceView(entrance)
+    {
         this.entrance = entrance;
         const latE = entrance.location.latitude;
         const lonE = entrance.location.longitude;
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latE}&lon=${lonE}`;
-        try {
+        try
+        {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (this.coords) {
+            if (this.coords)
+            {
                 this.map.removeLayer(this.coords.marker);
             }
 
@@ -87,7 +121,8 @@ class MapApp {
 
             this.coords = { lat, lon, display_name, marker };
 
-        } catch (error) {
+        } catch (error)
+        {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
         }
@@ -96,37 +131,54 @@ class MapApp {
         this.showMenu();
     }
 
-    openLocationSelectorView(locationBar, resolve, condomMetadata) {
+    addCondominiumToMap(condomMetadata)
+    {
+        // this.map.removeLayer(this.coords.marker);
+
+        // let [lat, lon] = [condomMetadata.condom.location.latitude, condomMetadata.condom.location.longitude];
+
+        // this.map.setView([lat, lon]);
+
+        // const radius = 1000; // Radius in meters
+        // const circle = L.circle([lat, lon], {
+        //     color: 'red',
+        //     fillColor: '#0000FF',
+        //     fillOpacity: 0.15,
+        //     radius: radius,
+        // })
+        // .addTo(this.map);
+
+        // const customIcon = L.icon({
+            // iconUrl: '../assets/location-red-3.png', // path to your PNG image
+            // iconSize: [40, 41], // size of the icon [width, height]
+            // iconAnchor: [20, 41], // point of the icon which will correspond to marker's location [x, y]
+            // popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor [x, y]
+        // });
+
+        // const marker = L.marker([lat, lon]).addTo(this.map);
+        // const marker = L.marker([lat, lon], { icon: customIcon })
+        // .addTo(this.map);
+        // const entranceMarkers = [];
+
+        // condomMetadata.condom.entranceSet.forEach(e =>
+        // {
+        //     const location = e.location;
+        //     const e_marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
+        //     entranceMarkers.push(e_marker);
+        // })
+
+        // this.condomMarker = { marker, circle, radius, lat, lon, entranceMarkers };
+    }
+
+    openLocationSelectorView(locationBar, resolve, condomMetadata)
+    {
         locationBar.style.display = "flex";
         this.showMap();
 
         console.log(condomMetadata)
-        if (condomMetadata.boundByCondom) {
-            this.map.removeLayer(this.coords.marker);
-
-            let [lat, lon] = [condomMetadata.condom.location.latitude, condomMetadata.condom.location.longitude];
-
-            this.map.setView([lat, lon]);
-
-            const radius = 500; // Radius in meters
-            const circle = L.circle([lat, lon], {
-                color: 'red',
-                fillColor: '#0000FF',
-                fillOpacity: 0.15,
-                radius: radius,
-            }).addTo(this.map);
-
-            const customIcon = L.icon({
-                iconUrl: '../assets/location-red.png', // path to your PNG image
-                iconSize: [40, 41], // size of the icon [width, height]
-                iconAnchor: [20, 41], // point of the icon which will correspond to marker's location [x, y]
-                popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor [x, y]
-            });
-
-            // const marker = L.marker([lat, lon]).addTo(this.map);
-            const marker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
-
-            this.condomMarker = { marker, circle, radius, lat, lon };
+        if (condomMetadata.boundByCondom)
+        {
+            this.addCondominiumToMap(condomMetadata);
         }
 
         const btnCancel = locationBar.querySelector("#btnCancel");
@@ -134,28 +186,73 @@ class MapApp {
         const inputSearch = locationBar.querySelector("#inputSearch");
         const btnSearch = locationBar.querySelector("#btnSearch");
 
-        const handleCancel = (evt) => {
+        const handleCancel = (evt) =>
+        {
             cleanup();
             resolve(false);
         };
 
-        const handleConfirm = (evt) => {
+        this.invalidEntrance = false;
+        const handleConfirm = (evt) =>
+        {
             cleanup();
-            resolve(this.coords);
+            if (this.invalidEntrance)
+                resolve(false);
+            else
+                resolve(this.coords);
         };
 
-        const handleSearch = async (evt) => {
+        const performGeocoding = async (lat, lon, display_name) =>
+        {
+            // if (this.coords)
+            // {
+            //     this.map.removeLayer(this.coords.marker);
+            // }
+
+            if (condomMetadata.boundByCondom)
+            {
+                const contains = this.isPointInsideCircle(
+                    condomMetadata.condom.location.latitude,
+                    condomMetadata.condom.location.longitude,
+                    lat,
+                    lon,
+                    // condomMetadata.condom.radius,
+                    condomMetadata.radius,
+                );
+
+                if (!contains)
+                {
+                    inputSearch.value = "";
+                    this.invalidEntrance = true;
+                    console.log("INVALID");
+                    return null;
+                }
+                this.invalidEntrance = false;
+            }
+
+            this.map.setView([lat, lon], 15);
+
+            const marker = L.marker([lat, lon]).addTo(this.map);
+            marker.bindPopup(`📍 ${display_name || ''}`, {
+                maxWidth: 200,
+                minWidth: 100,
+            }).openPopup();
+
+            return { lat, lon, display_name, marker };
+        };
+
+        const handleSearch = async (evt) =>
+        {
             const strAddress = inputSearch.value.trim();
             const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
-            try {
+
+            try
+            {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (this.coords) {
-                    this.map.removeLayer(this.coords.marker);
-                }
-
-                if (data.length === 0) {
+                if (data.length === 0)
+                {
                     alert("Address not found.");
                     this.map.setView([51.5074, -0.1278], 2);
                     return;
@@ -165,85 +262,47 @@ class MapApp {
                 lat = parseFloat(lat);
                 lon = parseFloat(lon);
 
-                if (condomMetadata.boundByCondom) {
-                    const contains = this.isPointInsideCircle(
-                        this.condomMarker.lat,
-                        this.condomMarker.lon,
-                        lat,
-                        lon,
-                        this.condomMarker.radius
-                    );
-                    if (!contains) {
-                        this.coords = null;
-                        return;
-                    }
-                }
-
-                this.map.setView([lat, lon], 15);
-
-                const marker = L.marker([lat, lon]).addTo(this.map);
-                marker.bindPopup(`📍 ${display_name}`, {
-                    maxWidth: 200,
-                    minWidth: 100,
-                }).openPopup();
-
-                this.coords = { lat, lon, display_name, marker };
-
-            } catch (error) {
+                this.coords = await performGeocoding(lat, lon, display_name);
+            } catch (error)
+            {
                 console.error("Error fetching geocoding data:", error);
                 alert("Failed to fetch location data.");
             }
         };
 
-        const handleMapClick = async (evt) => {
+        const handleMapClick = async (evt) =>
+        {
             const latlng = evt.latlng;
             const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`;
-            try {
+
+            try
+            {
                 const response = await fetch(url);
                 const data = await response.json();
-
-                if (this.coords) {
-                    this.map.removeLayer(this.coords.marker);
-                }
 
                 let { lat, lon, display_name } = data;
                 lat = parseFloat(latlng.lat);
                 lon = parseFloat(latlng.lng);
 
-                if (condomMetadata.boundByCondom) {
-                    const contains = this.isPointInsideCircle(
-                        this.condomMarker.lat,
-                        this.condomMarker.lon,
-                        lat,
-                        lon,
-                        this.condomMarker.radius
-                    );
-                    if (!contains) {
-                        this.coords = null;
-                        return;
-                    }
-                }
+                console.log(this.coords);
+                const r = await performGeocoding(lat, lon, display_name);
+                this.coords = r || this.coords;
+                console.log(this.coords);
 
-                this.map.setView([lat, lon]);
-                const marker = L.marker([lat, lon]).addTo(this.map);
-                marker.bindPopup(`📍 ${display_name}`, {
-                    maxWidth: 200,
-                    minWidth: 100,
-                }).openPopup();
-
-                // Put the address name in the input.
-                inputSearch.value = display_name;
-
-                this.coords = { lat, lon, display_name, marker };
-
-            } catch (error) {
+                // Atualiza o input com o nome do endereço
+                if (r && this.coords)
+                    inputSearch.value = this.coords.display_name;
+            } catch (error)
+            {
                 console.error("Error fetching geocoding data:", error);
                 alert("Failed to fetch location data.");
             }
         };
 
-        const handleInputSearchEnter = (evt) => {
-            if (evt.key === "Enter") {
+        const handleInputSearchEnter = (evt) =>
+        {
+            if (evt.key === "Enter")
+            {
                 evt.preventDefault();
                 btnSearch.click();
             }
@@ -255,7 +314,8 @@ class MapApp {
         inputSearch.addEventListener("keydown", handleInputSearchEnter)
         this.map.on("click", handleMapClick);
 
-        const cleanup = () => {
+        const cleanup = () =>
+        {
             locationBar.style.display = "none";
             this.hideMap();
 
@@ -264,73 +324,88 @@ class MapApp {
             btnSearch.removeEventListener("click", handleSearch);
             inputSearch.removeEventListener("keydown", handleInputSearchEnter);
             this.map.off("click", handleMapClick);
-            
-            if (condomMetadata.boundByCondom) {
-                this.coords.marker.addTo(this.map);
-                this.map.removeLayer(this.condomMarker.circle);
-                this.map.removeLayer(this.condomMarker.marker);
-            }
+
+            // if (condomMetadata.boundByCondom)
+            // {
+            //     this.coords.marker.addTo(this.map);
+            //     this.map.removeLayer(this.condomMarker.circle);
+            //     this.map.removeLayer(this.condomMarker.marker);
+            //     this.condomMarker.forEach(m =>
+            //     {
+            //         this.map.removeLayer(m);
+            //     });
+            // }
         };
     }
 
     // Uses Haversine formula
-    isPointInsideCircle(centerLat, centerLon, pointLat, pointLon, radius) {
+    isPointInsideCircle(centerLat, centerLon, pointLat, pointLon, radius)
+    {
         // Convert degrees to radians
         const toRadians = (degrees) => degrees * (Math.PI / 180);
-    
+
         const R = 6371000; // Earth's radius in meters
-    
+
         const dLat = toRadians(pointLat - centerLat);
         const dLon = toRadians(pointLon - centerLon);
-    
+
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                  Math.cos(toRadians(centerLat)) * Math.cos(toRadians(pointLat)) *
-                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            Math.cos(toRadians(centerLat)) * Math.cos(toRadians(pointLat)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
+
         const distance = R * c;
-    
+
         return distance <= radius;
     }
 
-    hideMap() {
+    hideMap()
+    {
         this.mapElement.style.display = "none";
     }
 
-    showMap() {
+    showMap()
+    {
         this.mapElement.style.display = "flex";
     }
 
-    showMenu() {
+    showMenu()
+    {
         this.menuScreen.style.display = "flex";
     }
 
-    hideMenu() {
+    hideMenu()
+    {
         this.menuScreen.style.display = "none";
     }
 
-    showEntranceRegister() {
+    showEntranceRegister()
+    {
         this.entranceRegisterBtn.style.display = "flex";
     }
 
-    hideEntranceRegister() {
+    hideEntranceRegister()
+    {
         this.entranceRegisterBtn.style.display = "none";
     }
 
-    watchGeolocation() {
+    watchGeolocation()
+    {
         // Enable geolocation watch
         navigator.geolocation.watchPosition(
             this.onSuccess.bind(this),
             this.onError.bind(this)
         );
     }
-    onSuccess(pos) {
+    onSuccess(pos)
+    {
         const lat = pos.coords.latitude;
         const lng = pos.coords.lnggitude;
         const acc = pos.coords.accuracy;
 
         // Remove existing marker and circle if they exist
-        if (this.marker) {
+        if (this.marker)
+        {
             this.map.removeLayer(this.marker);
             this.map.removeLayer(this.circle);
         }
@@ -347,7 +422,8 @@ class MapApp {
         this.circle = L.circle([lat, lng], { radius: acc, zIndexOffset: -1 }).addTo(this.map);
 
         // Adjust the zoom if needed
-        if (!this.zoomed) {
+        if (!this.zoomed)
+        {
             this.zoomed = true;
             this.map.fitBounds(this.circle.getBounds());
         }
@@ -356,8 +432,10 @@ class MapApp {
         this.map.setView([lat, lng]);
     }
 
-    onError(err) {
-        switch (err.code) {
+    onError(err)
+    {
+        switch (err.code)
+        {
             case 1: // PERMISSION_DENIED
                 alert("Please allow geolocation access.");
                 break;
@@ -369,14 +447,16 @@ class MapApp {
         }
     }
 
-    onMapClick(e) {
+    onMapClick(e)
+    {
         const latlng = e.latlng;
         const clickedMarker = L.marker(latlng).addTo(this.map);
 
         clickedMarker.bindPopup("You clicked here!").openPopup();
 
         // Remove the marker on click
-        clickedMarker.on("click", (e) => {
+        clickedMarker.on("click", (e) =>
+        {
             this.map.removeLayer(clickedMarker);
         });
     }
