@@ -37,7 +37,7 @@ async function openLocationSelector(boundByCondom)
 {
     locationObj = await new Promise((resolve, reject) =>
     {
-        mapApp.openLocationSelectorView(locationBar, resolve, { boundByCondom, condom: g_condom_metadata });
+        mapApp.openLocationSelectorView(locationBar, resolve, { radius: 1000, boundByCondom, condom: g_condom_metadata });
     });
     if (locationObj)
     {
@@ -93,7 +93,7 @@ registerCondominiumForm.addEventListener("submit", async (evt) =>
 
         const result = await response.json();
         showMsg(successMsg, "Condominium registered successfully!");
-        console.log(result);
+        //console.log(result);
         g_condom_metadata = result;
 
     } catch (error)
@@ -144,7 +144,7 @@ condominiumLoginForm.addEventListener("submit", async (evt) =>
             showMsg(warnMsg, result.message);
         }
 
-        console.log(result);
+        //console.log(result);
         g_condom_metadata = result;
     } catch (error)
     {
@@ -207,7 +207,7 @@ registerEntranceForm.addEventListener("submit", async (evt) =>
 
         const result = await response.json();
         showMsg(successMsg, "Entrance registered successfully!");
-        console.log(result);
+        //console.log(result);
 
     } catch (error)
     {

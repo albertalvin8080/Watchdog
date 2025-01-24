@@ -7,6 +7,7 @@ import org.featherlessbipeds.watchdog.dto.LoginDTO;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
+import org.featherlessbipeds.watchdog.util.MapperDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CondominiumController
         try
         {
             condominium = service.registerCondominium(condominium);
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
         catch (DataIntegrityViolationException e)
@@ -61,7 +62,7 @@ public class CondominiumController
 
         if (condominium != null)
         {
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation());
+            var condominiumDTO = MapperDto.convert(condominium);
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
 
@@ -72,8 +73,6 @@ public class CondominiumController
     @GetMapping("/all")
     public ResponseEntity<List<Condominium>> getAll()
     {
-
         return ResponseEntity.ok(service.getAll());
-
     }
 }

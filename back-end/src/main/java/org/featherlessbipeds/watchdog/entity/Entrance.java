@@ -3,7 +3,6 @@ package org.featherlessbipeds.watchdog.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.featherlessbipeds.watchdog.entity.notused.Doorman;
 
 import java.util.Set;
 
@@ -25,6 +24,7 @@ public class Entrance
     @Column(name = "entrance_email", columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     private String email;
     @Column(name = "entrance_password_hash", columnDefinition = "VARCHAR(255)", nullable = false)
+    @JsonIgnore
     private String passwordHash;
     @ManyToOne
     @JoinColumn(name = "condominium_id", nullable = false)
