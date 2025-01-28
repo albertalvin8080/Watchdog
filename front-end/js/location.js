@@ -41,13 +41,6 @@ class MapApp {
             lon = parseFloat(lonC);
 
             this.map.setView([lat, lon], 15);
-            const radius = 1000; // Radius in meters
-            const circle = L.circle([lat, lon], {
-                color: 'red',
-                fillColor: '#0000FF',
-                fillOpacity: 0.15,
-                radius: radius,
-            }).addTo(this.map);
 
             const customIcon = L.icon({
                 iconUrl: '../assets/location-red-3.png', // path to your PNG image
@@ -72,7 +65,7 @@ class MapApp {
                 entranceMarkers.push(e_marker);
             })
 
-            this.condomCoords = { lat, lon, display_name, marker, circle, entranceMarkers };
+            this.condomCoords = { lat, lon, display_name, marker, entranceMarkers };
 
         } catch (error) {
             console.error("Error fetching geocoding data:", error);
@@ -85,7 +78,7 @@ class MapApp {
 
     async openEntranceView(entranceMetadata) {
         console.log(entranceMetadata);
-        this.entranceMetadata = entranceMetadata;
+        // this.entranceMetadata = entranceMetadata;
 
         const condom = entranceMetadata.condom;
         const entranceSet = condom.entranceSet;
@@ -128,14 +121,14 @@ class MapApp {
                 entranceMarkers.push(m);
             });
 
-            const radius = 1000; // Radius in meters
-            const circle = L.circle([condom.location.latitude, condom.location.longitude], {
-                color: 'red',
-                fillColor: '#0000FF',
-                fillOpacity: 0.15,
-                radius: radius,
-            })
-                .addTo(this.map);
+            // const radius = 1000; // Radius in meters
+            // const circle = L.circle([condom.location.latitude, condom.location.longitude], {
+            //     color: 'red',
+            //     fillColor: '#0000FF',
+            //     fillOpacity: 0.15,
+            //     radius: radius,
+            // })
+            //     .addTo(this.map);
 
             customIcon = L.icon({
                 iconUrl: '../assets/location-red-3.png',
@@ -153,7 +146,7 @@ class MapApp {
                 minWidth: 100,
             });
 
-            this.entranceCoords = { lat, lon, display_name, marker, entranceMarkers, condomMarker, circle };
+            this.entranceCoords = { lat, lon, display_name, marker, entranceMarkers, condomMarker };
 
         } catch (error) {
             console.error("Error fetching geocoding data:", error);
@@ -164,42 +157,16 @@ class MapApp {
         this.showMenu();
     }
 
-    addCondominiumToMap(condomMetadata) {
-        // this.map.removeLayer(this.coords.marker);
-
-        // let [lat, lon] = [condomMetadata.condom.location.latitude, condomMetadata.condom.location.longitude];
-
-        // this.map.setView([lat, lon]);
-
-        // const radius = 1000; // Radius in meters
-        // const circle = L.circle([lat, lon], {
-        //     color: 'red',
-        //     fillColor: '#0000FF',
-        //     fillOpacity: 0.15,
-        //     radius: radius,
-        // })
-        // .addTo(this.map);
-
-        // const customIcon = L.icon({
-        // iconUrl: '../assets/location-red-3.png', // path to your PNG image
-        // iconSize: [40, 41], // size of the icon [width, height]
-        // iconAnchor: [20, 41], // point of the icon which will correspond to marker's location [x, y]
-        // popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor [x, y]
-        // });
-
-        // const marker = L.marker([lat, lon]).addTo(this.map);
-        // const marker = L.marker([lat, lon], { icon: customIcon })
-        // .addTo(this.map);
-        // const entranceMarkers = [];
-
-        // condomMetadata.condom.entranceSet.forEach(e =>
-        // {
-        //     const location = e.location;
-        //     const e_marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
-        //     entranceMarkers.push(e_marker);
-        // })
-
-        // this.condomMarker = { marker, circle, radius, lat, lon, entranceMarkers };
+    cleanUpAll() {
+        if (this.entranceCoords) {
+            this.map.removeLayer(this.entranceCoords.marker);
+            this.entranceCoords.entranceMarkers.forEach(e => this.map.removeLayer(e));
+            this.map.removeLayer(this.entranceCoords.condomMarker);
+        }
+        if(this.condomCoords) {
+            this.map.removeLayer(this.condomCoords.marker);
+            this.condomCoords.entranceMarkers.forEach(e => this.map.removeLayer(e));
+        }
     }
 
     openLocationSelectorView(locationBar, resolve, condomMetadata) {
@@ -207,9 +174,6 @@ class MapApp {
         this.showMap();
 
         //console.log(condomMetadata)
-        if (condomMetadata.boundByCondom) {
-            this.addCondominiumToMap(condomMetadata);
-        }
 
         const btnCancel = locationBar.querySelector("#btnCancel");
         const btnConfirm = locationBar.querySelector("#btnConfirm");
@@ -235,24 +199,24 @@ class MapApp {
                 this.map.removeLayer(this.coords.marker);
             }
 
-            if (condomMetadata.boundByCondom) {
-                const contains = this.isPointInsideCircle(
-                    condomMetadata.condom.location.latitude,
-                    condomMetadata.condom.location.longitude,
-                    lat,
-                    lon,
-                    // condomMetadata.condom.radius,
-                    condomMetadata.radius,
-                );
+            // if (condomMetadata.boundByCondom) {
+            //     const contains = this.isPointInsideCircle(
+            //         condomMetadata.condom.location.latitude,
+            //         condomMetadata.condom.location.longitude,
+            //         lat,
+            //         lon,
+            //         // condomMetadata.condom.radius,
+            //         condomMetadata.radius,
+            //     );
 
-                if (!contains) {
-                    inputSearch.value = "";
-                    this.invalidEntrance = true;
-                    //console.log("INVALID");
-                    return null;
-                }
-                this.invalidEntrance = false;
-            }
+            //     if (!contains) {
+            //         inputSearch.value = "";
+            //         this.invalidEntrance = true;
+            //         //console.log("INVALID");
+            //         return null;
+            //     }
+            //     this.invalidEntrance = false;
+            // }
 
             this.map.setView([lat, lon], 15);
 
