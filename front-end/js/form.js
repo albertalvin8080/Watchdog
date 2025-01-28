@@ -15,8 +15,10 @@ function hideAllForms()
     });
 }
 
-function showForm(formId)
+function showForm(formId, clean = true)
 {
+    if(clean)
+        mapApp.cleanUpAll();
     mapApp.hideMap();
     mapApp.hideMenu();
     mapApp.hideEntranceRegister();
