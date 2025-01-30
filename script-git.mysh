@@ -36,7 +36,7 @@ echo
 git commit -m "$choice: $commit_message"
 echo
 
-git push
+git push origin main
 echo
 
 read -p "Press any key to close..."

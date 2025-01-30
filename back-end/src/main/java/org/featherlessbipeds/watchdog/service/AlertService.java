@@ -3,6 +3,7 @@ package org.featherlessbipeds.watchdog.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
+import org.featherlessbipeds.watchdog.sse.AlertSSEController;
 import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.Entrance;
@@ -19,41 +20,42 @@ public class AlertService
 {
     private final AlertRepository repository;
     private final EntranceService entranceService;
+    private final AlertSSEController alertSSEController;
 
     public List<Alert> findAll()
     {
         return repository.findAll();
     }
 
-    public Alert createAlert(AlertRegisterDTO alert){
-
+    public Alert createAlert(AlertRegisterDTO alert)
+    {
         Optional<Entrance> op = entranceService.findById(alert.entranceId());
 
-        if (op.isPresent()) {
-
-            Entrance entrance = op.get();
-
-            Alert newAlert = new Alert();
-            newAlert.setDangerLevel(alert.dangerLevel());
-            newAlert.setDate(LocalDateTime.now());
-            newAlert.setDescription(alert.description());
-            newAlert.setEntrance(entrance);
-
-            try {
-                repository.save(newAlert);
-            }
-            catch (PersistenceException e){
-                throw new PersistenceException("Error while creating alert");
-            }
-            return newAlert;
-
-        }
-
-        else {
+        if (op.isEmpty())
+        {
             throw new EntityNotFoundException("Error while trying to fetch entrance");
         }
 
+        Entrance entrance = op.get();
+
+        Alert newAlert = new Alert();
+        newAlert.setDangerLevel(alert.dangerLevel());
+        newAlert.setDate(LocalDateTime.now());
+        newAlert.setDescription(alert.description());
+        newAlert.setEntrance(entrance);
+
+        try
+        {
+            repository.save(newAlert);
+        }
+        catch (PersistenceException e)
+        {
+            throw new PersistenceException("Error while creating alert");
+        }
+
+        // 200 -> hardcoded radius
+        alertSSEController.sendAlertToNearbyEntrances(newAlert, 200);
+
+        return newAlert;
     }
-
-
 }
