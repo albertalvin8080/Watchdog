@@ -221,7 +221,6 @@ registerEntranceForm.addEventListener("submit", async (evt) =>
 
 entranceLoginForm.addEventListener("submit", async (evt) =>
 {
-
     evt.preventDefault();
 
     const formData = new FormData(entranceLoginForm);
@@ -244,7 +243,8 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
 
         if (success)
         {
-            localStorage.setItem('entranceId', result.id);
+            localStorage.setItem("entranceId", result.id);
+            alertSSE = new AlertSSE(result.entrance);
             mapApp.openEntranceView(result);
         }
         else

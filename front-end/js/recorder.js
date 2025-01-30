@@ -8,38 +8,47 @@ let audioChunks = [];
 
 const baseurl = "http://localhost:8080";
 
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+{
     console.log("getUserMedia supported.");
     navigator.mediaDevices
         .getUserMedia({
             audio: true,
         })
-        .then((stream) => {
+        .then((stream) =>
+        {
             myStream = stream;
             main();
         })
-        .catch((err) => {
+        .catch((err) =>
+        {
             console.error(`The following getUserMedia error occurred: ${err}`);
         });
-} else {
+} else
+{
     console.log("getUserMedia not supported on your browser!");
 }
 
-function main() {
+function main()
+{
     mediaRecorder = new MediaRecorder(myStream);
 
-    mediaRecorder.onstart = () => {
+    mediaRecorder.onstart = () =>
+    {
         console.log("Recording started.");
         audioChunks = []; // Clear any previous chunks
     };
 
-    mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
+    mediaRecorder.ondataavailable = (event) =>
+    {
+        if (event.data.size > 0)
+        {
             audioChunks.push(event.data);
         }
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop = () =>
+    {
         console.log("Recording stopped.");
 
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
@@ -51,7 +60,7 @@ function main() {
         audio.controls = true;
         audio.src = audioURL;
         document.querySelector("#menu-screen > #content").appendChild(audio);
-        
+
         persistAudio(audioBlob);
 
         // const downloadLink = document.createElement("a");
@@ -61,20 +70,22 @@ function main() {
         // document.body.appendChild(downloadLink);
     };
 
-    recordStart.addEventListener("click", () => {
-        if (mediaRecorder.state === "inactive") {
+    recordStart.addEventListener("click", () =>
+    {
+        if (mediaRecorder.state === "inactive")
+        {
             mediaRecorder.start();
             recordStart.innerText = "Listening";
-        } else if (mediaRecorder.state === "recording") {
+        } else if (mediaRecorder.state === "recording")
+        {
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
         }
     });
 }
 
-
-function persistAudio(audioBlob) {
-    
+function persistAudio(audioBlob)
+{
     const dangerLevel = getDangetLevel();
     const entranceId = localStorage.getItem('entranceId');
 
@@ -83,22 +94,24 @@ function persistAudio(audioBlob) {
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
 
-
-    fetch(baseurl+"/alert/register", {
+    fetch(baseurl + "/alert/register", {
         method: "POST",
         body: formData
-      
+
     })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data) =>
+        {
             console.log(data);
         })
-        .catch((error) => {
+        .catch((error) =>
+        {
             console.error("Error:", error);
         });
 }
 
-function getDangetLevel() {
+function getDangetLevel()
+{
     // Retonando na tora, depois bota a IA pra adivinhar
     return "HIGH";
 

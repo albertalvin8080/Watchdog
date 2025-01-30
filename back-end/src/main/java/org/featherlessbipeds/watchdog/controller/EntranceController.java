@@ -48,12 +48,13 @@ public class EntranceController
                 //     MapperDto.convert(entrance.getCondominium())
                 // );
                 EntranceWithCondomDTO dto = new EntranceWithCondomDTO(
-                    entrance.getId(), 
-                    MapperDto.convert(entrance.getCondominium())
+                        entrance.getId(),
+                        MapperDto.convert(entrance),
+                        MapperDto.convert(entrance.getCondominium())
                 );
                 return ResponseEntity.status(HttpStatus.OK).body(dto);
             }
-            
+
             log.warn("Falha ao logar com: {}", loginDTO.email());
             String json = jsonUtil.createMsg("Invalid email and/or password.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);

@@ -43,7 +43,8 @@ public class AlertController
 
         try
         {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.createAlert(alert));
+            final Alert a = service.createAlert(alert);
+            return ResponseEntity.status(HttpStatus.CREATED).body(a);
         }
 
         catch (Exception e)

@@ -1,6 +1,7 @@
 package org.featherlessbipeds.watchdog.dto;
 
 public record EntranceWithCondomDTO(
-    Integer id, 
+    Integer id,
+    EntranceDTO entrance,
     CondominiumDTO condom) {
 }
