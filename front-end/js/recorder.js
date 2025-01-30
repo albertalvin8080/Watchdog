@@ -87,7 +87,7 @@ function main()
 function persistAudio(audioBlob)
 {
     const dangerLevel = getDangetLevel();
-    const entranceId = localStorage.getItem('entranceId');
+    const entranceId = localStorage.getItem("entranceId");
 
     const formData = new FormData();
     formData.append("dangerLevel", dangerLevel);
@@ -102,7 +102,7 @@ function persistAudio(audioBlob)
         .then((response) => response.json())
         .then((data) =>
         {
-            console.log(data);
+            // console.log(data);
         })
         .catch((error) =>
         {
@@ -114,6 +114,4 @@ function getDangetLevel()
 {
     // Retonando na tora, depois bota a IA pra adivinhar
     return "HIGH";
-
-
 }

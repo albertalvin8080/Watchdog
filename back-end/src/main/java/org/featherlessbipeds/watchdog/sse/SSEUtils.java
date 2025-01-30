@@ -18,8 +18,8 @@ public class SSEUtils
         {
             final Entrance entrance = alert.getEntrance();
 
-            if (entrance.getId() == entranceEmitter.entranceId())
-                continue;
+//            if (entrance.getId() == entranceEmitter.entranceId())
+//                continue;
 
             final Location location = entrance.getLocation();
             double distance = calculateDistance(
@@ -32,12 +32,12 @@ public class SSEUtils
 
             try
             {
-                entranceEmitter.emitter().send(new AlertSSEDTO(radius, alert));
+                entranceEmitter.emitter().send(new AlertSSEDTO(alert.getEntrance().getId(), radius, alert));
             }
             catch (IOException e)
             {
                 System.out.println("AlertSSEController exception: " + e.getMessage());
-                entranceEmitter.emitter().complete();
+//                entranceEmitter.emitter().complete();
                 emitters.remove(entranceEmitter);
             }
         }
@@ -64,10 +64,10 @@ public class SSEUtils
             {
                 entranceEmitter.emitter().send(SseEmitter.event().data("{\"type\":\"heartbeat\"}"));
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 System.out.println("AlertSSEController heartbeat exception: " + e.getMessage());
-                entranceEmitter.emitter().complete();
+//                entranceEmitter.emitter().complete();
                 emitters.remove(entranceEmitter);
             }
         }

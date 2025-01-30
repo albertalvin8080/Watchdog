@@ -39,5 +39,8 @@ VALUES ('Franz Bonaparta', 'Sunrise Villas', 'trustee1@sunrisevillas.com', '123'
 INSERT INTO entrance (condominium_id, latitude, longitude,entrance_email,entrance_password_hash)
 VALUES (1, 40.7130, -74.0070,'entrance1@entrance.com','123'),
        (1, 40.7125, -74.0065,'entrance2@entrance.com','123'),
-       (2, 34.0525, -118.2440,'entrance3@entrance.com','123'),
-       (3, 37.7750, -122.4190,'entrance4@entrance.com','123');
+       (1, 40.70930014538002, -74.01063645352922,'entrance3@entrance.com','123'),
+       (1, 40.7154954045871, -74.00928915463217,'entrance4@entrance.com','123'),
+       (1, 40.71468310365792, -74.0114722090322,'entrance5@entrance.com','123'),
+       (2, 34.0525, -118.2440,'entrance6@entrance.com','123'),
+       (3, 37.7750, -122.4190,'entrance7@entrance.com','123');
