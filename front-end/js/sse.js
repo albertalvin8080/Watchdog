@@ -26,7 +26,6 @@ class AlertSSE
         this.map.drawAlert(alertSSEDto);
     }
 
-
 }
 
 

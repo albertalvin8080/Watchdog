@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @CrossOrigin("*")
 public class AlertSSEController
 {
-    private final List<EntranceEmitter> emitters = new CopyOnWriteArrayList<>();
+    private static final List<EntranceEmitter> emitters = new CopyOnWriteArrayList<>();
     private final SSEUtils sseUtils;
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

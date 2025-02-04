@@ -14,9 +14,9 @@ public class SSEUtils
 {
     public void sendAlertToNearbyEntrances(List<EntranceEmitter> emitters, Alert alert, double radius)
     {
+        final Entrance entrance = alert.getEntrance();
         for (EntranceEmitter entranceEmitter : emitters)
         {
-            final Entrance entrance = alert.getEntrance();
 
 //            if (entrance.getId() == entranceEmitter.entranceId())
 //                continue;
@@ -27,8 +27,14 @@ public class SSEUtils
                     entranceEmitter.latitude(), entranceEmitter.longitude()
             );
 
+//            System.out.println("Alert id Before: " + entrance.getId());
+//            System.out.println("Before radius: " + entranceEmitter.entranceId());
+
             if (distance > radius)
                 continue;
+
+//            System.out.println("Alert id After: " + entrance.getId());
+//            System.out.println("After radius: " + entranceEmitter.entranceId());
 
             try
             {
