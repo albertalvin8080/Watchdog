@@ -138,7 +138,7 @@ condominiumLoginForm.addEventListener("submit", async (evt) =>
 
         if (success)
         {
-            localStorage.setItem('condominiumId', result.id);
+            sessionStorage.setItem('condominiumId', result.id);
             mapApp.openCondominiumView(result);
         }
         else
@@ -170,7 +170,7 @@ registerEntranceForm.addEventListener("submit", async (evt) =>
     }
     btnLocation.classList.add("ok");
 
-    const condominiumId = localStorage.getItem('condominiumId');
+    const condominiumId = sessionStorage.getItem('condominiumId');
     console.log('Retrieved condominiumId:', condominiumId);
 
     if (!condominiumId)
@@ -243,7 +243,7 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
 
         if (success)
         {
-            localStorage.setItem("entranceId", result.id);
+            sessionStorage.setItem("entranceId", result.id);
             alertSSE = new AlertSSE(result.entrance, mapApp);
             mapApp.openEntranceView(result);
         }

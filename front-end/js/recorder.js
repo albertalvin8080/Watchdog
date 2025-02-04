@@ -87,7 +87,7 @@ function main()
 function persistAudio(audioBlob)
 {
     const dangerLevel = getDangetLevel();
-    const entranceId = localStorage.getItem("entranceId");
+    const entranceId = sessionStorage.getItem("entranceId");
 
     const formData = new FormData();
     formData.append("dangerLevel", dangerLevel);
