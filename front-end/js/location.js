@@ -478,11 +478,27 @@ class MapApp
 
     drawAlert(alertSSEDto)
     {
+
+        //Cria a cor de acordo com o id do alerta
+        function hashColor(id) {
+            const hue = (id * 137) % 360; 
+            return `hsl(${hue}, 90%, 50%)`;
+        }
+    
+        //Cor da borda de acordo com a periculosidade do alerta
+        const dangerLevels = {
+            "HIGH": 'hsl(0, 100%, 50%)',    // Vermelho
+            "MEDIUM": 'hsl(39, 100%, 50%)', // Laranja
+            "LOW": 'hsl(120, 100%, 50%)'    // Verde
+        };
+        
+        const color = hashColor(alertSSEDto.alert.id);
+
         console.log('Received alert:', alertSSEDto);
         const obj = this.entranceCoords.entranceMarkers.find(e => e.id === alertSSEDto.entranceId);
         const circle = L.circle([obj.lat, obj.lon], {
-            color: 'red',
-            fillColor: '#0000FF',
+            color: dangerLevels[alertSSEDto.alert.dangerLevel],
+            fillColor: color,
             fillOpacity: 0.15,
             radius: alertSSEDto.radius,
         })
