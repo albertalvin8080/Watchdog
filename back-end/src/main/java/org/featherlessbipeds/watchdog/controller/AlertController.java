@@ -54,4 +54,12 @@ public class AlertController
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
     }
+
+
+    @GetMapping("/{radius}/{id}")
+    //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
+    public List<Alert> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id){
+        return service.findAllWithinRadius(radius,id);
+    }
+
 }
