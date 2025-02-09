@@ -44,3 +44,10 @@ VALUES (1, 40.7130, -74.0070,'entrance1@entrance.com','123'),
        (1, 40.71468310365792, -74.0114722090322,'entrance5@entrance.com','123'),
        (2, 34.0525, -118.2440,'entrance6@entrance.com','123'),
        (3, 37.7750, -122.4190,'entrance7@entrance.com','123');
+
+INSERT INTO alert (alert_danger_level, alert_date, alert_description, entrance_id)
+VALUES
+    ('HIGH', NOW(), 'AKDNDIFISBSBAU', 1),
+    ('MEDIUM', NOW(), 'AKDNDIFISBSBAU', 1),
+    ('LOW', NOW(), 'AKDNDIFISBSBAU', 2);
+

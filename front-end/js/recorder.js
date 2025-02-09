@@ -115,3 +115,53 @@ function getDangetLevel()
     // Retonando na tora, depois bota a IA pra adivinhar
     return "HIGH";
 }
+
+function fetchAndDisplayAlerts(radius, entranceId) {
+    if (!entranceId) {
+        return;
+    }
+
+    fetch(`${baseurl}/alert/${radius}/${entranceId}`)
+        .then(response => response.json())
+        .then(alerts => {
+            const alertsContainer = document.querySelector("#alerts-container");
+            alertsContainer.innerHTML = ''; 
+
+
+            alerts.forEach(alert => {
+                const card = document.createElement('div');
+                card.className = 'alert-card';
+                
+                const date = new Date(alert.date);
+                const formattedDate = date.toLocaleString();
+
+                card.innerHTML = `
+                    <div class="danger-level ${alert.dangerLevel}">${alert.dangerLevel} ALERT #${alert.id}</div>
+                    <div class="meta">
+                        <!--<div>From Entrance #${alert.entranceId}</div>-->
+                        <div>${formattedDate}</div>
+                    </div>
+                    <audio controls>
+                        <source src="data:audio/webm;base64,${btoa(String.fromCharCode(...new Uint8Array(alert.description)))}" type="audio/webm">
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+                
+                alertsContainer.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching alerts:', error);
+            const alertsContainer = document.querySelector("#alerts-container");
+            alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
+        });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const entranceId = sessionStorage.getItem("entranceId");
+    if (entranceId) {
+        fetchAndDisplayAlerts(200, entranceId);
+        
+        setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
+    }
+});

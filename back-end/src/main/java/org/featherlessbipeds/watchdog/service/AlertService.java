@@ -64,7 +64,7 @@ public class AlertService
     }
 
     //Recebe a localizacao da entrance
-    public List<Alert> findAllWithinRadius( Double radius,int entranceId){
+    public List<Alert> findAllWithinRadius(Double radius, int entranceId){
 
         List<Alert> result = new ArrayList<>();
         List<Alert> allAlerts = this.findAll();

@@ -244,6 +244,7 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
         if (success)
         {
             sessionStorage.setItem("entranceId", result.id);
+            fetchAndDisplayAlerts(200, result.id);
             alertSSE = new AlertSSE(result.entrance, mapApp);
             mapApp.openEntranceView(result);
         }
