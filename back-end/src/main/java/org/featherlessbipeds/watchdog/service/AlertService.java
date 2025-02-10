@@ -82,7 +82,6 @@ public class AlertService
 
             for (Alert a : allAlerts) {
                 //Verifica se o alerta pertence a entrada
-                if(a.getEntrance().getId() != entranceId ) {
                     //A localizacao do alert é a mesma da entrada que criou ele
                     Location alertLocation = a.getEntrance().getLocation();
 
@@ -91,7 +90,6 @@ public class AlertService
                     if (distance <= radius) {
                         result.add(a);
                     }
-                }
             }
         }
 

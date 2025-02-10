@@ -103,6 +103,7 @@ function persistAudio(audioBlob)
         .then((data) =>
         {
             // console.log(data);
+            fetchAndDisplayAlerts(200, entranceId);
         })
         .catch((error) =>
         {
