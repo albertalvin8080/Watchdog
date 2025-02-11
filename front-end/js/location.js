@@ -86,7 +86,7 @@ class MapApp
         this.showEntranceRegister();
     }
 
-    async openEntranceView(entranceMetadata)
+    async openEntranceView(entranceMetadata, callback)
     {
         console.log(entranceMetadata);
         // this.entranceMetadata = entranceMetadata;
@@ -166,7 +166,7 @@ class MapApp
             });
 
             this.entranceCoords = { lat, lon, display_name, marker, entranceMarkers, condomMarker };
-
+            callback();
         } catch (error)
         {
             console.error("Error fetching geocoding data:", error);
@@ -478,7 +478,6 @@ class MapApp
 
     drawAlert(alertSSEDto)
     {
-
         //Cria a cor de acordo com o id do alerta
         function hashColor(id) {
             const hue = (id * 137) % 360; 
