@@ -117,46 +117,48 @@ function getDangetLevel()
     return "HIGH";
 }
 
-function fetchAndDisplayAlerts(radius, entranceId) {
+async function fetchAndDisplayAlerts(radius, entranceId) {
     if (!entranceId) {
         return;
     }
 
-    fetch(`${baseurl}/alert/${radius}/${entranceId}`)
-        .then(response => response.json())
-        .then(alerts => {
-            const alertsContainer = document.querySelector("#alerts-container");
-            alertsContainer.innerHTML = ''; 
+    try {
+        const response = await fetch(`${baseurl}/alert/${radius}/${entranceId}`);
+        const alerts = await response.json();
 
+        const alertsContainer = document.querySelector("#alerts-container");
+        alertsContainer.innerHTML = ''; 
 
-            alerts.forEach(alert => {
-                const card = document.createElement('div');
-                card.className = 'alert-card';
-                
-                const date = new Date(alert.date);
-                const formattedDate = date.toLocaleString();
+        alerts.forEach(alertSseDto => {
+            const card = document.createElement('div');
+            card.className = 'alert-card';
+            
+            const date = new Date(alertSseDto.alert.date);
+            const formattedDate = date.toLocaleString();
 
-                card.innerHTML = `
-                    <div class="danger-level ${alert.dangerLevel}">${alert.dangerLevel} ALERT #${alert.id}</div>
-                    <div class="meta">
-                        <!--<div>From Entrance #${alert.entranceId}</div>-->
-                        <div>${formattedDate}</div>
-                    </div>
-                    <audio controls>
-                        <source src="data:audio/webm;base64,${btoa(String.fromCharCode(...new Uint8Array(alert.description)))}" type="audio/webm">
-                        Your browser does not support the audio element.
-                    </audio>
-                `;
-                
-                alertsContainer.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching alerts:', error);
-            const alertsContainer = document.querySelector("#alerts-container");
-            alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
+            card.innerHTML = ` 
+                <div class="danger-level ${alertSseDto.alert.dangerLevel}">${alertSseDto.alert.dangerLevel} ALERT #${alertSseDto.alert.id}</div>
+                <div class="meta">
+                    <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
+                    <div>${formattedDate}</div>
+                </div>
+                <audio controls>
+                    <source src="data:audio/webm;base64,${btoa(String.fromCharCode(...new Uint8Array(alertSseDto.alert.description)))}" type="audio/webm">
+                    Your browser does not support the audio element.
+                </audio>
+            `;
+            
+            alertsContainer.appendChild(card);
         });
+
+        return alerts;
+    } catch (error) {
+        console.error('Error fetching alerts:', error);
+        const alertsContainer = document.querySelector("#alerts-container");
+        alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
+    }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const entranceId = sessionStorage.getItem("entranceId");
