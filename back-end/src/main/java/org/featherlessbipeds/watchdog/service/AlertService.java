@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.entity.Location;
 import org.featherlessbipeds.watchdog.sse.AlertSSEController;
+import org.featherlessbipeds.watchdog.sse.AlertSSEDTO;
 import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.Entrance;
@@ -64,9 +65,9 @@ public class AlertService
     }
 
     //Recebe a localizacao da entrance
-    public List<Alert> findAllWithinRadius(Double radius, int entranceId){
-
-        List<Alert> result = new ArrayList<>();
+    public List<AlertSSEDTO> findAllWithinRadius(Double radius, int entranceId)
+    {
+        List<AlertSSEDTO> result = new ArrayList<>();
         List<Alert> allAlerts = this.findAll();
 
         Optional<Entrance> entranceOp = entranceService.findById(entranceId);
@@ -82,14 +83,12 @@ public class AlertService
 
             for (Alert a : allAlerts) {
                 //Verifica se o alerta pertence a entrada
-                    //A localizacao do alert é a mesma da entrada que criou ele
-                    Location alertLocation = a.getEntrance().getLocation();
+                //A localizacao do alert é a mesma da entrada que criou ele
+                Location alertLocation = a.getEntrance().getLocation();
+                double distance = sseUtils.calculateDistance(alertLocation.getLatitude(), alertLocation.getLongitude(), lat, lon);
 
-                    double distance = sseUtils.calculateDistance(alertLocation.getLatitude(), alertLocation.getLongitude(), lat, lon);
-
-                    if (distance <= radius) {
-                        result.add(a);
-                    }
+                if (distance <= radius)
+                    result.add(new AlertSSEDTO(a.getEntrance().getId(), radius, a));
             }
         }
 
