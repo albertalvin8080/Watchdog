@@ -74,17 +74,19 @@ function main()
     {
         if (mediaRecorder.state === "inactive")
         {
+            speechRecognition.start();
             mediaRecorder.start();
             recordStart.innerText = "Listening";
         } else if (mediaRecorder.state === "recording")
         {
+            speechRecognition.stop();
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
         }
     });
 }
 
-function persistAudio(audioBlob)
+async function persistAudio(audioBlob)
 {
     const dangerLevel = getDangetLevel();
     const entranceId = sessionStorage.getItem("entranceId");
@@ -93,11 +95,11 @@ function persistAudio(audioBlob)
     formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
+    formData.append("descriptionText", await convertAudioToText(audioBlob));
 
     fetch(baseurl + "/alert/register", {
         method: "POST",
-        body: formData
-
+        body: formData,
     })
         .then((response) => response.json())
         .then((data) =>
@@ -117,22 +119,26 @@ function getDangetLevel()
     return "HIGH";
 }
 
-async function fetchAndDisplayAlerts(radius, entranceId) {
-    if (!entranceId) {
+async function fetchAndDisplayAlerts(radius, entranceId)
+{
+    if (!entranceId)
+    {
         return;
     }
 
-    try {
+    try
+    {
         const response = await fetch(`${baseurl}/alert/${radius}/${entranceId}`);
         const alerts = await response.json();
 
         const alertsContainer = document.querySelector("#alerts-container");
-        alertsContainer.innerHTML = ''; 
+        alertsContainer.innerHTML = '';
 
-        alerts.forEach(alertSseDto => {
+        alerts.forEach(alertSseDto =>
+        {
             const card = document.createElement('div');
             card.className = 'alert-card';
-            
+
             const date = new Date(alertSseDto.alert.date);
             const formattedDate = date.toLocaleString();
 
@@ -147,12 +153,13 @@ async function fetchAndDisplayAlerts(radius, entranceId) {
                     Your browser does not support the audio element.
                 </audio>
             `;
-            
+
             alertsContainer.appendChild(card);
         });
 
         return alerts;
-    } catch (error) {
+    } catch (error)
+    {
         console.error('Error fetching alerts:', error);
         const alertsContainer = document.querySelector("#alerts-container");
         alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
@@ -160,11 +167,13 @@ async function fetchAndDisplayAlerts(radius, entranceId) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () =>
+{
     const entranceId = sessionStorage.getItem("entranceId");
-    if (entranceId) {
+    if (entranceId)
+    {
         fetchAndDisplayAlerts(200, entranceId);
-        
+
         setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
     }
 });

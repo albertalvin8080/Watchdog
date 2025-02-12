@@ -35,12 +35,17 @@ public class AlertController
 
     @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createAlert(
-            @RequestParam("dangerLevel") DangerLevel dangerLevel,
             @RequestParam("entranceId") Integer entranceId,
-            @RequestParam("description") MultipartFile description
+            @RequestParam("dangerLevel") DangerLevel dangerLevel,
+            @RequestParam("description") MultipartFile description,
+            @RequestParam("descriptionText") String descriptionText
     ) throws IOException
     {
-        AlertRegisterDTO alert = new AlertRegisterDTO(dangerLevel, description.getBytes(), entranceId);
+        AlertRegisterDTO alert = new AlertRegisterDTO(
+                entranceId, dangerLevel, description.getBytes(), descriptionText
+        );
+
+        System.out.println(descriptionText);
 
         try
         {
@@ -59,8 +64,9 @@ public class AlertController
 
     @GetMapping("/{radius}/{id}")
     //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
-    public List<AlertSSEDTO> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id){
-        return service.findAllWithinRadius(radius,id);
+    public List<AlertSSEDTO> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id)
+    {
+        return service.findAllWithinRadius(radius, id);
     }
 
 }
