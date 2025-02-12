@@ -243,9 +243,15 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
 
         if (success)
         {
+            const radius = 200;
             sessionStorage.setItem("entranceId", result.id);
+
             alertSSE = new AlertSSE(result.entrance, mapApp);
-            mapApp.openEntranceView(result);
+            const alerts = await fetchAndDisplayAlerts(radius, result.id);
+
+            mapApp.openEntranceView(result, () => { 
+                alerts.forEach(alert => mapApp.drawAlert(alert)); 
+            });
         }
         else
         {
@@ -258,7 +264,6 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
         showMsg(errorMsg, "Ops! Try again in a few moments.");
     }
 })
-
 
 
 let id1 = null;

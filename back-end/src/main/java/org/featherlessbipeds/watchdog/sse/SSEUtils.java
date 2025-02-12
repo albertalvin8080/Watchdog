@@ -50,7 +50,7 @@ public class SSEUtils
     }
 
     // Haversine formula to calculate distance between two points on Earth
-    private double calculateDistance(double lat1, double lon1, double lat2, double lon2)
+    public double calculateDistance(double lat1, double lon1, double lat2, double lon2)
     {
         final int R = 6371; // Radius of the Earth in kilometers
         double latDistance = Math.toRadians(lat2 - lat1);

@@ -6,6 +6,7 @@ import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.service.AlertService;
+import org.featherlessbipeds.watchdog.sse.AlertSSEDTO;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,4 +55,12 @@ public class AlertController
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
     }
+
+
+    @GetMapping("/{radius}/{id}")
+    //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
+    public List<AlertSSEDTO> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id){
+        return service.findAllWithinRadius(radius,id);
+    }
+
 }

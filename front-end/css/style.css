@@ -340,6 +340,7 @@ body {
     align-items: center;
     justify-content: start;
     flex-direction: column;
+    width: 100%;
 }
 
 #menu-screen #btnOpenMenu {
@@ -443,4 +444,54 @@ form h1, form label {
 
 .btnLocation:hover {
     background-color: #dfdfdf;
+}
+
+#alerts-container {
+    box-sizing: border-box;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+#alerts-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.alert-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.alert-card .danger-level {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.alert-card .danger-level.HIGH {
+    color: #dc3545;
+}
+
+.alert-card .danger-level.MEDIUM {
+    color: #ffc107;
+}
+
+.alert-card .danger-level.LOW {
+    color: #28a745;
+}
+
+.alert-card .meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.alert-card audio {
+    width: 100%;
+    margin-top: 8px;
 }
