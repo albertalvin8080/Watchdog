@@ -1,15 +1,15 @@
 package org.featherlessbipeds.watchdog.util;
 
-import org.featherlessbipeds.watchdog.dto.CondominiumDTO;
-import org.featherlessbipeds.watchdog.dto.EntranceDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumDto;
+import org.featherlessbipeds.watchdog.dto.EntranceDto;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 
 public class MapperDto
 {
-    public static CondominiumDTO convert(Condominium condominium)
+    public static CondominiumDto convert(Condominium condominium)
     {
-        return new CondominiumDTO(
+        return new CondominiumDto(
                 condominium.getId(),
                 condominium.getName(),
                 condominium.getTrusteeName(),
@@ -17,9 +17,9 @@ public class MapperDto
                 condominium.getEntranceSet());
     }
 
-    public static EntranceDTO convert(Entrance entrance)
+    public static EntranceDto convert(Entrance entrance)
     {
-        return new EntranceDTO(
+        return new EntranceDto(
                 entrance.getId(),
                 entrance.getLocation(),
                 entrance.getCondominium().getId(),

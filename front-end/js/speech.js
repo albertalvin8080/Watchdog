@@ -29,9 +29,8 @@ class CustomSpeechRecognitionObject
 
         this.speechRecognition.onend = () =>
         {
-            if (this.running) {
-                this.speechRecognition.start();
-            }
+            if (this.running) this.speechRecognition.start();
+            else this.resolve();
         };
     }
 
@@ -44,8 +43,12 @@ class CustomSpeechRecognitionObject
 
     stop()
     {
-        this.running = false;
-        this.speechRecognition.stop();
+        return new Promise((resolve, reject) =>
+        {
+            this.running = false;
+            this.resolve = resolve;
+            this.speechRecognition.stop();
+        })
     }
 }
 

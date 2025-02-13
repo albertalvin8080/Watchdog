@@ -19,11 +19,18 @@ class AlertSSE
         );
 
         this.eventSource.onmessage = this.onmessage.bind(this);
+        this.eventSource.onerror = this.onerror.bind(this);
     }
 
-    onmessage(event) {
+    onmessage(event)
+    {
         const alertSSEDto = JSON.parse(event.data);
         this.map.drawAlert(alertSSEDto);
+    }
+
+    onerror(event)
+    {
+        location.reload(true);
     }
 
 }

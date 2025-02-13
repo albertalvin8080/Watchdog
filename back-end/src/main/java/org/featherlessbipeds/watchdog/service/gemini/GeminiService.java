@@ -22,7 +22,13 @@ public class GeminiService
         this.objectMapper = objectMapper;
     }
 
-    public String generateContent(String prompt)
+    public String makeRequest(String prompt)
+    {
+        String fmtd = formatPrompt(prompt);
+        return generateContent(fmtd);
+    }
+
+    private String generateContent(String prompt)
     {
         GeminiRequest requestBody = new GeminiRequest(prompt);
 
@@ -35,15 +41,9 @@ public class GeminiService
                 .block();
     }
 
-    public String formatPrompt(String prompt)
+    private String formatPrompt(String prompt)
     {
-        return String.format("Faça um resumo de no máximo 5 palavras do parágrafo a seguir: %s", prompt);
-    }
-
-    public String makeRequest(String prompt)
-    {
-        String fmtd = formatPrompt(prompt);
-        return generateContent(fmtd);
+        return String.format("Faça um resumo de no máximo 5 palavras do conteúdo a seguir: %s", prompt);
     }
 
     private String extractTextFromResponse(String responseJson)

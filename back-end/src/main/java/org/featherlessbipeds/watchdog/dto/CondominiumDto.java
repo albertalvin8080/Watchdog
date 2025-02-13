@@ -5,6 +5,6 @@ import java.util.Set;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.entity.Location;
 
-public record CondominiumDTO(Integer id, String condominium, String trustee, Location location,
-        Set<Entrance> entranceSet) {
+public record CondominiumDto(Integer id, String condominium, String trustee, Location location,
+                             Set<Entrance> entranceSet) {
 }

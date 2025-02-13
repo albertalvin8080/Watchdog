@@ -34,4 +34,6 @@ public class Alert
     @JoinColumn(name = "entrance_id")
     @JsonIgnore
     private Entrance entrance;
+    @Column(name="alert_title", nullable = false)
+    private String title;
 }

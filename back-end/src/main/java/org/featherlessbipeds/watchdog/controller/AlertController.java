@@ -2,11 +2,12 @@ package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
+import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.service.AlertService;
-import org.featherlessbipeds.watchdog.sse.AlertSSEDTO;
+import org.featherlessbipeds.watchdog.service.gemini.GeminiService;
+import org.featherlessbipeds.watchdog.sse.AlertSseDto;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,13 +25,13 @@ import java.util.List;
 @CrossOrigin("*")
 public class AlertController
 {
-    private final AlertService service;
+    private final AlertService alertService;
     private final JsonUtil jsonUtil;
 
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Alert>> findAll()
     {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(alertService.findAll());
     }
 
     @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -38,18 +39,16 @@ public class AlertController
             @RequestParam("entranceId") Integer entranceId,
             @RequestParam("dangerLevel") DangerLevel dangerLevel,
             @RequestParam("description") MultipartFile description,
-            @RequestParam("descriptionText") String descriptionText
+            @RequestParam("transcript") String transcript
     ) throws IOException
     {
-        AlertRegisterDTO alert = new AlertRegisterDTO(
-                entranceId, dangerLevel, description.getBytes(), descriptionText
+        AlertRegisterDto alert = new AlertRegisterDto(
+                entranceId, dangerLevel, description.getBytes(), transcript
         );
-
-        System.out.println(descriptionText);
 
         try
         {
-            final Alert a = service.createAlert(alert);
+            final Alert a = alertService.createAlert(alert);
             return ResponseEntity.status(HttpStatus.CREATED).body(a);
         }
 
@@ -64,9 +63,9 @@ public class AlertController
 
     @GetMapping("/{radius}/{id}")
     //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
-    public List<AlertSSEDTO> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id)
+    public List<AlertSseDto> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id)
     {
-        return service.findAllWithinRadius(radius, id);
+        return alertService.findAllWithinRadius(radius, id);
     }
 
 }

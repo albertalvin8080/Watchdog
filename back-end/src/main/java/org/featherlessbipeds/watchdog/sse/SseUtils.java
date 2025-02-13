@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Component
-public class SSEUtils
+public class SseUtils
 {
     public void sendAlertToNearbyEntrances(List<EntranceEmitter> emitters, Alert alert, double radius)
     {
@@ -39,7 +39,7 @@ public class SSEUtils
 
             try
             {
-                entranceEmitter.emitter().send(new AlertSSEDTO(alert.getEntrance().getId(), radius, alert));
+                entranceEmitter.emitter().send(new AlertSseDto(alert.getEntrance().getId(), radius, alert));
             }
             catch (Exception e)
             {

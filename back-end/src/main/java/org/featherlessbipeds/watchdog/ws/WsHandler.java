@@ -8,7 +8,7 @@
 //import org.springframework.web.socket.handler.TextWebSocketHandler;
 //
 //@Component
-//public class WSHandler extends TextWebSocketHandler {
+//public class WsHandler extends TextWebSocketHandler {
 //    // Thread safe ArrayList
 //    private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 //

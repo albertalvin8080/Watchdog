@@ -70,7 +70,7 @@ function main()
         // document.body.appendChild(downloadLink);
     };
 
-    recordStart.addEventListener("click", () =>
+    recordStart.addEventListener("click", async () =>
     {
         if (mediaRecorder.state === "inactive")
         {
@@ -79,7 +79,7 @@ function main()
             recordStart.innerText = "Listening";
         } else if (mediaRecorder.state === "recording")
         {
-            customSpeechRecognition.stop();
+            await customSpeechRecognition.stop();
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
         }
@@ -95,7 +95,7 @@ async function persistAudio(audioBlob)
     formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
-    formData.append("descriptionText", customSpeechRecognition.transcript);
+    formData.append("transcript", customSpeechRecognition.transcript);
 
     fetch(baseurl + "/alert/register", {
         method: "POST",
