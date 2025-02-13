@@ -74,12 +74,12 @@ function main()
     {
         if (mediaRecorder.state === "inactive")
         {
-            speechRecognition.start();
+            customSpeechRecognition.start();
             mediaRecorder.start();
             recordStart.innerText = "Listening";
         } else if (mediaRecorder.state === "recording")
         {
-            speechRecognition.stop();
+            customSpeechRecognition.stop();
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
         }
@@ -95,7 +95,7 @@ async function persistAudio(audioBlob)
     formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
-    formData.append("descriptionText", await convertAudioToText(audioBlob));
+    formData.append("descriptionText", customSpeechRecognition.transcript);
 
     fetch(baseurl + "/alert/register", {
         method: "POST",

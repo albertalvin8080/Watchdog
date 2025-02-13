@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @CrossOrigin("*")
 public class AlertSSEController
 {
-    private static final List<EntranceEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final List<EntranceEmitter> emitters;
     private final SSEUtils sseUtils;
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
