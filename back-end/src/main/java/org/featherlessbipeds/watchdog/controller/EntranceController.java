@@ -3,11 +3,9 @@ package org.featherlessbipeds.watchdog.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.catalina.mapper.Mapper;
-import org.featherlessbipeds.watchdog.dto.EntranceDTO;
-import org.featherlessbipeds.watchdog.dto.EntranceRegisterDTO;
-import org.featherlessbipeds.watchdog.dto.EntranceWithCondomDTO;
-import org.featherlessbipeds.watchdog.dto.LoginDTO;
+import org.featherlessbipeds.watchdog.dto.EntranceRegisterDto;
+import org.featherlessbipeds.watchdog.dto.EntranceWithCondomDto;
+import org.featherlessbipeds.watchdog.dto.LoginDto;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
@@ -31,7 +29,7 @@ public class EntranceController
     private final CondominiumService condominiumService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO)
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDTO)
     {
         try
         {
@@ -47,7 +45,7 @@ public class EntranceController
                 //     entrance.getAlertSet(),
                 //     MapperDto.convert(entrance.getCondominium())
                 // );
-                EntranceWithCondomDTO dto = new EntranceWithCondomDTO(
+                EntranceWithCondomDto dto = new EntranceWithCondomDto(
                         entrance.getId(),
                         MapperDto.convert(entrance),
                         MapperDto.convert(entrance.getCondominium())
@@ -68,7 +66,7 @@ public class EntranceController
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerEntrance(@RequestBody EntranceRegisterDTO entrance)
+    public ResponseEntity<String> registerEntrance(@RequestBody EntranceRegisterDto entrance)
     {
         Condominium condominium = condominiumService.findById(entrance.condominiumId());
         Entrance ent = new Entrance();

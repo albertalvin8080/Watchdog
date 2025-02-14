@@ -4,20 +4,21 @@ import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.entity.Location;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 @Component
-public class SSEUtils
+public class SseUtils
 {
     public void sendAlertToNearbyEntrances(List<EntranceEmitter> emitters, Alert alert, double radius)
     {
+        Iterator<EntranceEmitter> it = emitters.iterator();
         final Entrance entrance = alert.getEntrance();
-        for (EntranceEmitter entranceEmitter : emitters)
-        {
 
+        while(it.hasNext())
+        {
+            var entranceEmitter = it.next();
 //            if (entrance.getId() == entranceEmitter.entranceId())
 //                continue;
 
@@ -38,13 +39,14 @@ public class SSEUtils
 
             try
             {
-                entranceEmitter.emitter().send(new AlertSSEDTO(alert.getEntrance().getId(), radius, alert));
+                entranceEmitter.emitter().send(new AlertSseDto(alert.getEntrance().getId(), radius, alert));
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 System.out.println("AlertSSEController exception: " + e.getMessage());
 //                entranceEmitter.emitter().complete();
-                emitters.remove(entranceEmitter);
+//                emitters.remove(entranceEmitter);
+                it.remove();
             }
         }
     }
@@ -60,22 +62,5 @@ public class SSEUtils
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c * 1000; // Convert to meters
-    }
-
-    public void sendHeartbeats(List<EntranceEmitter> emitters)
-    {
-        for (EntranceEmitter entranceEmitter : emitters)
-        {
-            try
-            {
-                entranceEmitter.emitter().send(SseEmitter.event().data("{\"type\":\"heartbeat\"}"));
-            }
-            catch (IOException e)
-            {
-                System.out.println("AlertSSEController heartbeat exception: " + e.getMessage());
-//                entranceEmitter.emitter().complete();
-                emitters.remove(entranceEmitter);
-            }
-        }
     }
 }

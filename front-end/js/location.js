@@ -88,7 +88,7 @@ class MapApp
 
     async openEntranceView(entranceMetadata, callback)
     {
-        console.log(entranceMetadata);
+        // console.log(entranceMetadata);
         // this.entranceMetadata = entranceMetadata;
 
         const condom = entranceMetadata.condom;
@@ -493,7 +493,7 @@ class MapApp
         
         const color = hashColor(alertSSEDto.alert.id);
 
-        console.log('Received alert:', alertSSEDto);
+        // console.log('Received alert:', alertSSEDto);
         const obj = this.entranceCoords.entranceMarkers.find(e => e.id === alertSSEDto.entranceId);
         const circle = L.circle([obj.lat, obj.lon], {
             color: dangerLevels[alertSSEDto.alert.dangerLevel],

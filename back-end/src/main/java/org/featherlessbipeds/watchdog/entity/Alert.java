@@ -28,10 +28,12 @@ public class Alert
     @Column(name = "alert_date", nullable = false)
     private LocalDateTime date;
     @Lob
-    @Column(name = "alert_description",columnDefinition = "MEDIUMBLOB" ,nullable = false)
+    @Column(name = "alert_description",columnDefinition = "MEDIUMBLOB", nullable = false)
     private byte[] description;
     @ManyToOne
     @JoinColumn(name = "entrance_id")
     @JsonIgnore
     private Entrance entrance;
+    @Column(name="alert_title", nullable = false)
+    private String title;
 }

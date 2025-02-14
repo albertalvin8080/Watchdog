@@ -1,9 +1,9 @@
 package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.featherlessbipeds.watchdog.dto.CondominiumDTO;
-import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDTO;
-import org.featherlessbipeds.watchdog.dto.LoginDTO;
+import org.featherlessbipeds.watchdog.dto.CondominiumDto;
+import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDto;
+import org.featherlessbipeds.watchdog.dto.LoginDto;
 import org.featherlessbipeds.watchdog.entity.Condominium;
 import org.featherlessbipeds.watchdog.service.CondominiumService;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
@@ -25,7 +25,7 @@ public class CondominiumController
     private final CondominiumService service;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerCondominium(@RequestBody CondominiumRegisterDTO condom)
+    public ResponseEntity<?> registerCondominium(@RequestBody CondominiumRegisterDto condom)
     {
         Condominium condominium = new Condominium();
         condominium.setLocation(condom.location());
@@ -39,7 +39,7 @@ public class CondominiumController
         try
         {
             condominium = service.registerCondominium(condominium);
-            var condominiumDTO = new CondominiumDTO(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
+            var condominiumDTO = new CondominiumDto(condominium.getId(), condominium.getName(), condominium.getTrusteeName(), condominium.getLocation(), condominium.getEntranceSet());
             return ResponseEntity.status(HttpStatus.OK).body(condominiumDTO);
         }
         catch (DataIntegrityViolationException e)
@@ -56,7 +56,7 @@ public class CondominiumController
 
     // curl -X POST "http://localhost:8080/condom/login" -H "Content-Type: application/json" -d "{\"email\":\"trustee1@sunrisevillas.com\",\"password\":\"123\"}"
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO)
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDTO)
     {
         var condominium = service.loginCondominium(loginDTO.email(), loginDTO.password());
 

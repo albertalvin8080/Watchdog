@@ -4,13 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.entity.Location;
+import org.featherlessbipeds.watchdog.service.gemini.GeminiService;
 import org.featherlessbipeds.watchdog.sse.AlertSSEController;
-import org.featherlessbipeds.watchdog.sse.AlertSSEDTO;
-import org.featherlessbipeds.watchdog.dto.AlertRegisterDTO;
+import org.featherlessbipeds.watchdog.sse.AlertSseDto;
+import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.repository.AlertRepository;
-import org.featherlessbipeds.watchdog.sse.SSEUtils;
+import org.featherlessbipeds.watchdog.sse.SseUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,32 +23,35 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AlertService
 {
+    private final GeminiService geminiService;
     private final AlertRepository repository;
     private final EntranceService entranceService;
     private final AlertSSEController alertSSEController;
-    private final SSEUtils sseUtils;
+    private final SseUtils sseUtils;
 
     public List<Alert> findAll()
     {
         return repository.findAll();
     }
 
-    public Alert createAlert(AlertRegisterDTO alert)
+    public Alert createAlert(AlertRegisterDto alert)
     {
         Optional<Entrance> op = entranceService.findById(alert.entranceId());
 
         if (op.isEmpty())
-        {
             throw new EntityNotFoundException("Error while trying to fetch entrance");
-        }
 
         Entrance entrance = op.get();
+
+        String title = geminiService.makeRequest(alert.transcript());
+        System.out.println(title);
 
         Alert newAlert = new Alert();
         newAlert.setDangerLevel(alert.dangerLevel());
         newAlert.setDate(LocalDateTime.now());
         newAlert.setDescription(alert.description());
         newAlert.setEntrance(entrance);
+        newAlert.setTitle(title);
 
         try
         {
@@ -65,9 +69,9 @@ public class AlertService
     }
 
     //Recebe a localizacao da entrance
-    public List<AlertSSEDTO> findAllWithinRadius(Double radius, int entranceId)
+    public List<AlertSseDto> findAllWithinRadius(Double radius, int entranceId)
     {
-        List<AlertSSEDTO> result = new ArrayList<>();
+        List<AlertSseDto> result = new ArrayList<>();
         List<Alert> allAlerts = this.findAll();
 
         Optional<Entrance> entranceOp = entranceService.findById(entranceId);
@@ -88,7 +92,7 @@ public class AlertService
                 double distance = sseUtils.calculateDistance(alertLocation.getLatitude(), alertLocation.getLongitude(), lat, lon);
 
                 if (distance <= radius)
-                    result.add(new AlertSSEDTO(a.getEntrance().getId(), radius, a));
+                    result.add(new AlertSseDto(a.getEntrance().getId(), radius, a));
             }
         }
 

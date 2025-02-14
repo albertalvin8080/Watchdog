@@ -2,14 +2,11 @@ package org.featherlessbipeds.watchdog.sse;
 
 import lombok.RequiredArgsConstructor;
 import org.featherlessbipeds.watchdog.entity.Alert;
-import org.featherlessbipeds.watchdog.entity.Entrance;
-import org.featherlessbipeds.watchdog.entity.Location;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @CrossOrigin("*")
 public class AlertSSEController
 {
-    private static final List<EntranceEmitter> emitters = new CopyOnWriteArrayList<>();
-    private final SSEUtils sseUtils;
+    private final List<EntranceEmitter> emitters;
+    private final SseUtils sseUtils;
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamAlerts(

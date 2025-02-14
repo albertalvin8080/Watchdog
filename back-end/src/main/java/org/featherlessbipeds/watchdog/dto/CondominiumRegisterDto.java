@@ -3,7 +3,7 @@ package org.featherlessbipeds.watchdog.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.featherlessbipeds.watchdog.entity.Location;
 
-public record CondominiumRegisterDTO(
+public record CondominiumRegisterDto(
         @JsonProperty("location") Location location,
         @JsonProperty("condomName") String condomName,
         @JsonProperty("trusteeName") String trusteeName,
