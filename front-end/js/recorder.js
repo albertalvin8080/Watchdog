@@ -144,6 +144,7 @@ async function fetchAndDisplayAlerts(radius, entranceId)
 
             card.innerHTML = ` 
                 <div class="danger-level ${alertSseDto.alert.dangerLevel}">${alertSseDto.alert.dangerLevel} ALERT #${alertSseDto.alert.id}</div>
+                <div style="margin-bottom:10px;">${alertSseDto.alert.title}</div>
                 <div class="meta">
                     <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
                     <div>${formattedDate}</div>
@@ -174,6 +175,6 @@ document.addEventListener('DOMContentLoaded', () =>
     {
         fetchAndDisplayAlerts(200, entranceId);
 
-        setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
+        // setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
     }
 });

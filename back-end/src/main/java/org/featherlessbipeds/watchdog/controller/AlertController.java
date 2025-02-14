@@ -60,7 +60,6 @@ public class AlertController
         }
     }
 
-
     @GetMapping("/{radius}/{id}")
     //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
     public List<AlertSseDto> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id)

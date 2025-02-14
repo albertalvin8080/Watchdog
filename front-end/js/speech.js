@@ -22,7 +22,7 @@ class CustomSpeechRecognitionObject
 
         this.speechRecognition.onresult = (event) =>
         {
-            this.transcript += " " + event.results[0][0].transcript;
+            this.transcript += ", " + event.results[0][0].transcript;
             console.log(this.transcript);
             console.log(event.results);
         };
