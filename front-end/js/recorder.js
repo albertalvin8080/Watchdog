@@ -8,47 +8,38 @@ let audioChunks = [];
 
 const baseurl = "http://localhost:8080";
 
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
-{
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     console.log("getUserMedia supported.");
     navigator.mediaDevices
         .getUserMedia({
             audio: true,
         })
-        .then((stream) =>
-        {
+        .then((stream) => {
             myStream = stream;
             main();
         })
-        .catch((err) =>
-        {
+        .catch((err) => {
             console.error(`The following getUserMedia error occurred: ${err}`);
         });
-} else
-{
+} else {
     console.log("getUserMedia not supported on your browser!");
 }
 
-function main()
-{
+function main() {
     mediaRecorder = new MediaRecorder(myStream);
 
-    mediaRecorder.onstart = () =>
-    {
+    mediaRecorder.onstart = () => {
         console.log("Recording started.");
         audioChunks = []; // Clear any previous chunks
     };
 
-    mediaRecorder.ondataavailable = (event) =>
-    {
-        if (event.data.size > 0)
-        {
+    mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
             audioChunks.push(event.data);
         }
     };
 
-    mediaRecorder.onstop = () =>
-    {
+    mediaRecorder.onstop = () => {
         console.log("Recording stopped.");
 
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
@@ -70,15 +61,12 @@ function main()
         // document.body.appendChild(downloadLink);
     };
 
-    recordStart.addEventListener("click", async () =>
-    {
-        if (mediaRecorder.state === "inactive")
-        {
+    recordStart.addEventListener("click", async () => {
+        if (mediaRecorder.state === "inactive") {
             customSpeechRecognition.start();
             mediaRecorder.start();
             recordStart.innerText = "Listening";
-        } else if (mediaRecorder.state === "recording")
-        {
+        } else if (mediaRecorder.state === "recording") {
             await customSpeechRecognition.stop();
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
@@ -86,8 +74,7 @@ function main()
     });
 }
 
-async function persistAudio(audioBlob)
-{
+async function persistAudio(audioBlob) {
     const dangerLevel = getDangetLevel();
     const entranceId = sessionStorage.getItem("entranceId");
 
@@ -102,49 +89,45 @@ async function persistAudio(audioBlob)
         body: formData,
     })
         .then((response) => response.json())
-        .then((data) =>
-        {
+        .then((data) => {
             // console.log(data);
             fetchAndDisplayAlerts(200, entranceId);
         })
-        .catch((error) =>
-        {
+        .catch((error) => {
             console.error("Error:", error);
         });
 }
 
-function getDangetLevel()
-{
+function getDangetLevel() {
     // Retonando na tora, depois bota a IA pra adivinhar
     return "HIGH";
 }
 
-async function fetchAndDisplayAlerts(radius, entranceId)
-{
-    if (!entranceId)
-    {
+async function fetchAndDisplayAlerts(radius, entranceId) {
+    if (!entranceId) {
         return;
     }
 
-    try
-    {
+    try {
         const response = await fetch(`${baseurl}/alert/${radius}/${entranceId}`);
         const alerts = await response.json();
 
         const alertsContainer = document.querySelector("#alerts-container");
         alertsContainer.innerHTML = '';
 
-        alerts.forEach(alertSseDto =>
-        {
+        alerts.forEach(alertSseDto => {
             const card = document.createElement('div');
             card.className = 'alert-card';
 
             const date = new Date(alertSseDto.alert.date);
             const formattedDate = date.toLocaleString();
 
+            const color = hashColor(alertSseDto.alert.id, 0.1);
+
             card.innerHTML = ` 
-                <div class="danger-level ${alertSseDto.alert.dangerLevel}">${alertSseDto.alert.dangerLevel} ALERT #${alertSseDto.alert.id}</div>
-                <div style="margin-bottom:10px;">${alertSseDto.alert.title}</div>
+                <div class="danger-level ${alertSseDto.alert.dangerLevel}" style="text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;" >${alertSseDto.alert.title}
+                <span style="background-color: ${}" ></span>
+                </div>
                 <div class="meta">
                     <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
                     <div>${formattedDate}</div>
@@ -155,12 +138,13 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                 </audio>
             `;
 
-            alertsContainer.appendChild(card);
+            card.style.backgroundColor = color;
+
+                alertsContainer.appendChild(card);
         });
 
         return alerts;
-    } catch (error)
-    {
+    } catch (error) {
         console.error('Error fetching alerts:', error);
         const alertsContainer = document.querySelector("#alerts-container");
         alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
@@ -168,11 +152,9 @@ async function fetchAndDisplayAlerts(radius, entranceId)
 }
 
 
-document.addEventListener('DOMContentLoaded', () =>
-{
+document.addEventListener('DOMContentLoaded', () => {
     const entranceId = sessionStorage.getItem("entranceId");
-    if (entranceId)
-    {
+    if (entranceId) {
         fetchAndDisplayAlerts(200, entranceId);
 
         // setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
