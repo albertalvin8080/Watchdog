@@ -137,5 +137,7 @@ analises/
 GCMS/GCMS-Albert-Sobral*/
 Ground-Truth-Evaluation/weights_v2/*.zip
 Ground-Truth-Evaluation/weights_v2/onnx/
+Ground-Truth-Evaluation/weights_v2/*.pth
 
-#**/*.onnx
+src/main/resources/models/*.onnx
+inferences/

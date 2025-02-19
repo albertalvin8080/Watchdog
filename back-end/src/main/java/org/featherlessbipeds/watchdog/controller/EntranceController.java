@@ -38,13 +38,7 @@ public class EntranceController
             if (entrance != null)
             {
                 log.info("Login com: {}", loginDTO.email());
-                // EntranceDTO entranceDTO = new EntranceDTO(
-                //     entrance.getId(), 
-                //     entrance.getLocation(), 
-                //     entrance.getCondominium().getId(), 
-                //     entrance.getAlertSet(),
-                //     MapperDto.convert(entrance.getCondominium())
-                // );
+
                 EntranceWithCondomDto dto = new EntranceWithCondomDto(
                         entrance.getId(),
                         MapperDto.convert(entrance),

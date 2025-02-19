@@ -6,7 +6,6 @@ import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.service.AlertService;
-import org.featherlessbipeds.watchdog.service.gemini.GeminiService;
 import org.featherlessbipeds.watchdog.sse.AlertSseDto;
 import org.featherlessbipeds.watchdog.util.JsonUtil;
 import org.springframework.http.HttpStatus;
@@ -51,11 +50,9 @@ public class AlertController
             final Alert a = alertService.createAlert(alert);
             return ResponseEntity.status(HttpStatus.CREATED).body(a);
         }
-
         catch (Exception e)
         {
-            log.error("Error while trying to create alert");
-            e.printStackTrace();
+            log.error("Error while trying to create alert: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
     }

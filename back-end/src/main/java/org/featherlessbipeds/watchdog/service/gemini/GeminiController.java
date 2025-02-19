@@ -11,10 +11,17 @@ public class GeminiController
 {
     private final GeminiService service;
 
-    @GetMapping("/prompt")
-    public ResponseEntity<String> getResponse(@RequestParam("prompt") String prompt)
+    @GetMapping("/title")
+    public ResponseEntity<String> getTitle(@RequestParam("prompt") String prompt)
     {
-        String response = service.makeRequest(prompt);
+        String response = service.generateTitle(prompt);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/level")
+    public ResponseEntity<String> getDangerLevel(@RequestParam("prompt") String prompt)
+    {
+        String response = service.generateDangerLevel(prompt);
         return ResponseEntity.ok(response);
     }
 }

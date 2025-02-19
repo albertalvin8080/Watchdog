@@ -2,6 +2,7 @@ package org.featherlessbipeds.watchdog.service.gemini;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,26 @@ public class GeminiService
         this.objectMapper = objectMapper;
     }
 
-    public String makeRequest(String prompt)
+    public String generateTitle(String prompt)
     {
-        String fmtd = formatPrompt(prompt);
+        String context = "Faça um resumo de no máximo 5 palavras do conteúdo a seguir: %s";
+        String fmtd = formatPrompt(context, prompt);
+        return generateContent(fmtd);
+    }
+
+    public String generateDangerLevel(String prompt)
+    {
+        String context = """
+        Analise o transcript a seguir e responda APENAS com a string correspondente.
+        Para perigo Baixo: %s; Para perigo Médio: %s; Para perigo Alto: %s.
+        Transcript: %s
+        """.formatted(
+                DangerLevel.LOW,
+                DangerLevel.MEDIUM,
+                DangerLevel.HIGH,
+                prompt
+        );
+        String fmtd = formatPrompt(context, prompt);
         return generateContent(fmtd);
     }
 
@@ -41,9 +59,9 @@ public class GeminiService
                 .block();
     }
 
-    private String formatPrompt(String prompt)
+    private String formatPrompt(String context, String prompt)
     {
-        return String.format("Faça um resumo de no máximo 5 palavras do conteúdo a seguir: %s", prompt);
+        return String.format(context, prompt);
     }
 
     private String extractTextFromResponse(String responseJson)

@@ -1,6 +1,7 @@
 package org.featherlessbipeds.watchdog.sse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/alerts")
 @CrossOrigin("*")
+@Slf4j
 public class AlertSSEController
 {
     private final List<EntranceEmitter> emitters;
@@ -31,7 +33,7 @@ public class AlertSSEController
         emitter.onCompletion(() -> emitters.remove(entranceEmitter));
         emitter.onTimeout(() -> emitters.remove(entranceEmitter));
 
-        System.out.println(entranceEmitter);
+        log.info("{}", entranceEmitter);
 
         return emitter;
     }

@@ -95,22 +95,24 @@ async function persistAudio(audioBlob)
     formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
-    formData.append("transcript", customSpeechRecognition.transcript);
+    formData.append("transcript", customSpeechRecognition.getTranscript());
 
-    fetch(baseurl + "/alert/register", {
-        method: "POST",
-        body: formData,
-    })
-        .then((response) => response.json())
-        .then((data) =>
-        {
-            // console.log(data);
-            fetchAndDisplayAlerts(200, entranceId);
+    try
+    {
+        const response = await fetch(baseurl + "/alert/register", {
+            method: "POST",
+            body: formData,
         })
-        .catch((error) =>
-        {
-            console.error("Error:", error);
-        });
+        // const json = await response.json();
+        if (response.ok)
+            fetchAndDisplayAlerts(200, entranceId);
+        else
+            showMsg(errorMsg, "Try again.");
+    }
+    catch (error)
+    {
+        console.error("Error:", error);
+    }
 }
 
 function getDangetLevel()
@@ -142,9 +144,23 @@ async function fetchAndDisplayAlerts(radius, entranceId)
             const date = new Date(alertSseDto.alert.date);
             const formattedDate = date.toLocaleString();
 
+            const color = hashColor(alertSseDto.alert.id, 1);
+
+
+            // style="text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;"
+            const style = `
+                display: flex;
+                justify-content: space-between;
+            `;
             card.innerHTML = ` 
-                <div class="danger-level ${alertSseDto.alert.dangerLevel}">${alertSseDto.alert.dangerLevel} ALERT #${alertSseDto.alert.id}</div>
-                <div style="margin-bottom:10px;">${alertSseDto.alert.title}</div>
+                <div class="danger-level ${alertSseDto.alert.dangerLevel}" style="${style}">
+                    <div>${alertSseDto.alert.title}</div>
+                    <div>
+                        <div class="danger-info">
+                            ${alertSseDto.alert.dangerLevel}
+                        </div>
+                    </div>
+                </div>
                 <div class="meta">
                     <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
                     <div>${formattedDate}</div>
@@ -154,6 +170,7 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                     Your browser does not support the audio element.
                 </audio>
             `;
+            card.style.border = `3px solid ${color}`
 
             alertsContainer.appendChild(card);
         });
@@ -173,8 +190,11 @@ document.addEventListener('DOMContentLoaded', () =>
     const entranceId = sessionStorage.getItem("entranceId");
     if (entranceId)
     {
-        fetchAndDisplayAlerts(200, entranceId);
-
+        /*
+        WARNING: I don't think it's a good idea to fecth every time we reload. If the server is still going up, it will fail anyway. 
+        Put it inside entranceLoginForm and condominiumLoginForm individually.
+        */
+        // fetchAndDisplayAlerts(200, entranceId);
         // setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
     }
 });

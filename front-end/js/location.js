@@ -1,9 +1,7 @@
 "use strict";
 
-class MapApp
-{
-    constructor(divId)
-    {
+class MapApp {
+    constructor(divId) {
         this.alerts = [];
 
         this.map = L.map(divId);
@@ -23,24 +21,20 @@ class MapApp
         configureMenu(this);
     }
 
-    openMap()
-    {
+    openMap() {
         this.showMap();
     }
 
-    async openCondominiumView(condom)
-    {
+    async openCondominiumView(condom) {
         this.condom = condom;
         const latC = condom.location.latitude;
         const lonC = condom.location.longitude;
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latC}&lon=${lonC}`;
-        try
-        {
+        try {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (this.coords)
-            {
+            if (this.coords) {
                 this.map.removeLayer(this.coords.marker);
             }
 
@@ -67,8 +61,7 @@ class MapApp
             // .openPopup(); // The popup is slight deslocated to the right.
 
             const entranceMarkers = [];
-            condom.entranceSet.forEach(e =>
-            {
+            condom.entranceSet.forEach(e => {
                 const location = e.location;
                 const e_marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
                 entranceMarkers.push(e_marker);
@@ -76,8 +69,7 @@ class MapApp
 
             this.condomCoords = { lat, lon, display_name, marker, entranceMarkers };
 
-        } catch (error)
-        {
+        } catch (error) {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
         }
@@ -86,8 +78,7 @@ class MapApp
         this.showEntranceRegister();
     }
 
-    async openEntranceView(entranceMetadata, callback)
-    {
+    async openEntranceView(entranceMetadata, callback) {
         // console.log(entranceMetadata);
         // this.entranceMetadata = entranceMetadata;
 
@@ -98,13 +89,11 @@ class MapApp
         const latE = entrance.location.latitude;
         const lonE = entrance.location.longitude;
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latE}&lon=${lonE}`;
-        try
-        {
+        try {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (this.coords)
-            {
+            if (this.coords) {
                 this.map.removeLayer(this.coords.marker);
             }
 
@@ -128,8 +117,7 @@ class MapApp
             });
 
             const entranceMarkers = [];
-            entranceSet.forEach(e =>
-            {
+            entranceSet.forEach(e => {
                 const m = L.marker([e.location.latitude, e.location.longitude]);
                 // DO NOT change this. If the current entrance is doing the alert, it wont be able to draw it on the map anymore.
                 if (e.id !== entrance.id)
@@ -167,8 +155,7 @@ class MapApp
 
             this.entranceCoords = { lat, lon, display_name, marker, entranceMarkers, condomMarker };
             callback();
-        } catch (error)
-        {
+        } catch (error) {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
         }
@@ -177,23 +164,19 @@ class MapApp
         this.showMenu();
     }
 
-    cleanUpAll()
-    {
-        if (this.entranceCoords)
-        {
+    cleanUpAll() {
+        if (this.entranceCoords) {
             this.map.removeLayer(this.entranceCoords.marker);
             this.entranceCoords.entranceMarkers.forEach(e => this.map.removeLayer(e.marker));
             this.map.removeLayer(this.entranceCoords.condomMarker);
         }
-        if (this.condomCoords)
-        {
+        if (this.condomCoords) {
             this.map.removeLayer(this.condomCoords.marker);
             this.condomCoords.entranceMarkers.forEach(e => this.map.removeLayer(e));
         }
     }
 
-    openLocationSelectorView(locationBar, resolve, condomMetadata)
-    {
+    openLocationSelectorView(locationBar, resolve, condomMetadata) {
         locationBar.style.display = "flex";
         this.showMap();
 
@@ -204,15 +187,13 @@ class MapApp
         const inputSearch = locationBar.querySelector("#inputSearch");
         const btnSearch = locationBar.querySelector("#btnSearch");
 
-        const handleCancel = (evt) =>
-        {
+        const handleCancel = (evt) => {
             cleanup();
             resolve(false);
         };
 
         this.invalidEntrance = false;
-        const handleConfirm = (evt) =>
-        {
+        const handleConfirm = (evt) => {
             cleanup();
             if (this.invalidEntrance)
                 resolve(false);
@@ -220,10 +201,8 @@ class MapApp
                 resolve(this.coords);
         };
 
-        const performGeocoding = async (lat, lon, display_name) =>
-        {
-            if (this.coords)
-            {
+        const performGeocoding = async (lat, lon, display_name) => {
+            if (this.coords) {
                 this.map.removeLayer(this.coords.marker);
             }
 
@@ -257,18 +236,15 @@ class MapApp
             return { lat, lon, display_name, marker };
         };
 
-        const handleSearch = async (evt) =>
-        {
+        const handleSearch = async (evt) => {
             const strAddress = inputSearch.value.trim();
             const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(strAddress)}`;
 
-            try
-            {
+            try {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.length === 0)
-                {
+                if (data.length === 0) {
                     alert("Address not found.");
                     this.map.setView([51.5074, -0.1278], 2);
                     return;
@@ -279,20 +255,17 @@ class MapApp
                 lon = parseFloat(lon);
 
                 this.coords = await performGeocoding(lat, lon, display_name);
-            } catch (error)
-            {
+            } catch (error) {
                 console.error("Error fetching geocoding data:", error);
                 alert("Failed to fetch location data.");
             }
         };
 
-        const handleMapClick = async (evt) =>
-        {
+        const handleMapClick = async (evt) => {
             const latlng = evt.latlng;
             const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`;
 
-            try
-            {
+            try {
                 const response = await fetch(url);
                 const data = await response.json();
 
@@ -308,17 +281,14 @@ class MapApp
                 // Atualiza o input com o nome do endereço
                 if (r && this.coords)
                     inputSearch.value = this.coords.display_name;
-            } catch (error)
-            {
+            } catch (error) {
                 console.error("Error fetching geocoding data:", error);
                 alert("Failed to fetch location data.");
             }
         };
 
-        const handleInputSearchEnter = (evt) =>
-        {
-            if (evt.key === "Enter")
-            {
+        const handleInputSearchEnter = (evt) => {
+            if (evt.key === "Enter") {
                 evt.preventDefault();
                 btnSearch.click();
             }
@@ -330,8 +300,7 @@ class MapApp
         inputSearch.addEventListener("keydown", handleInputSearchEnter)
         this.map.on("click", handleMapClick);
 
-        const cleanup = () =>
-        {
+        const cleanup = () => {
             locationBar.style.display = "none";
             this.hideMap();
 
@@ -355,8 +324,7 @@ class MapApp
     }
 
     // Uses Haversine formula
-    isPointInsideCircle(centerLat, centerLon, pointLat, pointLon, radius)
-    {
+    isPointInsideCircle(centerLat, centerLon, pointLat, pointLon, radius) {
         const toRadians = (degrees) => degrees * (Math.PI / 180);
 
         const R = 6371000; // Earth's radius in meters
@@ -374,53 +342,44 @@ class MapApp
         return distance <= radius;
     }
 
-    hideMap()
-    {
+    hideMap() {
         this.mapElement.style.display = "none";
     }
 
-    showMap()
-    {
+    showMap() {
         this.mapElement.style.display = "flex";
     }
 
-    showMenu()
-    {
+    showMenu() {
         this.menuScreen.style.display = "flex";
     }
 
-    hideMenu()
-    {
+    hideMenu() {
         this.menuScreen.style.display = "none";
     }
 
-    showEntranceRegister()
-    {
+    showEntranceRegister() {
         this.entranceRegisterBtn.style.display = "flex";
     }
 
-    hideEntranceRegister()
-    {
+    hideEntranceRegister() {
         this.entranceRegisterBtn.style.display = "none";
     }
 
-    watchGeolocation()
-    {
+    watchGeolocation() {
         // Enable geolocation watch
         navigator.geolocation.watchPosition(
             this.onSuccess.bind(this),
             this.onError.bind(this)
         );
     }
-    onSuccess(pos)
-    {
+    onSuccess(pos) {
         const lat = pos.coords.latitude;
         const lng = pos.coords.lnggitude;
         const acc = pos.coords.accuracy;
 
         // Remove existing marker and circle if they exist
-        if (this.marker)
-        {
+        if (this.marker) {
             this.map.removeLayer(this.marker);
             this.map.removeLayer(this.circle);
         }
@@ -437,8 +396,7 @@ class MapApp
         this.circle = L.circle([lat, lng], { radius: acc, zIndexOffset: -1 }).addTo(this.map);
 
         // Adjust the zoom if needed
-        if (!this.zoomed)
-        {
+        if (!this.zoomed) {
             this.zoomed = true;
             this.map.fitBounds(this.circle.getBounds());
         }
@@ -447,10 +405,8 @@ class MapApp
         this.map.setView([lat, lng]);
     }
 
-    onError(err)
-    {
-        switch (err.code)
-        {
+    onError(err) {
+        switch (err.code) {
             case 1: // PERMISSION_DENIED
                 alert("Please allow geolocation access.");
                 break;
@@ -462,36 +418,26 @@ class MapApp
         }
     }
 
-    onMapClick(e)
-    {
+    onMapClick(e) {
         const latlng = e.latlng;
         const clickedMarker = L.marker(latlng).addTo(this.map);
 
         clickedMarker.bindPopup("You clicked here!").openPopup();
 
         // Remove the marker on click
-        clickedMarker.on("click", (e) =>
-        {
+        clickedMarker.on("click", (e) => {
             this.map.removeLayer(clickedMarker);
         });
     }
 
-    drawAlert(alertSSEDto)
-    {
-        //Cria a cor de acordo com o id do alerta
-        function hashColor(id) {
-            const hue = (id * 137) % 360; 
-            return `hsl(${hue}, 90%, 50%)`;
-        }
-    
-        //Cor da borda de acordo com a periculosidade do alerta
+    drawAlert(alertSSEDto) {
+        const color = hashColor(alertSSEDto.alert.id, 1);
+
         const dangerLevels = {
             "HIGH": 'hsl(0, 100%, 50%)',    // Vermelho
             "MEDIUM": 'hsl(39, 100%, 50%)', // Laranja
             "LOW": 'hsl(120, 100%, 50%)'    // Verde
         };
-        
-        const color = hashColor(alertSSEDto.alert.id);
 
         // console.log('Received alert:', alertSSEDto);
         const obj = this.entranceCoords.entranceMarkers.find(e => e.id === alertSSEDto.entranceId);
@@ -505,6 +451,13 @@ class MapApp
         this.alerts.push(circle);
     }
 }
+
+//Cria a cor de acordo com o id do alerta
+function hashColor(id, opacity) {
+    const hue = (id * 137) % 360;
+    return `hsla(${hue}, 90%, 50%, ${opacity})`;
+}
+
 
 const mapApp = new MapApp("map");
 mapApp.hideMap();
