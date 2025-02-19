@@ -3,6 +3,8 @@ package org.featherlessbipeds.watchdog.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.entity.Location;
 import org.featherlessbipeds.watchdog.service.gemini.GeminiService;
 import org.featherlessbipeds.watchdog.sse.AlertSSEController;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AlertService
 {
     private final GeminiService geminiService;
@@ -43,11 +46,20 @@ public class AlertService
 
         Entrance entrance = op.get();
 
-        String title = geminiService.makeRequest(alert.transcript());
-        System.out.println(title);
+        if (alert.transcript().isBlank())
+            throw new IllegalArgumentException("Invalid transcript");
+
+        String title = geminiService.generateTitle(alert.transcript()).trim();
+        log.info("{}", title);
+        String dangerLevel = geminiService.generateDangerLevel(alert.transcript()).trim();
+        log.info("{}", dangerLevel);
+        DangerLevel dangerLevelEnum = DangerLevel.valueOf(dangerLevel);
+
+        if (dangerLevelEnum == DangerLevel.UNKNOWN)
+            throw new IllegalArgumentException("Invalid transcript");
 
         Alert newAlert = new Alert();
-        newAlert.setDangerLevel(alert.dangerLevel());
+        newAlert.setDangerLevel(dangerLevelEnum);
         newAlert.setDate(LocalDateTime.now());
         newAlert.setDescription(alert.description());
         newAlert.setEntrance(entrance);

@@ -15,6 +15,7 @@ class CustomSpeechRecognitionObject
         this.speechRecognition.lang = 'pt-BR';
         this.running = false;
         this.transcript = null;
+        this.appender = ", ";
 
         this.speechRecognition.onstart = () =>
         {
@@ -22,7 +23,7 @@ class CustomSpeechRecognitionObject
 
         this.speechRecognition.onresult = (event) =>
         {
-            this.transcript += ", " + event.results[0][0].transcript;
+            this.transcript += this.appender + event.results[0][0].transcript;
             console.log(this.transcript);
             console.log(event.results);
         };
@@ -49,6 +50,12 @@ class CustomSpeechRecognitionObject
             this.resolve = resolve;
             this.speechRecognition.stop();
         })
+    }
+
+    getTranscript() {
+        if(this.transcript.startsWith(this.appender))
+            this.transcript = this.transcript.replace(this.appender, "");
+        return this.transcript;
     }
 }
 

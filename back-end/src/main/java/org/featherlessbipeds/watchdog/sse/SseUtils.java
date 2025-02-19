@@ -1,5 +1,6 @@
 package org.featherlessbipeds.watchdog.sse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.Entrance;
 import org.featherlessbipeds.watchdog.entity.Location;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Component
+@Slf4j
 public class SseUtils
 {
     public void sendAlertToNearbyEntrances(List<EntranceEmitter> emitters, Alert alert, double radius)
@@ -28,14 +30,14 @@ public class SseUtils
                     entranceEmitter.latitude(), entranceEmitter.longitude()
             );
 
-//            System.out.println("Alert id Before: " + entrance.getId());
-//            System.out.println("Before radius: " + entranceEmitter.entranceId());
+//            log.info("Alert id Before: " + entrance.getId());
+//            log.info("Before radius: " + entranceEmitter.entranceId());
 
             if (distance > radius)
                 continue;
 
-//            System.out.println("Alert id After: " + entrance.getId());
-//            System.out.println("After radius: " + entranceEmitter.entranceId());
+//            log.info("Alert id After: " + entrance.getId());
+//            log.info("After radius: " + entranceEmitter.entranceId());
 
             try
             {
@@ -43,7 +45,7 @@ public class SseUtils
             }
             catch (Exception e)
             {
-                System.out.println("AlertSSEController exception: " + e.getMessage());
+                log.error("AlertSSEController exception: {}", e.getMessage());
 //                entranceEmitter.emitter().complete();
 //                emitters.remove(entranceEmitter);
                 it.remove();

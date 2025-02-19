@@ -1,6 +1,7 @@
 package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.featherlessbipeds.watchdog.dto.CondominiumDto;
 import org.featherlessbipeds.watchdog.dto.CondominiumRegisterDto;
 import org.featherlessbipeds.watchdog.dto.LoginDto;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/condom")
 @RequiredArgsConstructor
 @CrossOrigin("*")
+@Slf4j
 public class CondominiumController
 {
     private final JsonUtil jsonUtil;
@@ -34,7 +36,7 @@ public class CondominiumController
         condominium.setEmail(condom.email());
         //A senha ta sem hash, dps v isso
         condominium.setPasswordHash(condom.passwordHash());
-        System.out.println(condom);
+        log.info("{}", condom);
 
         try
         {

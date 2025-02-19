@@ -8,38 +8,47 @@ let audioChunks = [];
 
 const baseurl = "http://localhost:8080";
 
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+{
     console.log("getUserMedia supported.");
     navigator.mediaDevices
         .getUserMedia({
             audio: true,
         })
-        .then((stream) => {
+        .then((stream) =>
+        {
             myStream = stream;
             main();
         })
-        .catch((err) => {
+        .catch((err) =>
+        {
             console.error(`The following getUserMedia error occurred: ${err}`);
         });
-} else {
+} else
+{
     console.log("getUserMedia not supported on your browser!");
 }
 
-function main() {
+function main()
+{
     mediaRecorder = new MediaRecorder(myStream);
 
-    mediaRecorder.onstart = () => {
+    mediaRecorder.onstart = () =>
+    {
         console.log("Recording started.");
         audioChunks = []; // Clear any previous chunks
     };
 
-    mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
+    mediaRecorder.ondataavailable = (event) =>
+    {
+        if (event.data.size > 0)
+        {
             audioChunks.push(event.data);
         }
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop = () =>
+    {
         console.log("Recording stopped.");
 
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
@@ -61,12 +70,15 @@ function main() {
         // document.body.appendChild(downloadLink);
     };
 
-    recordStart.addEventListener("click", async () => {
-        if (mediaRecorder.state === "inactive") {
+    recordStart.addEventListener("click", async () =>
+    {
+        if (mediaRecorder.state === "inactive")
+        {
             customSpeechRecognition.start();
             mediaRecorder.start();
             recordStart.innerText = "Listening";
-        } else if (mediaRecorder.state === "recording") {
+        } else if (mediaRecorder.state === "recording")
+        {
             await customSpeechRecognition.stop();
             mediaRecorder.stop();
             recordStart.innerText = "Alert";
@@ -74,7 +86,8 @@ function main() {
     });
 }
 
-async function persistAudio(audioBlob) {
+async function persistAudio(audioBlob)
+{
     const dangerLevel = getDangetLevel();
     const entranceId = sessionStorage.getItem("entranceId");
 
@@ -82,51 +95,71 @@ async function persistAudio(audioBlob) {
     formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
-    formData.append("transcript", customSpeechRecognition.transcript);
+    formData.append("transcript", customSpeechRecognition.getTranscript());
 
-    fetch(baseurl + "/alert/register", {
-        method: "POST",
-        body: formData,
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            // console.log(data);
-            fetchAndDisplayAlerts(200, entranceId);
+    try
+    {
+        const response = await fetch(baseurl + "/alert/register", {
+            method: "POST",
+            body: formData,
         })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+        // const json = await response.json();
+        if (response.ok)
+            fetchAndDisplayAlerts(200, entranceId);
+        else
+            showMsg(errorMsg, "Try again.");
+    }
+    catch (error)
+    {
+        console.error("Error:", error);
+    }
 }
 
-function getDangetLevel() {
+function getDangetLevel()
+{
     // Retonando na tora, depois bota a IA pra adivinhar
     return "HIGH";
 }
 
-async function fetchAndDisplayAlerts(radius, entranceId) {
-    if (!entranceId) {
+async function fetchAndDisplayAlerts(radius, entranceId)
+{
+    if (!entranceId)
+    {
         return;
     }
 
-    try {
+    try
+    {
         const response = await fetch(`${baseurl}/alert/${radius}/${entranceId}`);
         const alerts = await response.json();
 
         const alertsContainer = document.querySelector("#alerts-container");
         alertsContainer.innerHTML = '';
 
-        alerts.forEach(alertSseDto => {
+        alerts.forEach(alertSseDto =>
+        {
             const card = document.createElement('div');
             card.className = 'alert-card';
 
             const date = new Date(alertSseDto.alert.date);
             const formattedDate = date.toLocaleString();
 
-            const color = hashColor(alertSseDto.alert.id, 0.1);
+            const color = hashColor(alertSseDto.alert.id, 1);
 
+
+            // style="text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;"
+            const style = `
+                display: flex;
+                justify-content: space-between;
+            `;
             card.innerHTML = ` 
-                <div class="danger-level ${alertSseDto.alert.dangerLevel}" style="text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;" >${alertSseDto.alert.title}
-                <span style="background-color: ${}" ></span>
+                <div class="danger-level ${alertSseDto.alert.dangerLevel}" style="${style}">
+                    <div>${alertSseDto.alert.title}</div>
+                    <div>
+                        <div class="danger-info">
+                            ${alertSseDto.alert.dangerLevel}
+                        </div>
+                    </div>
                 </div>
                 <div class="meta">
                     <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
@@ -137,14 +170,14 @@ async function fetchAndDisplayAlerts(radius, entranceId) {
                     Your browser does not support the audio element.
                 </audio>
             `;
+            card.style.border = `3px solid ${color}`
 
-            card.style.backgroundColor = color;
-
-                alertsContainer.appendChild(card);
+            alertsContainer.appendChild(card);
         });
 
         return alerts;
-    } catch (error) {
+    } catch (error)
+    {
         console.error('Error fetching alerts:', error);
         const alertsContainer = document.querySelector("#alerts-container");
         alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
@@ -152,11 +185,16 @@ async function fetchAndDisplayAlerts(radius, entranceId) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () =>
+{
     const entranceId = sessionStorage.getItem("entranceId");
-    if (entranceId) {
-        fetchAndDisplayAlerts(200, entranceId);
-
+    if (entranceId)
+    {
+        /*
+        WARNING: I don't think it's a good idea to fecth every time we reload. If the server is still going up, it will fail anyway. 
+        Put it inside entranceLoginForm and condominiumLoginForm individually.
+        */
+        // fetchAndDisplayAlerts(200, entranceId);
         // setInterval(() => fetchAndDisplayAlerts(200, entranceId), 60000);
     }
 });
