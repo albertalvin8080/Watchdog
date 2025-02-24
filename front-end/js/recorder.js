@@ -47,34 +47,12 @@ function main()
         }
     };
 
-    mediaRecorder.onstop = () =>
-    {
-        console.log("Recording stopped.");
-
-        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-
-        const audioURL = URL.createObjectURL(audioBlob);
-
-        // Create an audio element to play the recording
-        const audio = document.createElement("audio");
-        audio.controls = true;
-        audio.src = audioURL;
-        document.querySelector("#menu-screen > #content").appendChild(audio);
-
-        persistAudio(audioBlob);
-
-        // const downloadLink = document.createElement("a");
-        // downloadLink.href = audioURL;
-        // downloadLink.download = "recording.webm";
-        // downloadLink.textContent = "Download Recording";
-        // document.body.appendChild(downloadLink);
-    };
-
     recordStart.addEventListener("click", async () =>
     {
         if (mediaRecorder.state === "inactive")
         {
             customSpeechRecognition.start();
+            mediaRecorder.onstop = () => recordAudioBlob(persistAudio);
             mediaRecorder.start();
             recordStart.innerText = "Listening";
         } else if (mediaRecorder.state === "recording")
@@ -86,13 +64,29 @@ function main()
     });
 }
 
+function recordAudioBlob(lambda)
+{
+    console.log("Recording stopped.");
+
+    const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+
+    const audioURL = URL.createObjectURL(audioBlob);
+
+    // Create an audio element to play the recording
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.src = audioURL;
+    document.querySelector("#menu-screen > #content").appendChild(audio);
+
+    lambda(audioBlob);
+}
+
 async function persistAudio(audioBlob)
 {
-    const dangerLevel = getDangetLevel();
     const entranceId = sessionStorage.getItem("entranceId");
 
     const formData = new FormData();
-    formData.append("dangerLevel", dangerLevel);
+    // formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("description", audioBlob);
     formData.append("transcript", customSpeechRecognition.getTranscript());
@@ -113,12 +107,6 @@ async function persistAudio(audioBlob)
     {
         console.error("Error:", error);
     }
-}
-
-function getDangetLevel()
-{
-    // Retonando na tora, depois bota a IA pra adivinhar
-    return "HIGH";
 }
 
 async function fetchAndDisplayAlerts(radius, entranceId)
@@ -163,7 +151,12 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                 </div>
                 <div class="meta">
                     <!--<div>From Entrance #${alertSseDto.entranceId}</div>-->
-                    <div>${formattedDate}</div>
+                    <div class="reinforce-container">
+                        <div>${formattedDate}</div>
+                        <div>
+                            <button id="reinforce" data-entrance-id="${alertSseDto.entranceId}">reinforce</button>
+                        </div>
+                    </div>
                 </div>
                 <audio controls>
                     <source src="data:audio/webm;base64,${btoa(String.fromCharCode(...new Uint8Array(alertSseDto.alert.description)))}" type="audio/webm">
@@ -173,6 +166,7 @@ async function fetchAndDisplayAlerts(radius, entranceId)
             card.style.border = `3px solid ${color}`
 
             alertsContainer.appendChild(card);
+            addAlertReinforceListener(card.querySelector("#reinforce"));
         });
 
         return alerts;
@@ -183,7 +177,6 @@ async function fetchAndDisplayAlerts(radius, entranceId)
         alertsContainer.innerHTML = '<p class="error">Error loading alerts</p>';
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', () =>
 {

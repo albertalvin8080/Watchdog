@@ -3,6 +3,7 @@ package org.featherlessbipeds.watchdog.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
+import org.featherlessbipeds.watchdog.dto.AlertReinforceDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.service.AlertService;
@@ -33,16 +34,34 @@ public class AlertController
         return ResponseEntity.ok(alertService.findAll());
     }
 
+    @PostMapping(path = "/reinforce", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> reinforceAlert(
+            @RequestParam("previousEntranceId") Integer previousEntranceId,
+            @RequestParam("entranceId") Integer entranceId,
+            @RequestParam("description") MultipartFile description,
+            @RequestParam("transcript") String transcript
+    ) throws IOException
+    {
+        AlertReinforceDto dto = new AlertReinforceDto(
+                previousEntranceId,
+                entranceId,
+                null,
+                description.getBytes(),
+                transcript
+        );
+
+        return null;
+    }
+
     @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createAlert(
             @RequestParam("entranceId") Integer entranceId,
-            @RequestParam("dangerLevel") DangerLevel dangerLevel,
             @RequestParam("description") MultipartFile description,
             @RequestParam("transcript") String transcript
     ) throws IOException
     {
         AlertRegisterDto alert = new AlertRegisterDto(
-                entranceId, dangerLevel, description.getBytes(), transcript
+                entranceId, null, description.getBytes(), transcript
         );
 
         try
