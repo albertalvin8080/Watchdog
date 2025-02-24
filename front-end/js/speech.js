@@ -25,7 +25,7 @@ class CustomSpeechRecognitionObject
         {
             this.transcript += this.appender + event.results[0][0].transcript;
             console.log(this.transcript);
-            console.log(event.results);
+            // console.log(event.results);
         };
 
         this.speechRecognition.onend = () =>
