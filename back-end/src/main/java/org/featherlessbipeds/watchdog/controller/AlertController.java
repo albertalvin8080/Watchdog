@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
 import org.featherlessbipeds.watchdog.dto.AlertReinforceDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
-import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.service.AlertService;
 import org.featherlessbipeds.watchdog.sse.AlertSseDto;
 import org.featherlessbipeds.watchdog.util.JsonUtil;

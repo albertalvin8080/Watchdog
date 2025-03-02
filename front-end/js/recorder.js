@@ -140,6 +140,12 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                 display: flex;
                 justify-content: space-between;
             `;
+
+            const base64Audio = alertSseDto.alert.description; // Already base64-encoded
+            const audioUrl = `data:audio/webm;base64,${base64Audio}`;
+
+            // console.log(alertSseDto.alert.description);
+
             card.innerHTML = ` 
                 <div class="danger-level ${alertSseDto.alert.dangerLevel}" style="${style}">
                     <div>${alertSseDto.alert.title}</div>
@@ -159,11 +165,13 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                     </div>
                 </div>
                 <audio controls>
-                    <source src="data:audio/webm;base64,${btoa(String.fromCharCode(...new Uint8Array(alertSseDto.alert.description)))}" type="audio/webm">
+                    <source src="${audioUrl}" type="audio/webm">
                     Your browser does not support the audio element.
                 </audio>
             `;
-            card.style.border = `3px solid ${color}`
+
+            card.style.border = `3px solid ${color}`;
+
 
             alertsContainer.appendChild(card);
             addAlertReinforceListener(card.querySelector("#reinforce"));
