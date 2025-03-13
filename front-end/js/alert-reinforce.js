@@ -1,6 +1,7 @@
 "use strict";
 
 let previousEntranceId = null;
+let alertId = null;
 
 async function persistReinforce(audioBlob) 
 {
@@ -9,6 +10,7 @@ async function persistReinforce(audioBlob)
     // formData.append("dangerLevel", dangerLevel);
     formData.append("entranceId", entranceId);
     formData.append("previousEntranceId", previousEntranceId);
+    formData.append("alertId", alertId);
     formData.append("description", audioBlob);
     formData.append("transcript", customSpeechRecognition.getTranscript());
 
@@ -37,7 +39,7 @@ function addAlertReinforceListener(btnReinforce)
     btnReinforce.addEventListener("click", async (evt) =>
         {
             previousEntranceId = parseInt(btnReinforce.getAttribute("data-entrance-id"));
-        
+            alertId = parseInt(btnReinforce.getAttribute("data-alert-id"));
             if (mediaRecorder.state === "inactive")
             {
                 customSpeechRecognition.start();

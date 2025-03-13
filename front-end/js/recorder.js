@@ -160,7 +160,7 @@ async function fetchAndDisplayAlerts(radius, entranceId)
                     <div class="reinforce-container">
                         <div>${formattedDate}</div>
                         <div>
-                            <button id="reinforce" data-entrance-id="${alertSseDto.entranceId}">reinforce</button>
+                            <button id="reinforce" data-entrance-id="${alertSseDto.entranceId}" data-alert-id="${alertSseDto.alert.id}">reinforce</button>
                         </div>
                     </div>
                 </div>
