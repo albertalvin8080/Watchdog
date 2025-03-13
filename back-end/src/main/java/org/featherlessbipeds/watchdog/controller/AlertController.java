@@ -22,14 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin("*")
-public class AlertController
-{
+public class AlertController {
     private final AlertService alertService;
     private final JsonUtil jsonUtil;
 
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Alert>> findAll()
-    {
+    public ResponseEntity<List<Alert>> findAll() {
         return ResponseEntity.ok(alertService.findAll());
     }
 
@@ -38,18 +36,29 @@ public class AlertController
             @RequestParam("previousEntranceId") Integer previousEntranceId,
             @RequestParam("entranceId") Integer entranceId,
             @RequestParam("description") MultipartFile description,
-            @RequestParam("transcript") String transcript
-    ) throws IOException
-    {
+            @RequestParam("transcript") String transcript,
+            @RequestParam("alertId") Integer alertId
+    ) throws IOException {
+
         AlertReinforceDto dto = new AlertReinforceDto(
                 previousEntranceId,
                 entranceId,
                 null,
                 description.getBytes(),
-                transcript
+                transcript,
+                alertId
         );
 
-        return null;
+        log.info("reinfoce {}", dto);
+        try {
+            Alert reinforce = alertService.createReinforce(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(reinforce);
+        } catch (Exception e) {
+            log.error("Error while trying to create the alert reinforce: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
+        }
+
+
     }
 
     @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -57,19 +66,15 @@ public class AlertController
             @RequestParam("entranceId") Integer entranceId,
             @RequestParam("description") MultipartFile description,
             @RequestParam("transcript") String transcript
-    ) throws IOException
-    {
+    ) throws IOException {
         AlertRegisterDto alert = new AlertRegisterDto(
                 entranceId, null, description.getBytes(), transcript
         );
 
-        try
-        {
+        try {
             final Alert a = alertService.createAlert(alert);
             return ResponseEntity.status(HttpStatus.CREATED).body(a);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("Error while trying to create alert: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
@@ -77,8 +82,7 @@ public class AlertController
 
     @GetMapping("/{radius}/{id}")
     //O valor do raio do alerta , id da entrance e retorna todos os alertas no qual ela esta dentro do raio
-    public List<AlertSseDto> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id)
-    {
+    public List<AlertSseDto> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id) {
         return alertService.findAllWithinRadius(radius, id);
     }
 

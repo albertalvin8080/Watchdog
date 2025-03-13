@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.featherlessbipeds.watchdog.dto.AlertReinforceDto;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.entity.Location;
 import org.featherlessbipeds.watchdog.service.gemini.GeminiService;
@@ -24,21 +25,18 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AlertService
-{
+public class AlertService {
     private final GeminiService geminiService;
     private final AlertRepository repository;
     private final EntranceService entranceService;
     private final AlertSSEController alertSSEController;
     private final SseUtils sseUtils;
 
-    public List<Alert> findAll()
-    {
+    public List<Alert> findAll() {
         return repository.findAll();
     }
 
-    public Alert createAlert(AlertRegisterDto alert)
-    {
+    public Alert createAlert(AlertRegisterDto alert) {
         Optional<Entrance> op = entranceService.findById(alert.entranceId());
 
         if (op.isEmpty())
@@ -65,12 +63,9 @@ public class AlertService
         newAlert.setEntrance(entrance);
         newAlert.setTitle(title);
 
-        try
-        {
+        try {
             repository.save(newAlert);
-        }
-        catch (PersistenceException e)
-        {
+        } catch (PersistenceException e) {
             throw new PersistenceException("Error while creating alert");
         }
 
@@ -81,19 +76,18 @@ public class AlertService
     }
 
     //Recebe a localizacao da entrance
-    public List<AlertSseDto> findAllWithinRadius(Double radius, int entranceId)
-    {
+    public List<AlertSseDto> findAllWithinRadius(Double radius, int entranceId) {
         List<AlertSseDto> result = new ArrayList<>();
         List<Alert> allAlerts = this.findAll();
 
         Optional<Entrance> entranceOp = entranceService.findById(entranceId);
         Entrance entrance = null;
 
-        if(entranceOp.isPresent()){
+        if (entranceOp.isPresent()) {
             entrance = entranceOp.get();
         }
 
-        if(entrance != null) {
+        if (entrance != null) {
             Double lat = entrance.getLocation().getLatitude();
             Double lon = entrance.getLocation().getLongitude();
 
@@ -110,5 +104,27 @@ public class AlertService
 
         return result;
     }
+
+    public Alert createReinforce(AlertReinforceDto reinforceAlert) {
+
+        Entrance entrance = entranceService.findById(reinforceAlert.entranceId()).orElseThrow();
+        Alert parentAlert = repository.findById(reinforceAlert.alertId()).orElseThrow();
+        String title = geminiService.generateTitle(reinforceAlert.transcript());
+
+        Alert reinforce = Alert.builder()
+                .dangerLevel(parentAlert.getDangerLevel())
+                .date(LocalDateTime.now())
+                .description(reinforceAlert.description())
+                .entrance(entrance)
+                .reinforced(parentAlert)
+                .title(title)
+                .reinforced(parentAlert)
+                .build();
+
+        return repository.save(reinforce);
+
+    }
+
+
 }
 
