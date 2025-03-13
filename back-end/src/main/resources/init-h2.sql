@@ -28,7 +28,9 @@ CREATE TABLE alert (
     alert_description MEDIUMBLOB NOT NULL,
     alert_title VARCHAR(100) NOT NULL,
     entrance_id INT,
-    CONSTRAINT fk_entrance FOREIGN KEY (entrance_id) REFERENCES entrance(entrance_id)
+    parent_id INT,
+    CONSTRAINT fk_entrance FOREIGN KEY (entrance_id) REFERENCES entrance(entrance_id),
+    CONSTRAINT fk_parent FOREIGN KEY (parent_id) REFERENCES alert(alert_id)
 );
 
 INSERT INTO condominium (condominium_trustee_name, condominium_name, condominium_email, condominium_password_hash, latitude, longitude)

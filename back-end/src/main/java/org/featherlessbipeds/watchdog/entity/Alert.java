@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Table(name = "alert")
 public class Alert
 {
@@ -34,6 +35,15 @@ public class Alert
     @JoinColumn(name = "entrance_id")
     @JsonIgnore
     private Entrance entrance;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Alert reinforced;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "reinforced")
+    private List<Alert> reinforces;
+
     @Column(name="alert_title", nullable = false)
     private String title;
 }
