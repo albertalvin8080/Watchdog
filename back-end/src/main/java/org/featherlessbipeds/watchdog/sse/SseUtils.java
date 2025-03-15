@@ -41,7 +41,8 @@ public class SseUtils
 
             try
             {
-                entranceEmitter.emitter().send(new AlertSseDto(alert.getEntrance().getId(), radius, alert));
+                entranceEmitter.emitter().send(new AlertSseDto(alert.getEntrance().getId(), radius, alert,
+                        alert.getReinforced() != null ? alert.getReinforced().getId() : null));
             }
             catch (Exception e)
             {

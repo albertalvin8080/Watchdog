@@ -25,10 +25,10 @@ CREATE TABLE alert (
     alert_id INT AUTO_INCREMENT PRIMARY KEY,
     alert_danger_level VARCHAR(20) NOT NULL,
     alert_date TIMESTAMP NOT NULL,
-    alert_description MEDIUMBLOB NOT NULL,
     alert_title VARCHAR(100) NOT NULL,
     entrance_id INT,
     parent_id INT,
+    alert_description MEDIUMBLOB NOT NULL,
     CONSTRAINT fk_entrance FOREIGN KEY (entrance_id) REFERENCES entrance(entrance_id),
     CONSTRAINT fk_parent FOREIGN KEY (parent_id) REFERENCES alert(alert_id)
 );

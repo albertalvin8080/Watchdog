@@ -1,8 +1,8 @@
 "use strict";
 
-let alertSSE = null;
+let alertSseService = null;
 
-class AlertSSE
+class AlertSseService
 {
     constructor(entrance, mapApp)
     {

@@ -84,7 +84,8 @@ class MapApp {
 
         const condom = entranceMetadata.condom;
         const entranceSet = condom.entranceSet;
-        const entrance = entranceSet.find(e => e.id == entranceMetadata.id)
+        const entrance = entranceSet.find(e => e.id == entranceMetadata.id);
+        // console.log(entranceSet);
 
         const latE = entrance.location.latitude;
         const lonE = entrance.location.longitude;
@@ -123,6 +124,8 @@ class MapApp {
                 if (e.id !== entrance.id)
                     m.addTo(this.map);
 
+                // console.log(e.alertSet);
+
                 entranceMarkers.push(
                     { marker: m, id: e.id, lat: e.location.latitude, lon: e.location.longitude }
                 );
@@ -154,7 +157,10 @@ class MapApp {
             });
 
             this.entranceCoords = { lat, lon, display_name, marker, entranceMarkers, condomMarker };
-            callback();
+            callback(); // Used to drawn alerts. Why? I forgot, but dont remove this.
+
+            // Write connections between alerts hera.
+            this.connectReinforcedAlerts(entranceSet);
         } catch (error) {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
@@ -162,6 +168,10 @@ class MapApp {
 
         this.showMap();
         this.showMenu();
+    }
+
+    connectReinforcedAlerts(entranceSet) {
+        console.log(entranceSet)
     }
 
     cleanUpAll() {
@@ -449,6 +459,8 @@ class MapApp {
         })
             .addTo(this.map);
         this.alerts.push(circle);
+
+        console.log(alertSSEDto);
     }
 }
 

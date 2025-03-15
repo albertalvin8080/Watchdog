@@ -58,7 +58,6 @@ public class AlertController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonUtil.createMsg(e.getMessage()));
         }
 
-
     }
 
     @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -85,5 +84,4 @@ public class AlertController {
     public List<AlertSseDto> findAllWithinRadius(@PathVariable Double radius, @PathVariable int id) {
         return alertService.findAllWithinRadius(radius, id);
     }
-
 }

@@ -97,8 +97,12 @@ public class AlertService {
                 Location alertLocation = a.getEntrance().getLocation();
                 double distance = sseUtils.calculateDistance(alertLocation.getLatitude(), alertLocation.getLongitude(), lat, lon);
 
+
                 if (distance <= radius)
-                    result.add(new AlertSseDto(a.getEntrance().getId(), radius, a));
+                {
+                    result.add(new AlertSseDto(a.getEntrance().getId(), radius, a,
+                            a.getReinforced() != null ? a.getReinforced().getId() : null));
+                }
             }
         }
 

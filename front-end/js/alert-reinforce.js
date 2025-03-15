@@ -50,7 +50,7 @@ function addAlertReinforceListener(btnReinforce)
             {
                 await customSpeechRecognition.stop();
                 mediaRecorder.stop();
-                btnReinforce.innerText = "reforce";
+                btnReinforce.innerText = "reinforce";
             }
         });
 }

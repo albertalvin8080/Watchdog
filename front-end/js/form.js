@@ -246,7 +246,7 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
             const radius = 200;
             sessionStorage.setItem("entranceId", result.id);
 
-            alertSSE = new AlertSSE(result.entrance, mapApp);
+            alertSseService = new AlertSseService(result.entrance, mapApp);
             const alerts = await fetchAndDisplayAlerts(radius, result.id);
 
             mapApp.openEntranceView(result, () => { 
