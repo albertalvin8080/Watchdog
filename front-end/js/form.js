@@ -248,6 +248,7 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
 
             alertSseService = new AlertSseService(result.entrance, mapApp);
             const alerts = await fetchAndDisplayAlerts(radius, result.id);
+            // console.log(alerts);
 
             mapApp.openEntranceView(result, () => { 
                 alerts.forEach(alert => mapApp.drawAlert(alert)); 

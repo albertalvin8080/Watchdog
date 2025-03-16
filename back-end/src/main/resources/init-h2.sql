@@ -45,10 +45,21 @@ VALUES (1, 40.7130, -74.0070,'entrance1@entrance.com','123'),
        (1, 40.7154954045871, -74.00928915463217,'entrance4@entrance.com','123'),
        (1, 40.71468310365792, -74.0114722090322,'entrance5@entrance.com','123'),
        (2, 34.0525, -118.2440,'entrance6@entrance.com','123'),
-       (3, 37.7750, -122.4190,'entrance7@entrance.com','123');
+       (3, 37.7750, -122.4190,'entrance7@entrance.com','123'),
+       (1, 40.71413732339604, -74.0167377428322,'entrance8@entrance.com','123'),
+       (1, 40.70636632928598, -74.01480889740652,'entrance9@entrance.com','123'),
+       (1, 40.705616624670384, -74.01271740607613,'entrance10@entrance.com','123'),
+       (1, 40.705160572300954, -74.01880705961578,'entrance11@entrance.com','123')
+       ;
 
-INSERT INTO alert (alert_danger_level, alert_title, alert_date, alert_description, entrance_id)
+INSERT INTO alert (alert_danger_level, alert_title, alert_date, alert_description, entrance_id, parent_id)
 VALUES
-    ('HIGH', 'Motorcycle at entrance 405', NOW(), 'AKDNDIFISBSBAU', 1),
-    ('MEDIUM', 'Crackhead at entrance 210', NOW(), 'AKDNDIFISBSBAU', 1),
-    ('LOW', 'Car accident', NOW(), 'AKDNDIFISBSBAU', 2);
+    ('MEDIUM', 'Crackhead at entrance 210', NOW(), 'AKDNDIFISBSBAU', 1, null),
+    ('LOW', 'Car accident', NOW(), 'AKDNDIFISBSBAU', 2, null),
+    ('MEDIUM', 'Crackhead sighted', NOW(), 'AKDNDIFISBSBAU', 4, 1),
+    ('MEDIUM', 'Crackhead sighted again', NOW(), 'AKDNDIFISBSBAU', 5, 3),
+    ('HIGH', 'Crackhead killed someone', NOW(), 'AKDNDIFISBSBAU', 8, 4),
+    ('LOW', 'Two Guys in a motorbike', NOW(), 'AKDNDIFISBSBAU', 9, null),
+    ('MEDIUM', 'Two guys again', NOW(), 'AKDNDIFISBSBAU', 10, 6),
+    ('MEDIUM', 'Two guys, maybe theyre the same', NOW(), 'AKDNDIFISBSBAU', 11, 6)
+    ;

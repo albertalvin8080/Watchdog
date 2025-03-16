@@ -160,7 +160,7 @@ class MapApp {
             callback(); // Used to drawn alerts. Why? I forgot, but dont remove this.
 
             // Write connections between alerts hera.
-            this.connectReinforcedAlerts(entranceSet);
+            this.connectReinforcedAlerts(entranceSet, entranceMarkers);
         } catch (error) {
             console.error("Error fetching geocoding data:", error);
             alert("Failed to fetch location data.");
@@ -171,7 +171,75 @@ class MapApp {
     }
 
     connectReinforcedAlerts(entranceSet) {
-        console.log(entranceSet)
+        console.log(entranceSet);
+
+        function findAlertById(id) {
+            for (const entrance of entranceSet) {
+                const alertObj = entrance.alertSet.find(a => a.id === id);
+                if (alertObj) return alertObj;
+            }
+            return null;
+        }
+        
+        // Follow the reinforcement chain to find the root alert.
+        function getChainRoot(alert) {
+            let current = alert;
+            while (current.reinforced) {
+                const next = findAlertById(current.reinforced.id);
+                if (next) {
+                    current = next;
+                } else {
+                    break;
+                }
+            }
+            return current;
+        }
+        
+        // Map to store the unique color for each flux (keyed by the chain root's id).
+        const flux = new Map();
+        
+        entranceSet.forEach(entrance => {
+            entrance.alertSet.forEach(_alert => {
+                if (!_alert.reinforced) return;
+        
+                // Determine the root of this chain.
+                const chainRoot = getChainRoot(_alert);
+        
+                // If this flux hasn't been assigned a color yet, assign one.
+                if (!flux.has(chainRoot.id)) {
+                    // Use flux.size as the unique id for generating a distinct color.
+                    flux.set(chainRoot.id, hashColor(flux.size + 2, 1));
+                }
+                const fluxColor = flux.get(chainRoot.id);
+        
+                // Find the entrance that contains the reinforced alert.
+                const reinforced = _alert.reinforced;
+                const reinforcedEntrance = entranceSet.find(e =>
+                    e.alertSet.some(a => a.id === reinforced.id)
+                );
+                if (!reinforcedEntrance) return;
+        
+                const latlngs = [
+                    [reinforcedEntrance.location.latitude, reinforcedEntrance.location.longitude],
+                    [entrance.location.latitude, entrance.location.longitude],
+                ];
+                const polyline = L.polyline(latlngs, { color: fluxColor }).addTo(this.map);
+        
+                L.polylineDecorator(polyline, {
+                    patterns: [
+                        {
+                            offset: '50%', // Position the arrow in the middle of the line.
+                            repeat: 0,     // No repetition, just one arrow.
+                            symbol: L.Symbol.arrowHead({
+                                pixelSize: 10,
+                                polygon: false,
+                                pathOptions: { color: "red", fillOpacity: 1 }
+                            })
+                        }
+                    ]
+                }).addTo(this.map);
+            });
+        });
     }
 
     cleanUpAll() {
@@ -455,12 +523,14 @@ class MapApp {
             color: dangerLevels[alertSSEDto.alert.dangerLevel],
             fillColor: color,
             fillOpacity: 0.15,
-            radius: alertSSEDto.radius,
-        })
-            .addTo(this.map);
+            // radius: alertSSEDto.radius,
+            radius: 100,
+        });
+
+        circle.addTo(this.map);
         this.alerts.push(circle);
 
-        console.log(alertSSEDto);
+        // console.log(alertSSEDto);
     }
 }
 
