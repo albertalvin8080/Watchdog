@@ -25,8 +25,26 @@ class AlertHistory
             }
 
             this.alerts = await response.json();
+            this.alerts = this.alerts.sort((a, b) => {
+                // console.log(a, b);
+                if (parseInt(a.condominiumId) < parseInt(b.condominiumId)) 
+                    return -1
+                // if(parseInt(a.condominiumId) === parseInt(b.condominiumId))
+                //     return 0
+                if(parseInt(a.condominiumId) > parseInt(b.condominiumId))
+                    return 1
+                if (parseInt(a.entranceId) < parseInt(b.entranceId)) 
+                    return -1
+                // if (parseInt(a.entranceId) === parseInt(b.entranceId)) 
+                //     return 0
+                if (parseInt(a.entranceId) > parseInt(b.entranceId)) 
+                    return 1
+
+                return 0;
+            });
+
             this.render();
-            this.createFilder();
+            this.createFilter();
         } catch (error)
         {
             console.error("Failed to load alerts:", error);
@@ -34,64 +52,94 @@ class AlertHistory
 
     }
 
-    createFilder() {
-        const div = document.createElement("div");
-        div.classList.add("filter");
-        this.historyDiv.appendChild(div);
-    
-        // Function to create a dropdown with options
-        const createDropdown = (options, label, className) => {
+    createFilter()
+    {
+        const filter = document.createElement("div");
+        this.filter = filter;
+        filter.classList.add("filter");
+        this.historyDiv.appendChild(filter);
+
+        const displayAlertsByFilter = (evt) =>
+        {
+            const dangerSelect = this.filter.querySelector(".danger-level");
+            const entranceSelect = this.filter.querySelector(".entrance-id");
+            const condominiumSelect = this.filter.querySelector(".condominium-id");
+
+            const filteredAlerts = this.alerts.filter((alert =>
+            {
+                if (dangerSelect.value !== "" && dangerSelect.value !== alert.dangerLevel)
+                    return false;
+
+                if (entranceSelect.value !== "" && entranceSelect.value != alert.entranceId)
+                    return false;
+
+                if (condominiumSelect.value !== "" && condominiumSelect.value != alert.condominiumId)
+                    return false;
+
+                return true;
+            }));
+
+            this.render(filteredAlerts);
+        }
+
+        const createDropdown = (options, label, className) =>
+        {
             const container = document.createElement("div");
             container.className = "dropdown-container";
-    
+
             const select = document.createElement("select");
             select.className = className;
             select.innerHTML = `<option value="">${label}</option>` +
                 options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-    
+
             container.appendChild(select);
+            select.addEventListener("change", displayAlertsByFilter);
             return container;
         };
-    
+
         // Danger Levels dropdown
         const dangerLevels = [...new Set(this.alerts.map(alert => alert.dangerLevel))];
-        div.appendChild(createDropdown(dangerLevels, "Danger", "danger-level"));
-    
-        // Entrance IDs dropdown
-        const entranceIds = [...new Set(this.alerts.map(alert => alert.entranceId))];
-        div.appendChild(createDropdown(entranceIds, "Entrance", "entrance-id"));
-    
-        // Condominium IDs dropdown
-        const condominiumIds = [...new Set(this.alerts.map(alert => 
-            alert.condominiumId ? alert.condominiumId : "None"))];
 
-        div.appendChild(createDropdown(condominiumIds, "Condominium", "condominium-id"));
+        // Entrance IDs dropdown
+        const entranceIds = [...new Set(this.alerts.map(alert => alert.entranceId))].sort((a, b) =>
+        {
+            return a < b ? -1 : (a == b ? 0 : 1);
+        });
+
+        // Condominium IDs dropdown
+        const condominiumIds = [...new Set(this.alerts.map(alert =>
+            alert.condominiumId ? alert.condominiumId : "None"))].sort((a, b) =>
+            {
+                return a < b ? -1 : (a == b ? 0 : 1)
+            });
+
+        filter.appendChild(createDropdown(dangerLevels, "Danger", "danger-level"));
+        filter.appendChild(createDropdown(entranceIds, "Entrance", "entrance-id"));
+        filter.appendChild(createDropdown(condominiumIds, "Condominium", "condominium-id"));
     }
 
-    render()
+    render(alerts = null)
     {
-        this.historyDiv.innerHTML = ""; // Clear previous content
+        if (alerts === null)
+            alerts = this.alerts
 
-        if (this.alerts.length === 0)
-        {
-            this.historyDiv.innerHTML = `<p class="empty">No alerts available.</p>`;
-            return;
-        }
+        this.historyDiv.querySelector(".alert-list")?.remove(); // Clear previous content
 
         const list = document.createElement("ul");
         list.className = "alert-list";
 
-        this.alerts.forEach(alert =>
+        alerts.forEach(alert =>
         {
+            const rein = alert.reinforcedAlertId;
+            const reinSpan = `<span style="color: red;">R</span>`;
             const listItem = document.createElement("li");
             listItem.className = `alert-item ${alert.dangerLevel.toLowerCase()}`;
             listItem.innerHTML = `
-            <span class="alert-entrance">${alert.entranceId}</span>
+            <span class="alert-entrance">C${alert.condominiumId}E${alert.entranceId}${rein ? reinSpan : ""}</span>
             <span class="alert-level">${alert.dangerLevel}</span>
             <span class="alert-title">${alert.title}</span>
             `;
 
-            // Add click event to open the dialog
             listItem.addEventListener("click", () => this.showDetails(alert));
 
             list.appendChild(listItem);
@@ -152,7 +200,7 @@ class AlertHistory
         const audioUrl = `data:audio/webm;base64,${base64Audio}`;
 
         audioElement.src = audioUrl;
-        audioElement.load(); 
+        audioElement.load();
 
         this.dialog.classList.remove("hidden");
     }

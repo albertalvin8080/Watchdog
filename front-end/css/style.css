@@ -525,7 +525,7 @@ form label {
 /* --------------------------------------------- */
 
 #alertHistory {
-    padding: 0px 5px 15px 5px;
+    padding: 0px 5px 35px 5px;
     display: none;
     position: absolute !important;
     z-index: 100;
@@ -551,7 +551,7 @@ form label {
 }
 
 .filter {
-    background-color: red;
+    /* background-color: red; */
     display: flex;
     position: absolute;
     width: 100%;
@@ -568,13 +568,13 @@ form label {
     border-radius: 5px;
     font-size: 16px;
     font-weight: bold;
-    transition: transform 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     gap: 5px;
 }
 
 .alert-item:hover {
-    transform: scale(1.01);
+    opacity: 0.85;
 }
 
 .alert-title {
@@ -649,4 +649,22 @@ form label {
     max-width: 100%;
     display: block;
     margin-top: 5px;
+}
+
+.dropdown-container {
+    z-index: 1001;
+    flex-grow: 1;
+}
+
+.dropdown-container select {
+    width: 100%;
+    padding: 10px;
+}
+
+.danger-level {
+    border-top-left-radius: 10px;
+} 
+
+.condominium-id {
+    border-top-right-radius: 10px;
 }

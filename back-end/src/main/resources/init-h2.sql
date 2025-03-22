@@ -51,7 +51,10 @@ VALUES (1, 40.7130, -74.0070, 'entrance1@entrance.com', '123'),
        (1, 40.71413732339604, -74.0167377428322, 'entrance8@entrance.com', '123'),
        (1, 40.70636632928598, -74.01480889740652, 'entrance9@entrance.com', '123'),
        (1, 40.705616624670384, -74.01271740607613, 'entrance10@entrance.com', '123'),
-       (1, 40.705160572300954, -74.01880705961578, 'entrance11@entrance.com', '123')
+       (1, 40.705160572300954, -74.01880705961578, 'entrance11@entrance.com', '123'),
+       (2, 34.0525, -115.2440, 'entrance12@entrance.com', '123'),
+       (2, 34.0525, -117.2440, 'entrance13@entrance.com', '123'),
+       (3, 34.0525, -112.2440, 'entrance14@entrance.com', '123')
 ;
 
 INSERT INTO alert (alert_danger_level, alert_title, alert_date, alert_description, entrance_id, parent_id)
@@ -103,7 +106,10 @@ VALUES
     ('MEDIUM', 'Broken lock', NOW(), 'The lock on the side door is broken.', 4, null),
     ('HIGH', 'Electrical short circuit', NOW(), 'A short circuit caused a power surge.', 5, null),
     ('LOW', 'Graffiti on walls', NOW(), 'Graffiti was found on the building walls.', 6, null),
-    ('HIGH', 'Fallen tree branch', NOW(), 'A large tree branch fell in the parking lot.', 8, null)
+    ('HIGH', 'Fallen tree branch', NOW(), 'A large tree branch fell in the parking lot.', 8, null),
+    ('HIGH', 'Blob Blob Blob', NOW(), 'Detestatio Sacrorum', 12, null),
+    ('LOW', 'Blob Blob Blob', NOW(), 'Summa Blasphemia', 13, null),
+    ('MEDIUM', 'Blob Blob Blob', NOW(), 'Oh no.', 14, null)
 ;
 
 CREATE TABLE admin
