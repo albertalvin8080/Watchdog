@@ -17,7 +17,7 @@ function hideAllForms()
 
 function showForm(formId, clean = true)
 {
-    if(clean)
+    if (clean)
         mapApp.cleanUpAll();
     mapApp.hideMap();
     mapApp.hideMenu();
@@ -218,7 +218,6 @@ registerEntranceForm.addEventListener("submit", async (evt) =>
     }
 });
 
-
 entranceLoginForm.addEventListener("submit", async (evt) =>
 {
     evt.preventDefault();
@@ -250,8 +249,9 @@ entranceLoginForm.addEventListener("submit", async (evt) =>
             const alerts = await fetchAndDisplayAlerts(radius, result.id);
             // console.log(alerts);
 
-            mapApp.openEntranceView(result, () => { 
-                alerts.forEach(alert => mapApp.drawAlert(alert)); 
+            mapApp.openEntranceView(result, () =>
+            {
+                alerts.forEach(alert => mapApp.drawAlert(alert));
             });
         }
         else
@@ -294,3 +294,30 @@ function showMsg(msgE, msgStr)
         }, seconds * 1000);
     }, showDuration);
 }
+
+// ---------------------------------------------------------------------
+
+const admLoginForm = document.querySelector("#admLoginForm");
+admLoginForm.addEventListener("submit", async (evt) =>
+{
+    evt.preventDefault();
+
+    const email = admLoginForm.querySelector("#admEmail").value;
+    const password = admLoginForm.querySelector("#admPassword").value;
+
+    const result = await fetch("http://localhost:8080/admin/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        },
+    });
+
+    if (result.ok) {
+        alertHistory.show();
+        admLoginForm.style.display = "none";
+    } else {
+        showMsg(warnMsg, "try again later");
+    }
+});

@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.featherlessbipeds.watchdog.dto.AlertHistoryDto;
 import org.featherlessbipeds.watchdog.dto.AlertReinforceDto;
 import org.featherlessbipeds.watchdog.entity.DangerLevel;
 import org.featherlessbipeds.watchdog.entity.Location;
@@ -34,6 +35,21 @@ public class AlertService {
 
     public List<Alert> findAll() {
         return repository.findAll();
+    }
+
+    public List<AlertHistoryDto> findAllDto() {
+        return repository.findAll().stream().map(a -> new AlertHistoryDto(
+                a.getId(),
+                a.getDangerLevel(),
+                a.getDate(),
+                a.getDescription(),
+                a.getTitle(),
+                a.getReinforced() != null ? a.getReinforced().getId() : null,
+                a.getEntrance() != null ? a.getEntrance().getId() : null,
+                a.getEntrance() != null ? a.getEntrance().getLocation() : null,
+                a.getEntrance() != null ? a.getEntrance().getEmail() : null,
+                a.getEntrance() != null && a.getEntrance().getCondominium() != null ? a.getEntrance().getCondominium().getId() : null
+        )).toList();
     }
 
     public Alert createAlert(AlertRegisterDto alert) {

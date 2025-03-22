@@ -2,6 +2,7 @@ package org.featherlessbipeds.watchdog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.featherlessbipeds.watchdog.dto.AlertHistoryDto;
 import org.featherlessbipeds.watchdog.dto.AlertRegisterDto;
 import org.featherlessbipeds.watchdog.dto.AlertReinforceDto;
 import org.featherlessbipeds.watchdog.entity.Alert;
@@ -29,6 +30,11 @@ public class AlertController {
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Alert>> findAll() {
         return ResponseEntity.ok(alertService.findAll());
+    }
+
+    @GetMapping(path = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AlertHistoryDto>> findAllDto() {
+        return ResponseEntity.ok(alertService.findAllDto());
     }
 
     @PostMapping(path = "/reinforce", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
-
+public class AdminService
+{
     private final AdminRepository repository;
 
-    public boolean login(String email, String password){
-
-        return repository.existsByEmailAndPasswordHash(email,password);
-
+    public boolean login(String email, String password)
+    {
+        return repository.existsByEmailAndPassword(email, password);
     }
-
 }

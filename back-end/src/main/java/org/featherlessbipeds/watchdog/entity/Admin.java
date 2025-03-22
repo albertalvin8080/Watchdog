@@ -20,8 +20,8 @@ public class Admin
     private String username;
     @Column(name = "admin_email", columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     private String email;
-    @Column(name = "admin_password_hash", columnDefinition = "VARCHAR(255)", nullable = false)
-    private String passwordHash;
+    @Column(name = "admin_password", columnDefinition = "VARCHAR(255)", nullable = false)
+    private String password;
     @Enumerated(EnumType.STRING)
     @Column(name = "admin_role", columnDefinition = "VARCHAR(20)", nullable = false)
     private AdminRole admRole;
